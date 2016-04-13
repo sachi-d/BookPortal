@@ -4,6 +4,9 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -68,41 +71,29 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%
-                                                for (int i = 0; i < 10; i++) { %>
-                                            <tr>
-                                                <td class="tg-yw40">343-35266</td>
-                                                <td class="tg-yw40">SAMPLE TITLE1</td>
-                                                <td class="tg-yw40">Author 123</td>
-                                                <td class="tg-yw40">type1</td>
-                                                <td class="tg-yw40">subject1</td>
-                                                <td class="tg-yw40">language1</td>
-                                                <td class="tg-yw40">pub1</td>
-                                            </tr>
-                                            <%  }
-                                                for (int i = 0; i < 10; i++) { %>
-                                            <tr>
-                                                <td class="tg-yw40">123-35216</td>
-                                                <td class="tg-yw40">dasdbouih</td>
-                                                <td class="tg-yw40">fdsfsd 123</td>
-                                                <td class="tg-yw40">fwbg</td>
-                                                <td class="tg-yw40">bbef</td>
-                                                <td class="tg-yw40">wbvs</td>
-                                                <td class="tg-yw40">swbwe</td>
-                                            </tr>
-                                            <%  }
+                                            <%                                                ArrayList<Book> arrBook = DBDatalist.getBookList();
+                                                if (arrBook != null) {
+                                                    for (int i = 0; i < arrBook.size(); i++) {
+                                                        Book book = (Book) arrBook.get(i);
+
                                             %>
                                             <tr>
-                                                <td class="tg-yw40">7897</td>
-                                                <td class="tg-yw40">sachithra</td>
-                                                <td class="tg-yw40">malsha 123</td>
-                                                <td class="tg-yw40">fwbg</td>
-                                                <td class="tg-yw40">ach</td>
-                                                <td class="tg-yw40">wbvs</td>
-                                                <td class="tg-yw40">swbwe</td>
+                                                <td class="tg-yw40"><%= book.getISBN()%></td>
+                                                <td class="tg-yw40"><%= book.getTitle()%></td>
+                                                <td class="tg-yw40"><% for (int j = 0; j < book.getAuthors().size(); j++) { %>
+                                                    <%= book.getAuthors().get(j).toString() %> <br>
+                                                   <% }%></td>
+                                                <td class="tg-yw40"><%= book.getType()%></td>
+                                                <td class="tg-yw40"><%= book.getSubject()%></td>
+                                                <td class="tg-yw40"><%= book.getLanguage()%></td>
+                                                <td class="tg-yw40"><%= book.getPublisher()%></td>
                                             </tr>
+                                            <%                                                    }
+                                                }%>
+
                                         </tbody>
                                     </table>
+                                    <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal">Add new item <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
                                     <!--                                    <table id="table_principal" class="table table-bordered table-striped table-condensed">
                                                                             <thead>
                                                                                 <tr>
@@ -126,7 +117,7 @@
 
                                 <!-- ---------------- ADD NEW INVENTORY ITEM --------------------->
                                 <div class="bs-example2 bs-example-padded-bottom">
-                                    <input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">
+                                    <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">-->
                                     <!--                                    <a data-toggle="modal" data-target="#myModal" >
                                                                             <img class="hvr-grow" src="admin/images/add.png" 
                                                                                  style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">

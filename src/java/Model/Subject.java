@@ -9,21 +9,17 @@ package Model;
  *
  * @author Sachi
  */
-public class Publisher {
-
-    private int idpublisher;
+public class Subject {
+    private int idsubject;
     private String name;
 
-    public Publisher(String name) {
-        this.name = name;
-    }
     
-    public int getIdpublisher() {
-        return idpublisher;
+    public int getIdsubject() {
+        return idsubject;
     }
 
-    public void setIdpublisher(int idpublisher) {
-        this.idpublisher = idpublisher;
+    public void setIdsubject(int idsubject) {
+        this.idsubject = idsubject;
     }
 
     public String getName() {
@@ -33,5 +29,5 @@ public class Publisher {
     public void setName(String name) {
         this.name = name;
     }
-
+    
 }

@@ -13,7 +13,20 @@
 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+        <!-- Custom Theme files -->
+        <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
+        <link href="admin/css/font-awesome.css" rel="stylesheet"> 
+        <script src="admin/js/jquery.min.js"></script>
+        <script src="admin/js/bootstrap.min.js"></script>
 
+        <!-- Mainly scripts -->
+        <script src="admin/js/jquery.metisMenu.js"></script>
+        <script src="admin/js/jquery.slimscroll.min.js"></script>
+        <!-- Custom and plugin javascript -->
+        <link href="admin/css/custom.css" rel="stylesheet">
+        <script src="admin/js/custom.js"></script>
+        <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>

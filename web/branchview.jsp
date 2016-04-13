@@ -4,15 +4,32 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Branch"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Branches</title>
-        
+
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+        <!-- Custom Theme files -->
+        <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
+        <link href="admin/css/font-awesome.css" rel="stylesheet"> 
+        <script src="admin/js/jquery.min.js"></script>
+        <script src="admin/js/bootstrap.min.js"></script>
+
+        <!-- Mainly scripts -->
+        <script src="admin/js/jquery.metisMenu.js"></script>
+        <script src="admin/js/jquery.slimscroll.min.js"></script>
+        <!-- Custom and plugin javascript -->
+        <link href="admin/css/custom.css" rel="stylesheet">
+        <script src="admin/js/custom.js"></script>
+        <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>
@@ -25,9 +42,20 @@
 
                         <div class="grid-form1"> 
                             <div class="col-md-12">
+                                <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">-->
+
+                                <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" >-->
                                 <!-- -------------------BRANCH TABLE ----------------------->
                                 <div class="col-md-12">
+                                    <!--<div class="col-md-12">-->
+                                    <!--<div class="col-md-6">-->
                                     <h3 class="head-top">Branches</h3>
+                                    <!--</div>-->
+                                    <!--<div class="col-md-6">-->
+
+                                    <!--</div>-->
+                                    <!--</div>-->
+
                                     <table class="tg" id="table_branch">
                                         <thead>
                                             <tr>
@@ -38,24 +66,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%
-                                                for (int i = 0; i < 11; i++) { %>
+                                            <%                                                
+                                                ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
+                                                if (arrBranch != null) {
+                                                    for (int i = 0; i < arrBranch.size(); i++) {
+                                                        Branch branch = (Branch) arrBranch.get(i);
+
+                                            %>
                                             <tr>
-                                                <td class="tg-yw40">gdgdbndn</td>
-                                                <td class="tg-yw40">32,rw4eihui, vdsjnho</td>
-                                                <td class="tg-yw40">branch1</td>
-                                                <td class="tg-yw40">Open report</td>
+                                                <td class="tg-yw40"><%= branch.getName()%></td>
+                                                <td class="tg-yw40"><%= branch.getAddress()%></td>
+                                                <td class="tg-yw40"><%= branch.getTelNo()%></td>
+                                                <td class="tg-yw40"><%= branch.getBranchAdmin() %></td>
                                             </tr>
                                             <%  }
+                                                }
                                             %>
                                         </tbody>
 
                                     </table>
-
+                                    <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal">Add new branch <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
                                 </div>
                                 <!-- --------------- ADD BRANCH ---------------------------->
                                 <div class="bs-example2 bs-example-padded-bottom">
-                                    <input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">
+
                                     <!--                                    <a data-toggle="modal" data-target="#myModal" >
                                                                             <img class="hvr-grow" src="admin/images/add.png" 
                                                                                  style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">
@@ -131,7 +165,7 @@
             </div>
             <div class="clearfix"></div>
         </div>
-                
+
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
 

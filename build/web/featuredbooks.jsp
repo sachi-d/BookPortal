@@ -4,7 +4,9 @@
     Author     : Sachi
 --%>
 
-
+<%@page import="java.util.ArrayList"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -27,9 +29,13 @@
                                     <div class="bs-example2 bs-example-padded-bottom">
                                         <h3 class="head-top">Featured books</h3>
                                         <form class="form-horizontal">
+
                                             <div class="form-group">
                                                 <div class="col-md-1">
                                                     <h4 id="h4.-bootstrap-heading">#</h4>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <h4 id="h4.-bootstrap-heading">Status</h4>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <h4 id="h4.-bootstrap-heading">Title</h4>
@@ -37,44 +43,49 @@
                                                 <div class="col-md-4">
                                                     <h4 id="h4.-bootstrap-heading">Type/Subject</h4>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <h4 id="h4.-bootstrap-heading">Status</h4>
-                                                </div>
+
                                                 <div class="col-md-2">
                                                     <h4 id="h4.-bootstrap-heading">Action</h4>
                                                 </div>
                                             </div>
-                                            <% int count = 3;
-                                                for (int i = 0; i < count; i++) {
+
+                                            <%                                                
+                                                ArrayList<Book> arrBook = DBDatalist.getFeaturedBookList();
+                                                if (arrBook != null) {
+                                                    for (int i = 0; i < arrBook.size(); i++) {
+                                                        Book book = (Book) arrBook.get(i);
+
                                             %>
                                             <div class="form-group">
                                                 <div class="col-md-1">
                                                     <p><%= i + 1%> </p>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <input class="form-control" disabled="" value="book title 1" >
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <input class="form-control" disabled="" value="book typr 1" >
-                                                </div>
                                                 <div class="col-md-2">
                                                     <span class="label label-success">Featured</span>
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <input class="form-control" disabled="" value="<%= book.getTitle() %>" style="color: black">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input class="form-control" disabled="" value="<%= book.getType() + " - " + book.getSubject() %>" style="color: black">
+                                                </div>
+
                                                 <div class="col-md-2">
-                                                    <button data-toggle="modal" data-target="#myModalremove"  class="btn btn-xs btn-danger" type="button"><span class='fa fa-remove'></span></button>
-<!--                                                                                                        <a data-toggle="modal" data-target="#myModalremove" >
-                                                                                                            <img class="hvr-grow" src="admin/images/minus.png" 
-                                                                                                                 style="  z-index: 5; width: 30px; height: 30px;">
-                                                                                                        </a>-->
+                                                    <button data-toggle="modal" data-target="#myModalremove"  class="btn btn-danger" type="button">Remove <span class='fa fa-remove'></span></button>
                                                 </div>
                                             </div>
-                                            <%
+                                            <%                                                    }
                                                 }
-                                                for (int j = count; j < 10; j++) {
+                                            %>
+                                            <%
+                                                for (int j = arrBook.size(); j < 10; j++) {
                                             %>
                                             <div class="form-group">
                                                 <div class="col-md-1">
                                                     <p> <%= j + 1%> </p>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <span class="label label-warning">Empty slot</span>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <input class="form-control" placeholder="start typing...">
@@ -82,15 +93,9 @@
                                                 <div class="col-md-4">
                                                     <input class="form-control" disabled>
                                                 </div>
+
                                                 <div class="col-md-2">
-                                                    <span class="label label-danger">Empty slot</span>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button data-toggle="modal" data-target="#myModaladd" type="button" class="btn btn-xs btn-danger"><span class='fa fa-check'></span></button>
-                                                    <!--                                                    <a data-toggle="modal" data-target="#myModaladd" >
-                                                                                                            <img class="hvr-grow" src="admin/images/add_green.png" 
-                                                                                                                 style="  z-index: 5; width: 30px; height: 30px;">
-                                                                                                        </a>-->
+                                                    <button data-toggle="modal" data-target="#myModaladd" type="button" class="btn btn-primary">Add <span class='fa fa-check'></span></button>
                                                 </div>
                                             </div>
                                             <%
@@ -109,15 +114,15 @@
                                                         <div class="grid-form1">
 
                                                             <form class="form-horizontal">
+                                                                <!--<div class="form-group">-->
+                                                                <label > Once removed, it will NOT be visible in the featured books section of the website. <br> Do you wish to proceed? <br><br></label>
+                                                                <!--</div>-->
                                                                 <div class="form-group">
-                                                                    <p>Note:-<br> It will <strong>NOT</strong> be visible in the featured books section of the website. </p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <div class="col-md-3 "></div><div class="col-md-3 "></div>
-                                                                    <div class="col-md-3 ">
-                                                                        <button type="submit" class="btn btn-danger form-control">Remove</button>
+                                                                    <div class="col-md-4 "></div>
+                                                                    <div class="col-md-4 ">
+                                                                        <button type="submit" class="btn btn-danger form-control">Yes, remove the book</button>
                                                                     </div>
-                                                                    <div class="col-md-3 ">
+                                                                    <div class="col-md-4 ">
                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                                     </div>
                                                                 </div>
@@ -141,15 +146,15 @@
                                                         <div class="grid-form1">
 
                                                             <form class="form-horizontal">
+                                                                <!--<div class="form-group">-->
+                                                                <label > Once added, it will be visible in the featured books section of the website. <br> Do you wish to proceed? <br><br></label>
+                                                                <!--</div>-->
                                                                 <div class="form-group">
-                                                                    <p>Note:-<br> It will be visible in the featured books section of the website. </p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <div class="col-md-3 "></div><div class="col-md-3 "></div>
-                                                                    <div class="col-md-3 ">
-                                                                        <button type="submit" class="btn btn-success warning_2 form-control">Add</button>
+                                                                    <div class="col-md-4 "></div>
+                                                                    <div class="col-md-4 ">
+                                                                        <button type="submit" class="btn btn-success form-control">Yes, add the book</button>
                                                                     </div>
-                                                                    <div class="col-md-3 ">
+                                                                    <div class="col-md-4 ">
                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                                     </div>
                                                                 </div>

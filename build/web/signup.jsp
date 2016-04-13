@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Controller.DBDatalist"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <html>
@@ -26,55 +27,96 @@
         <div class="login">
             <h1><a href="index.jsp">Book Portal </a></h1>
             <div class="login-bottom">
+                <div class="col-md-12">
+                    <%
+                        if (request.getParameter("msg") != null) {
+                            if (request.getParameter("msg").equals("error")) {
+                    %>
+                    <div class="col-md-12 text-center">
+                        <label class="label-warning"><i class="fa fa-warning"></i> Warning:
+                            Oopsee! Something went wrong. <br/>Please try again.</label><hr>
+                    </div>
+                    <%
+                        }
+                        if (request.getParameter("msg") == "available") {
+                    %>
+                    <div class="col-md-12 text-center">
+                        <!--<div class="callout callout-danger" style="margin-bottom: 0!important;">-->												
+                        <label class="label-warning"><i class="fa fa-warning"></i> Warning:
+                            Username is available. Please try with another.</label><hr>
+                        <!--</div>-->
+                    </div>
+                    <%
+                            }
+                        }
+                    %>
+
+                </div>
+
                 <h2>Register</h2>
-                <div >
-                    <div class="login-mail">
-                        <input type="text" placeholder="First name" required="">
-                        <i class="fa fa-envelope"></i>
-                    </div>
-                    <div class="login-mail">
-                        <input type="text" placeholder="Last name" required="">
-                        <i class="fa fa-user"></i>
-                    </div>
-                    <div class="login-mail">
-                        <input type="text" placeholder="NIC" required="">
-                        <i class="fa fa-user"></i>
-                    </div>
-                    <div class="login-mail">
-                        <!--<label class="col-sm-3 control-label ">Category :</label>-->
-                        <div>
-                            <select name="category" id="category" class="form-control" >
-                                <option value = "select" selected = "">Select user level..</option>
-                                <option value = "National" >vdfgvdf</option>
-                                <option value = "Provincial" >fddfdbsb</option>
-
-                            </select>
+                <form action="saveuser" method="POST">
+                    <div >
+                        <div class="login-mail">
+                            <input type="text" placeholder="First name" required="" name="fname">
+                            <i class="fa fa-user"></i>
                         </div>
-                    </div>
-                    <div class="login-mail">
-                        <input type="text" placeholder="Username" required="">
-                        <i class="fa fa-user"></i>
-                    </div>
-                    <div class="login-mail">
-                        <input type="password" placeholder="Password" required="">
-                        <i class="fa fa-lock"></i>
-                    </div>
-                    <div class="login-mail">
-                        <input type="password" placeholder="Repeat password" required="">
-                        <i class="fa fa-lock"></i>
-                    </div>
-                    <a class="news-letter" href="#">
-                        <label class="checkbox1"><input type="checkbox" name="checkbox" ><i> </i>I agree with the terms</label>
-                    </a>
+                        <div class="login-mail">
+                            <input type="text" placeholder="Last name" required="" name="lname">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="login-mail">
+                            <input name="NIC" type="text" placeholder="NIC" required="" maxlength="10" >
 
-                </div>
-                <div class=" login-do">
-                    <label class="hvr-shutter-in-horizontal login-sub">
-                        <input type="submit" value="Submit">
-                    </label>
-                    <p>Already registered?</p>
-                    <a href="login.jsp" class="hvr-shutter-in-horizontal">Login</a>
-                </div>
+                            <i class="fa fa-credit-card"></i>
+                        </div>
+                        <div class="login-mail">
+                            <!--<label class="col-sm-3 control-label ">Category :</label>-->
+                            <div>
+                                <select name="userlevel" id="category" class="form-control" >
+                                    <option value = "select" selected = "">Select user level..</option>
+                                    <option value = "0" >Admin</option>
+                                    <option value = "1" >Branch admin</option>
+                                    <option value = "1" >Sales staff</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="login-mail">
+                            <!--<label class="col-sm-3 control-label ">Category :</label>-->
+                            <div>
+                                <select name="branch" id="category" class="form-control" >
+                                    <option value = "select" selected = "">Select branch..</option>
+                                    <option value = "1" >Nugegoda</option>
+                                    <option value = "2" >Rathnapura</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="login-mail">
+                            <input type="text" placeholder="Username" required="" name="uname">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="login-mail">
+                            <input type="password" placeholder="Password" required="" name="pw">
+                            <i class="fa fa-lock"></i>
+                        </div>
+                        <div class="login-mail">
+                            <input type="password" placeholder="Repeat password" required="" name="pw2">
+                            <i class="fa fa-lock"></i>
+                        </div>
+                        <a class="news-letter" href="#">
+                            <label class="checkbox1"><input type="checkbox" name="checkbox" ><i> </i>I agree with the terms</label>
+                        </a>
+
+                    </div>
+                    <div class=" login-do">
+                        <label class="hvr-shutter-in-horizontal login-sub">
+                            <!--<input type="submit" value="Submit">-->
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </label>
+                        <p>Already registered?</p>
+                        <a href="login.jsp" class="hvr-shutter-in-horizontal">Login</a>
+                    </div>
+                </form>
                 <div class="clearfix"> </div>
             </div>
         </div>

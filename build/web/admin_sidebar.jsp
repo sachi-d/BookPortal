@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -30,26 +31,18 @@
         <link href="admin/css/custom.css" rel="stylesheet">
         <script src="admin/js/custom.js"></script>
         <script src="admin/js/screenfull.js"></script>
-<!--        <script>
-            $(function () {
-                $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
 
-                if (!screenfull.enabled) {
-                    return false;
-                }
-
-
-
-                $('#toggle').click(function () {
-                    screenfull.toggle($('#container')[0]);
-                });
-
-
-
-            });
-        </script>-->
     </head>
+    <%
+        HttpSession ses = request.getSession();
+        if (null == ses.getAttribute("user")) {
+            response.sendRedirect("login.jsp");
+        } else {
+    %>
     <body>
+        <%
+            User u = (User) session.getAttribute("user");
+        %>
         <nav class="navbar-default navbar-static-top" role="navigation">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -58,21 +51,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h1> <a class="navbar-brand" href="index.html">Book Portal</a></h1>         
+                <h1> <a class="navbar-brand" href="index.jsp">Book Portal</a></h1>         
             </div>
             <div class=" border-bottom">
-<!--                <div class="full-left">
-                    <section class="full-top">
-                        <button id="toggle"><i class="fa fa-arrows-alt"></i></button>	
-                    </section>
-                    <form class=" navbar-left-right">
-                        <input type="text"  value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {
-                                    this.value = 'Search...';
-                                }">
-                        <input type="submit" value="" class="fa fa-search">
-                    </form>
-                    <div class="clearfix"> </div>
-                </div>-->
+                <!--                <div class="full-left">
+                                    <section class="full-top">
+                                        <button id="toggle"><i class="fa fa-arrows-alt"></i></button>	
+                                    </section>
+                                    <form class=" navbar-left-right">
+                                        <input type="text"  value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {
+                                                    this.value = 'Search...';
+                                                }">
+                                        <input type="submit" value="" class="fa fa-search">
+                                    </form>
+                                    <div class="clearfix"> </div>
+                                </div>-->
 
 
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -144,12 +137,12 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span class=" name-caret">UserName<i class="caret"></i></span><img src="admin/images/user.png" alt="profile pic"></a>
+                            <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span class=" name-caret"><%= u.getFname() + " " + u.getLname()%><i class="caret"></i></span><img src="admin/images/user.png" alt="profile pic"></a>
                             <ul class="dropdown-menu " role="menu">
-                                <li><a href="profile.html"><i class="fa fa-user"></i>Edit Profile</a></li>
-                                <li><a href="inbox.html"><i class="fa fa-envelope"></i>Inbox</a></li>
-                                <li><a href="calendar.html"><i class="fa fa-calendar"></i>Calender</a></li>
-                                <li><a href="inbox.html"><i class="fa fa-clipboard"></i>Tasks</a></li>
+                                <li><a href="signout"><i class="fa fa-user"></i>Logout</a></li>
+                                <!--                                <li><a href="inbox.html"><i class="fa fa-envelope"></i>Inbox</a></li>
+                                                                <li><a href="calendar.html"><i class="fa fa-calendar"></i>Calender</a></li>
+                                                                <li><a href="inbox.html"><i class="fa fa-clipboard"></i>Tasks</a></li>-->
                             </ul>
                         </li>
 
@@ -212,7 +205,7 @@
                                                                 <li><a href="signup.html" class=" hvr-bounce-to-right"><i class="fa fa-sign-in nav_icon"></i>Singup</a></li>
                                                             </ul>
                                                         </li>-->
-                           
+
                             <li>
                                 <a href="inventoryview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-book nav_icon"></i> <span class="nav-label">Inventory</span> </a>
                             </li> 
@@ -224,6 +217,9 @@
                             </li>
                             <li>
                                 <a href="featuredbooks.jsp" class=" hvr-bounce-to-right"><i class="fa fa-star nav_icon"></i> <span class="nav-label">Featured books</span> </a>
+                            </li>
+                            <li>
+                                <a href="recentarrivals.jsp" class=" hvr-bounce-to-right"><i class="fa fa-clock-o nav_icon"></i> <span class="nav-label">Recent arrivals</span> </a>
                             </li>
                             <li>
                                 <a href="userlogview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-users nav_icon"></i> <span class="nav-label">User logs</span> </a>
@@ -243,4 +239,7 @@
             </div>
         </nav>
     </body>
+    <%
+          }
+    %>
 </html>
