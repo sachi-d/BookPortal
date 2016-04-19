@@ -48,7 +48,7 @@
                                                 </div>
                                             </div>
 
-                                            <%                                                
+                                            <%                      
                                                 ArrayList<Book> arrBook = DBDatalist.getRecentBookList();
                                                 if (arrBook != null) {
                                                     for (int i = 0; i < arrBook.size(); i++) {
@@ -63,7 +63,7 @@
                                                     <input class="form-control" disabled="" value="<%= book.getTitle() %>" style="color: black">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input class="form-control" disabled="" value="<%= book.getType() + " - " + book.getSubject() %>" style="color: black">
+                                                    <input class="form-control" disabled="" value="<%= book.getSubject().getType().getName() + " - " + book.getSubject().getName() %>" style="color: black">
                                                 </div>
 
                                                 <div class="col-md-3">

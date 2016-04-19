@@ -18,10 +18,10 @@ public class User implements java.io.Serializable {
     private String fname;
     private String lname;
     private String nic;
-    private int branch_idbranch;
+    private Branch branch;
     private int status;
 
-    public User(int iduser, String username, String password, String user_level, String fname, String lname, String nic, int branch_idbranch) {
+    public User(int iduser, String username, String password, String user_level, String fname, String lname, String nic, Branch branch_idbranch) {
         this.iduser = iduser;
         this.username = username;
         this.password = password;
@@ -29,7 +29,8 @@ public class User implements java.io.Serializable {
         this.fname = fname;
         this.lname = lname;
         this.nic = nic;
-        this.branch_idbranch = branch_idbranch;
+        this.branch = branch_idbranch;
+        this.status=1;
     }
     
     public int getIduser() {
@@ -58,6 +59,20 @@ public class User implements java.io.Serializable {
 
     public String getUser_level() {
         return user_level;
+    }
+    public String getUser_levelname(){
+        if(this.user_level.equals("0")){
+            return "Admin";
+        }
+        else if(this.user_level.equals("1")){
+            return "Branch admin";
+        }
+        else if(this.user_level.equals("2")){
+            return "Sales staff";
+        }
+        else{
+            return "invalid";
+        }
     }
 
     public void setUser_level(String user_level) {
@@ -92,12 +107,12 @@ public class User implements java.io.Serializable {
         this.nic = nic;
     }
 
-    public int getBranch_idbranch() {
-        return branch_idbranch;
+    public Branch getBranch() {
+        return branch;
     }
 
-    public void setBranch_idbranch(int branch_idbranch) {
-        this.branch_idbranch = branch_idbranch;
+    public void setBranch(Branch branch_idbranch) {
+        this.branch = branch_idbranch;
     }
 
     public int getStatus() {

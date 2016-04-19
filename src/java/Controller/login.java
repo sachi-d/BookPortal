@@ -6,6 +6,7 @@
 package Controller;
 
 import DB.DBConnectionHandler;
+import Model.Branch;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -68,7 +69,8 @@ public class login extends HttpServlet {
             ResultSet rsetUser = ps.executeQuery();
 
             if (rsetUser.next()) {
-                User user = new User(rsetUser.getInt(1), rsetUser.getString(2), rsetUser.getString(3), rsetUser.getString(4), rsetUser.getString(5), rsetUser.getString(6), rsetUser.getString(7), rsetUser.getInt(8));
+                Branch b=DBDatalist.getBranch(rsetUser.getInt(8));
+                User user = new User(rsetUser.getInt(1), rsetUser.getString(2), rsetUser.getString(3), rsetUser.getString(4), rsetUser.getString(5), rsetUser.getString(6), rsetUser.getString(7), b);
                 request.getSession().invalidate();
                 request.getSession().setAttribute("user", user);
 
@@ -79,17 +81,17 @@ public class login extends HttpServlet {
                     Savelog.saveLog(request, "failed database back up");
                 }
 
-                boolean s=Savelog.saveLog(request, "user logged in");
-                if(s){
-                    response.sendRedirect("index.jsp?msg=success");
-                }
-                else{
-                     response.sendRedirect("index.jsp?msg=incorrect");
+                boolean s = Savelog.saveLog(request, "user logged in");
+                if (s) {
+
+                    response.sendRedirect("index.jsp");
+                } else {
+                    response.sendRedirect("login.jsp?msg=incorrect");
                 }
 
             } else {
                 Savelog.saveLog(request, "error user login");
-                response.sendRedirect("index.jsp?msg=incorrect");
+                response.sendRedirect("login.jsp?msg=incorrect");
             }
 
             con.close();
@@ -99,7 +101,7 @@ public class login extends HttpServlet {
             out.println("Oops! Something went wrong.\n");
             out.println(e.toString());
 
-            response.sendRedirect("index.jsp?msg=error");
+            response.sendRedirect("login.jsp?msg=error");
         }
     }
 }

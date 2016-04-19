@@ -12,6 +12,30 @@
         <servlet-name>signout</servlet-name>
         <servlet-class>Controller.signout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>savebranch</servlet-name>
+        <servlet-class>Controller.savebranch</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>savebook</servlet-name>
+        <servlet-class>Controller.savebook</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>Controller.NewServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>savestock</servlet-name>
+        <servlet-class>Controller.savestock</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>executenotification</servlet-name>
+        <servlet-class>Controller.executenotification</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>executepurreq</servlet-name>
+        <servlet-class>Controller.executepurreq</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>saveuser</servlet-name>
         <url-pattern>/saveuser</url-pattern>
@@ -23,6 +47,30 @@
     <servlet-mapping>
         <servlet-name>signout</servlet-name>
         <url-pattern>/signout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>savebranch</servlet-name>
+        <url-pattern>/savebranch</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>savebook</servlet-name>
+        <url-pattern>/savebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>savestock</servlet-name>
+        <url-pattern>/savestock</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>executenotification</servlet-name>
+        <url-pattern>/executenotification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>executepurreq</servlet-name>
+        <url-pattern>/executepurreq</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

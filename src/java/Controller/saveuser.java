@@ -6,12 +6,15 @@
 package Controller;
 
 import DB.DBConnectionHandler;
+import Model.Branch;
+import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,34 +67,36 @@ public class saveuser extends HttpServlet {
             ps.setString(1, uname);
             ps.setString(2, pw);
             ps.setString(3, userlevel);
-            switch (userlevel) {
-                case "Sales staff":
-                    ps.setInt(8, 0);
-                    break;
-                default:
-                    ps.setInt(8, 1);
-                    break;
-            }
             ps.setString(4, fname);
             ps.setString(5, lname);
             ps.setString(6, NIC);
-            ps.setInt(7, 1);
-            switch (branch) {
-                case "Nugegoda":
-                    ps.setInt(7, 1);
-                    break;
-                case "Rathnapura":
-                    ps.setInt(7, 2);
-                    break;
-                default:
-                    ps.setInt(3, 0);
-                    break;
+            ps.setString(7, branch);
+            ps.setInt(8, 2);
+            ps.executeUpdate();
+
+            //insert notification
+            int newuser = 0;
+            int targetuser = 1;
+            query = "SELECT MAX(iduser) FROM user";
+            ps = con.prepareStatement(query);
+            ResultSet rset = ps.executeQuery();
+            if (rset.next()) {
+                newuser = rset.getInt(1);
             }
 
-            ps.executeUpdate();
-            Savelog.saveLog(request, "new user signup1" + uname);
+            if (userlevel.equals("2")) {
+                Branch bb = DBDatalist.getBranch(Integer.parseInt(branch));
+
+                if (bb != null) {
+                    User u = DBDatalist.getBranchadminfromBranch(bb);
+                    if(u.getStatus()==1){
+                        targetuser=u.getIduser();
+                    }
+                }
+            }
+            System.out.println("targetuserr----------------" + newuser);
+            executenotification.insertnotification(targetuser, "UserReg", "New user registered", newuser, 0);
             con.commit();
-            Savelog.saveLog(request, "new user signup" + uname);
             response.sendRedirect("index.jsp?msg=success");
 
         } catch (SQLException | IOException e) {

@@ -6,15 +6,26 @@
 package Controller;
 
 import DB.DBConnectionHandler;
+import Model.Author;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import Model.Book;
-import Model.Author;
+import Model.Bill;
 import Model.Branch;
+import Model.Language;
+import Model.Log;
+import Model.Notification;
+import Model.Publisher;
+import Model.Purchaserequest;
+import Model.Report;
+import Model.Stock;
+import Model.Subject;
+import Model.Type;
 import Model.User;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,14 +34,367 @@ import java.util.concurrent.TimeUnit;
  */
 public class DBDatalist {
 
-    public static User getBranchadminfromBranch(String branch) {
+    public static ArrayList<Purchaserequest> getNewPurreqList() {
+        try {
+            ArrayList<Purchaserequest> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM purchase_req where status=? OR status=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, "New");
+            ps.setString(2, "Accepted");
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                Bill bill = getBill(rsetPurreq.getInt(5));
+
+                Purchaserequest pur = new Purchaserequest(rsetPurreq.getInt(1), rsetPurreq.getString(2), rsetPurreq.getString(3), rsetPurreq.getString(4), bill);
+
+                arr.add(pur);
+
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Purchaserequest> getPurreqList() {
+        try {
+            ArrayList<Purchaserequest> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM purchase_req ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                Bill bill = getBill(rsetPurreq.getInt(5));
+
+                Purchaserequest pur = new Purchaserequest(rsetPurreq.getInt(1), rsetPurreq.getString(2), rsetPurreq.getString(3), rsetPurreq.getString(4), bill);
+
+                arr.add(pur);
+
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Stock> getStockList() {
+        try {
+            ArrayList<Stock> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM branch_stock ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetStock = ps.executeQuery();
+
+            while (rsetStock.next()) {
+                int id=rsetStock.getInt(1);
+                Branch branch = getBranch(rsetStock.getInt(2));
+                Book book = getBook(rsetStock.getInt(3));
+                Date d=rsetStock.getDate(5);
+                int q = rsetStock.getInt(4);
+                Stock stock = new Stock(id,book, branch, q,d);
+                arr.add(stock);
+
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Notification> getNotificationList() {
+        try {
+            ArrayList<Notification> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM notification ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetNotification = ps.executeQuery();
+
+            while (rsetNotification.next()) {
+                User targetuser = getUser(rsetNotification.getInt(2));
+                String type = rsetNotification.getString(3);
+                if (type.equals("UserReg")) {
+                    User newuser = getUserfromAllUsers(rsetNotification.getInt(6));
+                    Notification not = new Notification(
+                            rsetNotification.getInt(1),
+                            targetuser,
+                            type,
+                            rsetNotification.getString(4),
+                            rsetNotification.getInt(5),
+                            newuser,
+                            null,
+                            rsetNotification.getTimestamp(8));
+                    arr.add(not);
+                } else {
+                    Report newreport = getReport(rsetNotification.getInt(7));
+                    Notification not = new Notification(
+                            rsetNotification.getInt(1),
+                            targetuser,
+                            type,
+                            rsetNotification.getString(4),
+                            rsetNotification.getInt(5),
+                            null,
+                            newreport,
+                            rsetNotification.getTimestamp(8));
+                    arr.add(not);
+                }
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Notification> getAllNotificationsforUser(int iduser) {
+        try {
+            ArrayList<Notification> arr = new ArrayList<>();
+            ArrayList<Notification> all = DBDatalist.getNotificationList();
+            for (Notification i : all) {
+                if (i.getTargetuser().getIduser() == iduser) {
+                    arr.add(i);
+                }
+            }
+            return arr;
+        } catch (Exception e) {
+            System.out.println("getallnotifications" + e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Notification> getNewNotificationsforUser(int iduser) {
+        try {
+            ArrayList<Notification> arr = new ArrayList<>();
+            ArrayList<Notification> all = DBDatalist.getNotificationList();
+            for (Notification i : all) {
+                if (i.getTargetuser().getIduser() == iduser) {
+                    if (i.getStatus() == 1) {
+                        arr.add(i);
+                    }
+                }
+            }
+            return arr;
+        } catch (Exception e) {
+            System.out.println("getnewnotifications" + e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Bill> getBillList() {
+        try {
+            ArrayList<Bill> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM bill ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetBill = ps.executeQuery();
+
+            while (rsetBill.next()) {
+                HashMap<Book, Integer> items = getBillitemsfromBill(rsetBill.getInt(1));
+                User user = getUser(rsetBill.getInt(5));
+                Bill rep = new Bill(
+                        rsetBill.getInt(1),
+                        rsetBill.getDate(2),
+                        rsetBill.getDouble(3),
+                        rsetBill.getString(4),
+                        user,
+                        items);
+                arr.add(rep);
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static HashMap<Book, Integer> getBillitemsfromBill(int idbill) {
+        try {
+            HashMap<Book, Integer> items = new HashMap();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT book_idbook,quantity FROM book_has_bill where Bill_idBill=? ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idbill);
+            ResultSet rsetBill = ps.executeQuery();
+
+            while (rsetBill.next()) {
+                Book b = getBook(rsetBill.getInt(1));
+                items.put(b, rsetBill.getInt(2));
+            }
+            con.close();
+            return items;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Report> getCustomReportList(String type) {  //type=MB, MG AB, AG 
+        try {
+            ArrayList<Report> arr2 = new ArrayList<>();
+            for (Report i : DBDatalist.getReportList()) {
+                if (i.getType().equals(type)) {
+                    arr2.add(i);
+                }
+            }
+            return arr2;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Report> getReportList() {
+        try {
+            ArrayList<Report> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM report ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetReport = ps.executeQuery();
+
+            while (rsetReport.next()) {
+                Report rep = new Report(
+                        rsetReport.getInt(1),
+                        rsetReport.getString(2),
+                        rsetReport.getString(3),
+                        rsetReport.getInt(4),
+                        rsetReport.getString(5),
+                        rsetReport.getString(6),
+                        rsetReport.getString(7));
+                arr.add(rep);
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static User getUserfromAllUsers(int uid) {
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM user where iduser=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, uid);
+            ResultSet rsetUser = ps.executeQuery();
+
+            User u = null;
+            while (rsetUser.next()) {
+                Branch b = DBDatalist.getBranch(rsetUser.getInt(8));
+                u = new User(
+                        rsetUser.getInt(1),
+                        rsetUser.getString(2),
+                        rsetUser.getString(3),
+                        rsetUser.getString(4),
+                        rsetUser.getString(5),
+                        rsetUser.getString(6),
+                        rsetUser.getString(7),
+                        b);
+
+            }
+            con.close();
+            return u;
+
+        } catch (Exception e) {
+            System.out.println("getuserlist error " + e);
+            return null;
+        }
+    }
+
+    public static ArrayList<User> getUserList() {
+        try {
+            ArrayList<User> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM user where status=? or status=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setInt(2, 2);
+            ResultSet rsetUser = ps.executeQuery();
+
+            while (rsetUser.next()) {
+                Branch b = DBDatalist.getBranch(rsetUser.getInt(8));
+                User u = new User(
+                        rsetUser.getInt(1),
+                        rsetUser.getString(2),
+                        rsetUser.getString(3),
+                        rsetUser.getString(4),
+                        rsetUser.getString(5),
+                        rsetUser.getString(6),
+                        rsetUser.getString(7),
+                        b);
+                arr.add(u);
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println("getuserlist error " + e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Log> getLogList() {
+        try {
+            ArrayList<Log> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM log ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetBranch = ps.executeQuery();
+
+            while (rsetBranch.next()) {
+                User user = getUser(rsetBranch.getInt(4));
+                Log log = new Log(
+                        rsetBranch.getInt(1),
+                        rsetBranch.getTimestamp(2),
+                        rsetBranch.getString(3),
+                        rsetBranch.getString(5),
+                        user);
+                arr.add(log);
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static User getBranchadminfromBranch(Branch branch) {
         try {
             User b = null;
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM user a, branch b where a.user_level=\"Branch admin\" and a.branch_idbranch=b.idbranch and b.name=? and a.status=? and b.status=?";
+            String query = "SELECT * FROM user a, branch b where a.user_level=1 and a.branch_idbranch=b.idbranch and b.name=? and a.status=? and b.status=?";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, branch);
+            ps.setString(1, branch.getName());
             ps.setInt(2, 1);
             ps.setInt(3, 1);
             ResultSet rsetSub = ps.executeQuery();
@@ -43,8 +407,9 @@ public class DBDatalist {
                         rsetSub.getString(5),
                         rsetSub.getString(6),
                         rsetSub.getString(7),
-                        rsetSub.getInt(8));
+                        branch);
             }
+            con.close();
             return b;
 
         } catch (Exception e) {
@@ -64,15 +429,15 @@ public class DBDatalist {
             ResultSet rsetBranch = ps.executeQuery();
 
             while (rsetBranch.next()) {
-                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
+//                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
                 Branch branch = new Branch(
                         rsetBranch.getInt(1),
                         rsetBranch.getString(2),
                         rsetBranch.getString(3),
-                        rsetBranch.getString(4),
-                        ba);
+                        rsetBranch.getString(4));
                 arr.add(branch);
             }
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -81,19 +446,21 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList<String> getSubjectList() {
+    public static ArrayList<Subject> getSubjectList() {
         try {
-            ArrayList<String> arr = new ArrayList<String>();
+            ArrayList<Subject> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT name FROM subject";
+            String query = "SELECT * FROM subject";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rsetSub = ps.executeQuery();
 
             while (rsetSub.next()) {
-                String sub = rsetSub.getString(1);
+                Type type = getType(rsetSub.getInt(3));
+                Subject sub = new Subject(rsetSub.getInt(1), rsetSub.getString(2), type);
                 arr.add(sub);
             }
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -102,19 +469,22 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList<String> getTypeList() {
+    public static ArrayList<Type> getTypeList() {
         try {
-            ArrayList<String> arr = new ArrayList<String>();
+            ArrayList<Type> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT name FROM type";
+            String query = "SELECT * FROM type";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rsetSub = ps.executeQuery();
 
             while (rsetSub.next()) {
-                String sub = rsetSub.getString(1);
-                arr.add(sub);
+                int id = rsetSub.getInt(1);
+                String sub = rsetSub.getString(2);
+                Type t = new Type(id, sub);
+                arr.add(t);
             }
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -123,19 +493,22 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList<String> getLanguageList() {
+    public static ArrayList<Language> getLanguageList() {
         try {
-            ArrayList<String> arr = new ArrayList<String>();
+            ArrayList<Language> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT name FROM language";
+            String query = "SELECT * FROM language";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rsetSub = ps.executeQuery();
 
             while (rsetSub.next()) {
-                String sub = rsetSub.getString(1);
-                arr.add(sub);
+                int id = rsetSub.getInt(1);
+                String sub = rsetSub.getString(2);
+                Language lan = new Language(id, sub);
+                arr.add(lan);
             }
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -144,19 +517,46 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList<String> getPublisherList() {
+    public static ArrayList<Publisher> getPublisherList() {
         try {
-            ArrayList<String> arr = new ArrayList<String>();
+            ArrayList<Publisher> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT name FROM publisher";
+            String query = "SELECT * FROM publisher";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rsetSub = ps.executeQuery();
 
             while (rsetSub.next()) {
-                String sub = rsetSub.getString(1);
-                arr.add(sub);
+                int id = rsetSub.getInt(1);
+                String sub = rsetSub.getString(2);
+                Publisher pub = new Publisher(id, sub);
+                arr.add(pub);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Author> getAuthorList() {
+        try {
+            ArrayList<Author> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM author";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetSub = ps.executeQuery();
+
+            while (rsetSub.next()) {
+                int id = rsetSub.getInt(1);
+                String name = rsetSub.getString(2);
+                Author a = new Author(id, name);
+                arr.add(a);
+            }
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -177,6 +577,7 @@ public class DBDatalist {
             while (rsetSub.next()) {
                 type = rsetSub.getString(1);
             }
+            con.close();
             return type;
 
         } catch (Exception e) {
@@ -185,11 +586,26 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList getFeaturedBookList() {
+    public static ArrayList<Subject> getSubjectsfromType(Type t) {
         try {
-            ArrayList<Book> arr = getBookList();
+            ArrayList<Subject> fbl = new ArrayList<>();
+            for (Subject i : DBDatalist.getSubjectList()) {
+                if (i.getType() == t) {
+                    fbl.add(i);
+                }
+            }
+            return fbl;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Book> getFeaturedBookList() {
+        try {
             ArrayList<Book> fbl = new ArrayList<>();
-            for (Book i : arr) {
+            for (Book i : DBDatalist.getBookList()) {
                 if (i.getFeatured() == 1) {
                     fbl.add(i);
                 }
@@ -202,11 +618,10 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList getRecentBookList() {
+    public static ArrayList<Book> getRecentBookList() {
         try {
-            ArrayList<Book> arr = getBookList();
             ArrayList<Book> rbl = new ArrayList<>();
-            for (Book i : arr) {
+            for (Book i : DBDatalist.getBookList()) {
                 Date pur = i.getPur_date();
                 Date today = new Date();
                 long diff = today.getTime() - pur.getTime();
@@ -239,7 +654,7 @@ public class DBDatalist {
 //                String author = new Author(idauthor, name);
                 arr.add(name);
             }
-
+            con.close();
             return arr;
 
         } catch (Exception e) {
@@ -253,18 +668,17 @@ public class DBDatalist {
             ArrayList<Book> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM book where status=?";
+            String query = "SELECT * FROM book where status=? order by name";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, 1);
             ResultSet rsetBook = ps.executeQuery();
 
             while (rsetBook.next()) {
 
-                String subject = getSubjectList().get(rsetBook.getInt(14) - 1);
-                String type = getTypefromSubject(subject);
-                String publisher = getPublisherList().get(rsetBook.getInt(12) - 1);
-                String language = getLanguageList().get(rsetBook.getInt(13) - 1);
-                ArrayList authors = getAuthorfromBook(rsetBook.getInt(1));
+                Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
                 Book b = new Book(
                         rsetBook.getInt(1),
                         rsetBook.getString(2),
@@ -280,17 +694,117 @@ public class DBDatalist {
                         publisher,//publisher
                         language,//language
                         subject,
-                        type,
                         authors);
 //                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
                 arr.add(b);
             }
-
+            con.close();
             return arr;
 
         } catch (Exception e) {
             System.out.println(e);
             return null;
         }
+    }
+
+    public static User getUser(int iduser) {
+        for (User i : DBDatalist.getUserList()) {
+            if (i.getIduser() == iduser) {
+                return i;
+            }
+        }
+        System.out.println("GetUser-----");
+        return null;
+    }
+
+    public static Book getBook(int idbook) {
+        for (Book i : DBDatalist.getBookList()) {
+            if (i.getIdbook() == idbook) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static Bill getBill(int idbill) {
+        for (Bill i : DBDatalist.getBillList()) {
+            if (i.getIdbill() == idbill) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static Branch getBranch(int idbranch) {
+        for (Branch i : DBDatalist.getBranchList()) {
+            if (i.getIdbranch() == idbranch) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static Publisher getPublisher(int idpublisher) {
+        for (Publisher i : DBDatalist.getPublisherList()) {
+            if (i.getIdpub() == idpublisher) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static String getLanguage(int idlanguage) {
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT name FROM language where idlanguage=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idlanguage);
+            ResultSet rsetSub = ps.executeQuery();
+            String lan = null;
+            while (rsetSub.next()) {
+                lan = rsetSub.getString(1);
+            }
+            con.close();
+            return lan;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static Subject getSubject(int idsubject) {
+        for (Subject i : DBDatalist.getSubjectList()) {
+            if (i.getIdsubject() == idsubject) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static Type getType(int idtype) {
+        for (Type i : DBDatalist.getTypeList()) {
+            if (i.getIdType() == idtype) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public static Report getReport(int idrep) {
+        for (Report i : DBDatalist.getReportList()) {
+            if (i.getIdreport() == idrep) {
+                return i;
+            }
+        }
+        return null;
+    }
+     public static Purchaserequest getPurchaserequest(int idpurreq) {
+        for (Purchaserequest i : DBDatalist.getPurreqList()) {
+            if (i.getIdpurreq() == idpurreq) {
+                return i;
+            }
+        }
+        return null;
     }
 }

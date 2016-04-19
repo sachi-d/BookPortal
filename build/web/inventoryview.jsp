@@ -4,6 +4,12 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Subject"%>
+<%@page import="Model.Type"%>
+<%@page import="Model.Language"%>
+<%@page import="sun.reflect.LangReflectAccess"%>
+<%@page import="Model.Publisher"%>
+<%@page import="Model.Author"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Controller.DBDatalist"%>
 <%@page import="Model.Book"%>
@@ -43,17 +49,45 @@
 
                         <div class="grid-form1"> 
                             <div class="col-md-12">
-                                <h3 class="head-top">Inventory</h3>
+                                <div class="col-md-12">
+                                    <%                        if (request.getParameter("msg") != null) {
+                                            if (request.getParameter("msg").equals("error")) {
+                                    %>
+                                    <div class="col-md-12 text-center">
+                                        <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
+                                            Oops! Something went wrong. <br/>Please try again.</label><hr>
+                                    </div>
+                                    <%
+                                        }
+                                        if (request.getParameter("msg").equals("success")) {
+                                    %>
+                                    <div class="col-md-12 text-center">
+                                        <label class="alert alert-success"><i class="fa fa-check"></i> Success:
+                                            Item added successfully.</label><hr>
+                                    </div>
+                                    <%
+                                            }
+                                        }
+                                    %>
 
-                                <!--                                <div class="full-left">
-                                                                    <form class=" navbar-left-right" style="padding: 5px;border: 2px solid #c7c7c7;">
-                                                                        <input type="text"  value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                    this.value = 'Search...';
-                                                                                }">
-                                                                        <input type="submit" value="" class="fa fa-search">
-                                                                    </form>
-                                                                    <div class="clearfix"> </div>
-                                                                </div>-->
+                                </div>
+
+                                <div class="col-md-12" >
+                                    <form action="bookinsert.jsp">
+                                    <div class="col-md-4 pull-left">
+                                        <h3 >Inventory</h3>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-4 ">
+                                        
+                                            <button class="btn btn-lg btn-default pull-right"  >Add new item <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
+                                        
+                                    </div>
+                                    </form>
+                                        
+                                </div>
 
                                 <!-- ---------------- BOOKS TABLE ------------------------------->
                                 <div class="col-md-12">
@@ -80,175 +114,23 @@
                                             <tr>
                                                 <td class="tg-yw40"><%= book.getISBN()%></td>
                                                 <td class="tg-yw40"><%= book.getTitle()%></td>
-                                                <td class="tg-yw40"><% for (int j = 0; j < book.getAuthors().size(); j++) { %>
-                                                    <%= book.getAuthors().get(j).toString() %> <br>
-                                                   <% }%></td>
-                                                <td class="tg-yw40"><%= book.getType()%></td>
-                                                <td class="tg-yw40"><%= book.getSubject()%></td>
+                                                <td class="tg-yw40"><% for (int j = 0; j < book.getAuthors().size(); j++) {%>
+                                                    <%= book.getAuthors().get(j).toString()%> <br>
+                                                    <% }%></td>
+                                                <td class="tg-yw40"><%= book.getSubject().getType().getName()%></td>
+                                                <td class="tg-yw40"><%= book.getSubject().getName()%></td>
                                                 <td class="tg-yw40"><%= book.getLanguage()%></td>
-                                                <td class="tg-yw40"><%= book.getPublisher()%></td>
+                                                <td class="tg-yw40"><%= book.getPublisher().getName()%></td>
                                             </tr>
                                             <%                                                    }
                                                 }%>
 
                                         </tbody>
                                     </table>
-                                    <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal">Add new item <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
-                                    <!--                                    <table id="table_principal" class="table table-bordered table-striped table-condensed">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>#</th>
-                                                                                    <th>First Name</th>
-                                                                                    <th>Last Name</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                    
-                                                                                <tr>
-                                                                                    <td>3</td>
-                                                                                    <td>dddr.getFname()%></td>
-                                                                                    <td>ddd user.getLname()%></td>
-                                                                                </tr>
-                                    
-                                                                            </tbody>
-                                                                        </table>-->
+
 
                                 </div>
 
-                                <!-- ---------------- ADD NEW INVENTORY ITEM --------------------->
-                                <div class="bs-example2 bs-example-padded-bottom">
-                                    <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">-->
-                                    <!--                                    <a data-toggle="modal" data-target="#myModal" >
-                                                                            <img class="hvr-grow" src="admin/images/add.png" 
-                                                                                 style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">
-                                                                        </a>-->
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    <h2 class="modal-title">Add inventory item</h2>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="grid-form1">
-
-                                                        <form class="form-horizontal">
-                                                            <div class="form-group">
-                                                                <label class="col-md-3 control-label"> Name :</label>
-                                                                <div class="col-md-9">
-                                                                    <input class="form-control" >
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-md-3 control-label"> ISBN :</label>
-                                                                <div class="col-md-9">
-                                                                    <input class="form-control" >
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Author 1 :</label>
-                                                                <div class="col-sm-9">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Author 2 :</label>
-                                                                <div class="col-sm-9">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Author 3 :</label>
-                                                                <div class="col-sm-9">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-md-3 control-label"> Description :</label>
-                                                                <div class="col-md-9">
-                                                                    <textarea rows="3" class="form-control" ></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Publisher :</label>
-                                                                <div class="col-sm-9">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Published date:</label>
-                                                                <div class="col-md-9">
-                                                                    <input class="form-control" type="date" >
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Language :</label>
-                                                                <div class="col-sm-3">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                                <label class="col-md-3 control-label"> Edition :</label>
-                                                                <div class="col-md-3">
-                                                                    <input class="form-control" >
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Type :</label>
-                                                                <div class="col-sm-3">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                                <label class="col-sm-3 control-label">Subject :</label>
-                                                                <div class="col-sm-3">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
-
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <button type="submit" class="btn btn-default">Submit</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="clearfix"> </div>
                         </div>
@@ -290,5 +172,17 @@
                 $("#table_book").DataTable();
             });
         </script>
+        <script type="text/javascript">
+            function removeOptions(selectbox) {
+                var i;
+                for (i = selectbox.options.length - 1; i >= 0; i--) {
+                    selectbox.remove(i);
+                }
+            }
+
+
+
+        </script>      
+
     </body>
 </html>

@@ -4,6 +4,11 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Model.Report"%>
+<%@page import="Model.Report"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -43,28 +48,77 @@
                             <!-- ----------------------GENERAL REPORTS TABLE ----------------->
                             <div class="col-md-12">
                                 <h3 class="head-top">General reports</h3>
-                                <table class="tg" id="table_gen_report">
-                                    <thead>
-                                        <tr>
-                                        <th class="tg-yw4l">Year</th>
-                                        <th class="tg-yw4l">Month</th>
-                                        <th class="tg-yw4l">Open report</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <%
-                                            for (int i = 0; i < 10; i++) { %>
-                                    <tr>
-                                        <td class="tg-yw40">2014</td>
-                                        <td class="tg-yw40">gesgrh</td>
-                                        <td class="tg-yw40"><a href="">Open report</a></td>
-                                    </tr>
-                                    <%  }
-                                    %>
-                                    </tbody>
-                                    
-                                </table>
 
+                                <div class="but_list">
+                                    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+                                        <ul id="myTab" class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Monthly reports</a></li>
+                                            <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Annual reports</a></li>
+                                        </ul>
+                                        <div id="myTabContent" class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+                                                <!-- ---------------------------MONTHLY BRANCH REPORTS ----------------------------------------->
+                                                <table class="tg" id="table_general_month">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="tg-yw4l">Year</th>
+                                                            <th class="tg-yw4l">Month</th>
+                                                            <th class="tg-yw4l">Open report</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%  
+                                                            ArrayList<Report> arrReport = DBDatalist.getCustomReportList("MG");
+                                                            if (arrReport != null) {
+                                                                for (int i = 0; i < arrReport.size(); i++) {
+                                                                    Report report = (Report) arrReport.get(i);
+
+                                                        %>
+                                                        <tr>
+                                                            <td class="tg-yw40"><%= report.getYear()%></td>
+                                                            <td class="tg-yw40"><%= report.getMonth()%></td>
+                                                            <td class="tg-yw40"><a href="<%= report.getLocation()%>" target="blank"><%= report.getTitle()%></a></td>
+                                                        </tr>
+                                                        <%  }
+                                                            }
+                                                        %>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+
+                                                <!-- ---------------------------ANNUAL BRANCH REPORTS ----------------------------------------->
+                                                <table class="tg" id="table_general_annual">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="tg-yw4l">Year</th>
+                                                            <th class="tg-yw4l">Open report</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            ArrayList<Report> arrReport2 = DBDatalist.getCustomReportList("AG");
+                                                            if (arrReport != null) {
+                                                                for (int i = 0; i < arrReport2.size(); i++) {
+                                                                    Report report = (Report) arrReport2.get(i);
+
+                                                        %>
+                                                        <tr>
+                                                            <td class="tg-yw40"><%= report.getYear()%></td>
+                                                            <td class="tg-yw40"><a href="<%= report.getLocation()%>" target="blank"><%= report.getTitle()%></a></td>
+                                                        </tr>
+                                                        <%  }
+                                                            }
+                                                        %>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="clearfix"> </div>
@@ -98,7 +152,8 @@
 
         <script type="text/javascript">
             $(function () {
-                $("#table_gen_report").DataTable();
+                $("#table_general_month").DataTable();
+                $("#table_general_annual").DataTable();
             });
         </script>
     </body>

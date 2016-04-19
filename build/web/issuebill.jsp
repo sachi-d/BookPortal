@@ -72,11 +72,11 @@
                                             <%
                                                 for (int i = 0; i < 10; i++) { %>
                                             <tr>
-                                                <td class="tg-yw40"><input type="text" class="form-control" id="exampleInputEmail1"></td>
-                                                <td class="tg-yw40"><input type="text" class="form-control" id="exampleInputEmail1"></td>
-                                                <td class="tg-yw40"><input type="text" class="form-control" id="exampleInputEmail1"></td>
-                                                <td class="tg-yw40"><input type="text" class="form-control" id="exampleInputEmail1"></td>
-                                                <td class="tg-yw40"><input type="text" class="form-control" id="exampleInputEmail1"></td>
+                                                <td class="tg-yw33"><input type="text" class="form-control" ></td>
+                                                <td class="tg-yw33"><input type="text" class="form-control" ></td>
+                                                <td class="tg-yw33"><input type="text" class="form-control" ></td>
+                                                <td class="tg-yw33"><input type="text" class="form-control" ></td>
+                                                <td class="tg-yw33"><input type="text" class="form-control" ></td>
                                             </tr>
                                             <%  }
                                             %>

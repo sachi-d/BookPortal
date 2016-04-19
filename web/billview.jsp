@@ -4,6 +4,11 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Book"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Model.Bill"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -48,25 +53,51 @@
                                         <tr>
                                             <th class="tg-yw4l">Bill ID</th>
                                             <th class="tg-yw4l">Date</th>
+                                            <th class="tg-yw4l">Branch</th>
                                             <th class="tg-yw4l">Processed by</th>
+                                            <th class="tg-yw4l">Items</th>
+                                            <th class="tg-yw4l">Quantity</th>
                                             <th class="tg-yw4l">Total</th>
                                             <th class="tg-yw4l">Payment method</th>
-                                            <th class="tg-yw4l">Open file</th>
                                         </tr> 
                                     </thead>
 
                                     <tbody>
-                                        <%
-                                            for (int i = 0; i < 15; i++) { %>
+                                        <%                                            
+                                            ArrayList<Bill> arrBill = DBDatalist.getBillList();
+                                            if (arrBill != null) {
+                                               
+                                                for (int i = 0; i < arrBill.size(); i++) {
+                                                    Bill bill = (Bill) arrBill.get(i);
+                                        %>
                                         <tr>
-                                            <td class="tg-yw40">112</td>
-                                            <td class="tg-yw40">2001-01-21</td>
-                                            <td class="tg-yw40">fsfafA</td>
-                                            <td class="tg-yw40">24242</td>
-                                            <td class="tg-yw40">fs sg</td>
-                                            <td class="tg-yw40">rwrw</td>
+                                            <td class="tg-yw40"><%= bill.getIdbill()%></td>
+                                            <td class="tg-yw40"><%= bill.getDate()%></td>
+                                            <td class="tg-yw40"><%= bill.getIssue_user().getBranch().getName() %></td>
+                                            <td class="tg-yw40"><%= bill.getIssue_user().getFullname()%></td>
+                                            <td class="tg-yw40">
+                                                <%  HashMap<Book, Integer> h = bill.getItems();
+                                                    for (Book b : h.keySet()) {
+                                                %>
+                                                <%= b.getTitle()%> <br>
+
+                                                <%
+                                                    }%></td>
+
+                                            <td class="tg-yw40">
+                                                <%
+                                                    for (Integer q : h.values()) {
+                                                %>
+                                                <%= q %> <br>
+
+                                                <%
+                                                    }%></td>
+
+                                            <td class="tg-yw40"><%= bill.getTotal()%></td>
+                                            <td class="tg-yw40"><%= bill.getPaymethod()%></td>
                                         </tr>
                                         <%  }
+                                            }
                                         %>
                                     </tbody>
 

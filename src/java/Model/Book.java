@@ -24,18 +24,17 @@ public class Book {
     private String image;
     private int featured;
     private int reserved;
-    private String publisher;
+    private Publisher publisher;
     private String language;
-    private String subject;
+    private Subject subject;
     private int status;
     private ArrayList<String> authors;
     
-    private String type;
 
     public Book() {
     }
 
-    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, int status) {
+    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, Publisher publisher, String language, Subject subject, int status) {
         this.idbook = idbook;
         this.title = title;
         this.ISBN = ISBN;
@@ -54,24 +53,22 @@ public class Book {
         
     }
 
-    public Book(int idbook, String title, String subject, String type) {    //for featured book
+    public Book(int idbook, String title, Subject subject, String type) {    //for featured book
         this.idbook = idbook;
         this.title = title;
         this.subject = subject;
-        this.type=type;
     }
 
-    public Book(int idbook, String title, String ISBN, String publisher, String language, String subject, String type) {
+    public Book(int idbook, String title, String ISBN, Publisher publisher, String language, Subject subject, String type) {
         this.idbook = idbook;
         this.title = title;
         this.ISBN = ISBN;
         this.publisher = publisher;
         this.language = language;
         this.subject = subject;
-        this.type = type;
     }
 
-    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type, ArrayList<String> auth) {
+    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, Publisher publisher, String language, Subject subject,ArrayList<String> auth) {
         this.idbook = idbook;
         this.title = title;
         this.ISBN = ISBN;
@@ -86,7 +83,6 @@ public class Book {
         this.publisher = publisher;
         this.language = language;
         this.subject = subject;
-        this.type = type;
         this.authors=auth;
     }
 
@@ -188,11 +184,11 @@ public class Book {
         this.reserved = reserved;
     }
 
-    public String getPublisher() {
+    public Publisher getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
 
@@ -204,11 +200,11 @@ public class Book {
         this.language = language;
     }
 
-    public String getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
@@ -219,14 +215,5 @@ public class Book {
     public void setStatus(int status) {
         this.status = status;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    
     
 }

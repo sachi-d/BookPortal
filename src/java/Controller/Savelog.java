@@ -12,7 +12,6 @@ import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
 import javax.servlet.http.HttpServletRequest;
 
 /**

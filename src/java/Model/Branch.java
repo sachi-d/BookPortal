@@ -15,14 +15,12 @@ public class Branch {
     private String address;
     private String telNo;
     private int status;
-    private User branchAdmin;
 
-    public Branch(int idbranch, String name, String address, String telNo, User u) {
+    public Branch(int idbranch, String name, String address, String telNo) {
         this.idbranch = idbranch;
         this.name = name;
         this.address = address;
         this.telNo = telNo;
-        branchAdmin=u;
     }
 
     public int getIdbranch() {
@@ -64,14 +62,4 @@ public class Branch {
     public void setStatus(int status) {
         this.status = status;
     }
-
-    public User getBranchAdmin() {
-        return branchAdmin;
-    }
-
-    public void setBranchAdmin(User branchAdmin) {
-        this.branchAdmin = branchAdmin;
-    }
-    
-    
 }

@@ -4,6 +4,8 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.Branch"%>
 <%@page import="Controller.DBDatalist"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
@@ -33,7 +35,7 @@
                             if (request.getParameter("msg").equals("error")) {
                     %>
                     <div class="col-md-12 text-center">
-                        <label class="label-warning"><i class="fa fa-warning"></i> Warning:
+                        <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
                             Oopsee! Something went wrong. <br/>Please try again.</label><hr>
                     </div>
                     <%
@@ -42,7 +44,7 @@
                     %>
                     <div class="col-md-12 text-center">
                         <!--<div class="callout callout-danger" style="margin-bottom: 0!important;">-->												
-                        <label class="label-warning"><i class="fa fa-warning"></i> Warning:
+                        <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
                             Username is available. Please try with another.</label><hr>
                         <!--</div>-->
                     </div>
@@ -74,9 +76,9 @@
                             <div>
                                 <select name="userlevel" id="category" class="form-control" >
                                     <option value = "select" selected = "">Select user level..</option>
-                                    <option value = "0" >Admin</option>
+                                    <!--<option value = "0" >Admin</option>-->
                                     <option value = "1" >Branch admin</option>
-                                    <option value = "1" >Sales staff</option>
+                                    <option value = "2" >Sales staff</option>
                                 </select>
                             </div>
                         </div>
@@ -85,8 +87,18 @@
                             <div>
                                 <select name="branch" id="category" class="form-control" >
                                     <option value = "select" selected = "">Select branch..</option>
-                                    <option value = "1" >Nugegoda</option>
-                                    <option value = "2" >Rathnapura</option>
+                                    <%                                                
+                                        ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
+                                        if (arrBranch != null) {
+                                            for (int i = 0; i < arrBranch.size(); i++) {
+                                                Branch branch = (Branch) arrBranch.get(i);
+
+                                    %>
+                                    <option value = "<%= branch.getIdbranch() %>" ><%= branch.getName() %></option>
+                                    <%         }
+                                        }
+
+                                    %>
 
                                 </select>
                             </div>
@@ -110,8 +122,9 @@
                     </div>
                     <div class=" login-do">
                         <label class="hvr-shutter-in-horizontal login-sub">
-                            <!--<input type="submit" value="Submit">-->
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <input type="submit" value="Submit">
+                            <!--<a href="login.jsp" class="hvr-shutter-in-horizontal">Login</a>-->
+                            <!--<button type="submit" class="btn btn-primary">Register</button>-->
                         </label>
                         <p>Already registered?</p>
                         <a href="login.jsp" class="hvr-shutter-in-horizontal">Login</a>

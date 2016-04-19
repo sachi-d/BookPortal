@@ -4,6 +4,9 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Controller.DBDatalist"%>
+<%@page import="Model.Log"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -47,24 +50,30 @@
                                     <thead>
                                         <tr>
                                             <th class="tg-yw4l">Timestamp</th>
-                                            <th class="tg-yw4l">Username</th>
+                                            <th class="tg-yw4l">User</th>
                                             <th class="tg-yw4l">User level</th>
                                             <th class="tg-yw4l">IP</th>
+                                            <th class="tg-yw4l">Action</th>
 
                                         </tr> 
                                     </thead>
 
                                     <tbody>
-                                        <%
-                                            for (int i = 0; i < 15; i++) { %>
+                                        <%  
+                                            ArrayList<Log> arrLog = DBDatalist.getLogList();
+                                            if (arrLog != null) {
+                                                for (int i = 0; i < arrLog.size(); i++) {
+                                                    Log log = (Log) arrLog.get(i);
+                                        %>
                                         <tr>
-                                            <td class="tg-yw40">njkg gfdkgln fdgjvksdjfg</td>
-                                            <td class="tg-yw40">rol" id="exampleInputEmail1"></td>
-                                            <td class="tg-yw40">input type="text" class="for</td>
-                                            <td class="tg-yw40">rm-control" id="exkkk</td>
-
+                                            <td class="tg-yw40"><%= log.getTimestamp() %></td>
+                                            <td class="tg-yw40"><%= log.getUser().getFullname() %></td>
+                                            <td class="tg-yw40"><%= log.getUser().getUser_levelname()%></td>
+                                            <td class="tg-yw40"><%= log.getIp() %></td>
+                                            <td class="tg-yw40"><%= log.getDescription() %></td>
                                         </tr>
                                         <%  }
+                                            }
                                         %>
                                     </tbody>
 

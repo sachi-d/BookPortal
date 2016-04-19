@@ -24,7 +24,30 @@
     <body>
         <div class="login">
             <h1><a href="index.jsp">Book Portal </a></h1>
+            
             <div class="login-bottom">
+                <div class="col-md-12">
+                <%                        if (request.getParameter("msg") != null) {
+                        if (request.getParameter("msg").equals("error")) {
+                %>
+                <div class="col-md-12 text-center">
+                    <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
+                        Login failed. <br/>Please try again.</label><hr>
+                </div>
+                <%
+                    }
+                    if (request.getParameter("msg").equals("success")) {
+                %>
+                <div class="col-md-12 text-center">
+                    <label class="alert alert-success"><i class="fa fa-check"></i> Success:
+                        Login successful</label><hr>
+                </div>
+                <%
+                        }
+                    }
+                %>
+
+            </div>
                 <h2>Login</h2>
                 <form action="login" method="POST">
                     <div class="col-md-6">

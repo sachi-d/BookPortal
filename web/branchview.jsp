@@ -42,19 +42,44 @@
 
                         <div class="grid-form1"> 
                             <div class="col-md-12">
-                                <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">-->
-
-                                <!--<input data-toggle="modal" data-target="#myModal" type="image" src="admin/images/add.png" alt="Add" >-->
-                                <!-- -------------------BRANCH TABLE ----------------------->
                                 <div class="col-md-12">
-                                    <!--<div class="col-md-12">-->
-                                    <!--<div class="col-md-6">-->
-                                    <h3 class="head-top">Branches</h3>
-                                    <!--</div>-->
-                                    <!--<div class="col-md-6">-->
+                                    <%                        if (request.getParameter("msg") != null) {
+                                            if (request.getParameter("msg").equals("error")) {
+                                    %>
+                                    <div class="col-md-12 text-center">
+                                        <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
+                                            Oops! Something went wrong. <br/>Please try again.</label><hr>
+                                    </div>
+                                    <%
+                                        }
+                                        if (request.getParameter("msg").equals("success")) {
+                                    %>
+                                    <div class="col-md-12 text-center">
+                                        <label class="alert alert-success"><i class="fa fa-check"></i> Success:
+                                            Branch added successfully.</label><hr>
+                                    </div>
+                                    <%
+                                            }
+                                        }
+                                    %>
 
-                                    <!--</div>-->
-                                    <!--</div>-->
+                                </div>
+
+                                <!-- - - - - - - - - - - - - - - - - - -BRANCH TABLE - - - - - - - - - - - - - - - - - ----->
+                                <div class="col-md-12" >
+                                    <div class="col-md-4 pull-left">
+                                        <h3 >Branches</h3>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-4 ">
+                                        <button class="btn btn-lg btn-default pull-right" data-toggle="modal" data-target="#myModal">Add new branch <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+
+
 
                                     <table class="tg" id="table_branch">
                                         <thead>
@@ -66,8 +91,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%                                                
-                                                ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
+                                            <%                                                ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
                                                 if (arrBranch != null) {
                                                     for (int i = 0; i < arrBranch.size(); i++) {
                                                         Branch branch = (Branch) arrBranch.get(i);
@@ -77,7 +101,13 @@
                                                 <td class="tg-yw40"><%= branch.getName()%></td>
                                                 <td class="tg-yw40"><%= branch.getAddress()%></td>
                                                 <td class="tg-yw40"><%= branch.getTelNo()%></td>
-                                                <td class="tg-yw40"><%= branch.getBranchAdmin() %></td>
+                                                <td class="tg-yw40">
+                                                    <%
+                                                        User u =DBDatalist.getBranchadminfromBranch(branch);
+                                                        if (u != null) {
+                                                    %>
+                                                    <%= u.getFullname()%> 
+                                                    <% } %></td>
                                             </tr>
                                             <%  }
                                                 }
@@ -85,15 +115,11 @@
                                         </tbody>
 
                                     </table>
-                                    <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal">Add new branch <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
-                                </div>
-                                <!-- --------------- ADD BRANCH ---------------------------->
-                                <div class="bs-example2 bs-example-padded-bottom">
 
-                                    <!--                                    <a data-toggle="modal" data-target="#myModal" >
-                                                                            <img class="hvr-grow" src="admin/images/add.png" 
-                                                                                 style="position: fixed; bottom: 60px; right: 135px; z-index: 5; width: 50px; height: 50px;">
-                                                                        </a>-->
+
+                                </div>
+                                <!-- - - - - - - - - - - - - - - - - - - ADD BRANCH - - - - - - - - - - - - - - - - - -->
+                                <div class="bs-example2 bs-example-padded-bottom">
 
                                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                         <div class="modal-dialog">
@@ -105,36 +131,26 @@
                                                 <div class="modal-body">
                                                     <div class="grid-form1">
 
-                                                        <form class="form-horizontal">
+                                                        <form class="form-horizontal" action="savebranch" method="POST">
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Branch name :</label>
                                                                 <div class="col-md-9">
-                                                                    <input class="form-control" >
+                                                                    <input class="form-control" name="name" >
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Address :</label>
                                                                 <div class="col-md-9">
-                                                                    <input class="form-control" >
+                                                                    <input class="form-control" name="address">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Tel no. :</label>
                                                                 <div class="col-md-9">
-                                                                    <input class="form-control" >
+                                                                    <input class="form-control" name="telno">
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Branch admin :</label>
-                                                                <div class="col-sm-9">
-                                                                    <select name="child" class="form-control">
-                                                                        <option value="select" selected="" disabled="">Select..</option>
 
-                                                                        <option value="">fsdfsd</option>
-
-                                                                    </select>
-                                                                </div>
-                                                            </div>
 
                                                             <div class="form-group">
                                                                 <div class="col-md-3 "></div><div class="col-md-3 "></div>
@@ -185,7 +201,7 @@
 
         <script type="text/javascript">
             $(function () {
-                $("#table_branch").DataTable();
+//                $("#table_branch").DataTable();
             });
         </script>
     </body>
