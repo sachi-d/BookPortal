@@ -2905,3 +2905,13 @@ tr.table-row {
     /*    padding: 0;
         margin: 0*/
 }
+
+h5.table-header{
+    text-decoration: underline;
+    color: #909090;
+}
+
+h4.table-header{
+    text-decoration: underline;
+    color: #909090;
+}

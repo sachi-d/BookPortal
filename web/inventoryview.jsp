@@ -19,6 +19,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Inventory</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!--<link rel="stylesheet" type="text/css" href="plugins/datatables/media/css/dataTables.bootstrap.css">-->
@@ -114,8 +115,10 @@
                                             <tr>
                                                 <td class="tg-yw40"><%= book.getISBN()%></td>
                                                 <td class="tg-yw40"><%= book.getTitle()%></td>
-                                                <td class="tg-yw40"><% for (int j = 0; j < book.getAuthors().size(); j++) {%>
-                                                    <%= book.getAuthors().get(j).toString()%> <br>
+                                                <td class="tg-yw40"><% 
+                                                    ArrayList<Author> aa=DBDatalist.getAuthorfromBook(book.getIdbook());
+                                                    for (int j = 0; j < aa.size(); j++) {%>
+                                                    <%= aa.get(j).getName() %> <br>
                                                     <% }%></td>
                                                 <td class="tg-yw40"><%= book.getSubject().getType().getName()%></td>
                                                 <td class="tg-yw40"><%= book.getSubject().getName()%></td>

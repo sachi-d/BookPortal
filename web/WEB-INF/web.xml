@@ -2,23 +2,23 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>saveuser</servlet-name>
-        <servlet-class>Controller.saveuser</servlet-class>
+        <servlet-class>Controller.Saveuser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>Controller.login</servlet-class>
+        <servlet-class>Controller.Executelogin</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>signout</servlet-name>
-        <servlet-class>Controller.signout</servlet-class>
+        <servlet-class>Controller.Signout</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>savebranch</servlet-name>
-        <servlet-class>Controller.savebranch</servlet-class>
+        <servlet-class>Controller.Savebranch</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>savebook</servlet-name>
-        <servlet-class>Controller.savebook</servlet-class>
+        <servlet-class>Controller.Savebook</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewServlet</servlet-name>
@@ -26,15 +26,27 @@
     </servlet>
     <servlet>
         <servlet-name>savestock</servlet-name>
-        <servlet-class>Controller.savestock</servlet-class>
+        <servlet-class>Controller.Savestock</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>executenotification</servlet-name>
-        <servlet-class>Controller.executenotification</servlet-class>
+        <servlet-class>Controller.Executenotification</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>executepurreq</servlet-name>
-        <servlet-class>Controller.executepurreq</servlet-class>
+        <servlet-class>Controller.Executepurreq</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>trialsavebook</servlet-name>
+        <servlet-class>Controller.trialsavebook</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Savebill</servlet-name>
+        <servlet-class>Controller.Savebill</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Executecart</servlet-name>
+        <servlet-class>Controller.Executecart</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>saveuser</servlet-name>
@@ -71,6 +83,18 @@
     <servlet-mapping>
         <servlet-name>executepurreq</servlet-name>
         <url-pattern>/executepurreq</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>trialsavebook</servlet-name>
+        <url-pattern>/trialsavebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Savebill</servlet-name>
+        <url-pattern>/Savebill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Executecart</servlet-name>
+        <url-pattern>/Executecart</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

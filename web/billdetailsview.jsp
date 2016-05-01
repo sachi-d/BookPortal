@@ -13,9 +13,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View bill details</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
+        
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-
-
         <!-- Custom Theme files -->
         <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
         <link href="admin/css/font-awesome.css" rel="stylesheet"> 
@@ -83,11 +83,11 @@
                                         <div class="col-md-8">
                                             <p> <%= pur.getIdbill().getIdbill()%> </p>
                                             <%
-                                                if(pur.getStatus().equals("New")){
-                                                    %><label class="label label-warning">New</label><%
-                                                }else if(pur.getStatus().equals("Accepted")){
-                                                    %><label class="label label-primary">Accpted</label><%
-                                                }
+                                                if (pur.getStatus().equals("New")) {
+                                            %><label class="label label-warning">New</label><%
+                                                    } else if (pur.getStatus().equals("Accepted")) {
+                                            %><label class="label label-primary">Accpted</label><%
+                                                        }
                                             %>
                                         </div>
 
@@ -95,29 +95,30 @@
                                     <div class="form-group">
                                         <hr>
                                         <div class="col-md-2"></div>
-                                        <label class="col-md-2 "> Bill items : </label>
-                                        <label class="col-md-4 "> Item </label>
-
-                                        <label class="col-md-4 "> Quantity </label>
+                                        <label class="col-md-2 " > Bill items : </label>
+                                        <label class="col-md-3 " style="text-decoration: underline"> Item </label>
+                                        <label class="col-md-3 " style="text-decoration: underline"> ISBN </label>
+                                        <label class="col-md-2 " style="text-decoration: underline"> Quantity </label>
                                     </div>
                                     <div class="form-group">
-                                        
+
                                         <%  HashMap<Book, Integer> h = bill.getItems();
                                             for (Book b : h.keySet()) {
                                         %>
                                         <div class="col-md-4"></div>
-                                        <div class="col-md-4">       <p>   <%= b.getTitle()%> <br></p></div>
-                                        <div class="col-md-4">       <p>   <%= h.get(b)%> <br></p></div>
+                                        <div class="col-md-3">       <p>   <%= b.getTitle()%> <br></p><hr></div>
+                                        <div class="col-md-3">       <p>   <%= b.getISBN() %> <br></p><hr></div>
+                                        <div class="col-md-2">       <p>   <%= h.get(b)%> <br></p><hr></div>
                                                 <%
                                                     }%>
-                                        
+
                                     </div>
                                     <div class="form-group">
                                         <hr>
                                         <div class="col-md-2"></div>
                                         <label class="col-md-2 "> Total : </label>
                                         <div class="col-md-8">
-                                            <p> <%= pur.getIdbill().getTotal()%> </p>
+                                            <p> Rs. <%= pur.getIdbill().getTotal()%> </p>
                                         </div>
                                         <hr>
                                     </div>
@@ -134,7 +135,7 @@
                                         <%
                                         } else if (stat.equals("Accepted")) {
                                         %>
-                                        
+
                                         <div class="col-md-2">
                                             <a href="executepurreq?para=process&pur=<%= pur.getIdpurreq()%>"><button class="btn-sm btn-danger" type="button">Close<span class='fa fa-remove'></span></button></a>
                                         </div>

@@ -13,7 +13,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Featured books</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+        <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>
@@ -31,20 +33,20 @@
 
                                     <div class="form-group">
                                         <div class="col-md-1">
-                                            <h4 id="q">#</h4>
+                                            <h4 class="table-header">#</h4>
                                         </div>
                                         <div class="col-md-2">
-                                            <h4 id="w">Status</h4>
+                                            <h4 class="table-header">Status</h4>
                                         </div>
                                         <div class="col-md-3">
-                                            <h4 id="e">Title</h4>
+                                            <h4 class="table-header">Title</h4>
                                         </div>
                                         <div class="col-md-4">
-                                            <h4 id="r">Type/Subject</h4>
+                                            <h4 class="table-header">Type/Subject</h4>
                                         </div>
 
                                         <div class="col-md-2">
-                                            <h4 id="t">Action</h4>
+                                            <h4 class="table-header">Action</h4>
                                         </div>
                                     </div>
 
@@ -88,7 +90,7 @@
                                         <div class="col-md-3">
                                             <input hidden="" id="para" name="para" value="fadd">
                                             <!--<input class="form-control" placeholder="start typing..." id="newfeatbook" name="newfeatbook">-->
-                                            <select id="newfeatbook" name="newfeatbook" class="form-control" onclick="settype()">
+                                            <select id="newfeatbook" name="newfeatbook" class="form-control" required="">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Book> bb = DBDatalist.getBookList();
@@ -113,7 +115,7 @@
 
                                         <div class="col-md-2">
                                             <!--<button data-toggle="modal" data-target="#myModaladd" type="button" class="btn-xs btn-primary">Add <span class='fa fa-check'></span></button>-->
-                                            <button class="btn-xs btn-primary" type="submit" disabled="" id="addnewfeat">Add <span class='fa fa-check'></span></button>
+                                            <a href="savebook?para=fadd&book="><button class="btn-xs btn-primary" type="button"  id="addnewfeat">Add <span class='fa fa-check'></span></button></a>
                                         </div>
                                     </div>
                                     <%
@@ -146,7 +148,7 @@
                                     %>
 
                                 </form>
-                       
+
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -159,11 +161,11 @@
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
         <script type="text/javascript">
-            function settype(){
-                var id=docu;
-                document.getElementById('addnewfeat').disabled=false;
-            }
-            </script>
+                                                function settype() {
+                                                    var id = docu;
+                                                    document.getElementById('addnewfeat').disabled = false;
+                                                }
+        </script>
 
     </body>
 </html>

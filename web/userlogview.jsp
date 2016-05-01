@@ -13,6 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User logs</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -34,7 +35,7 @@
     <body>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
-            <!----->
+            <!-- - -->
 
             <div id="page-wrapper" class="gray-bg dashbard-1">
                 <div class="content-main">
@@ -43,7 +44,7 @@
                         <div class="grid-form1"> 
 
 
-                            <!-- ----------------------USER LOGS TABLE ----------------->
+                            <!-- - - - - - - - - - - - - - - -USER LOGS TABLE - - - - - - - - - - -->
                             <div class="col-md-12">
                                 <h3 class="head-top">User logs</h3>
                                 <table class="tg" id="table_user">
@@ -59,18 +60,17 @@
                                     </thead>
 
                                     <tbody>
-                                        <%  
-                                            ArrayList<Log> arrLog = DBDatalist.getLogList();
+                                        <%                                            ArrayList<Log> arrLog = DBDatalist.getLogList();
                                             if (arrLog != null) {
                                                 for (int i = 0; i < arrLog.size(); i++) {
                                                     Log log = (Log) arrLog.get(i);
                                         %>
                                         <tr>
-                                            <td class="tg-yw40"><%= log.getTimestamp() %></td>
-                                            <td class="tg-yw40"><%= log.getUser().getFullname() %></td>
+                                            <td class="tg-yw40"><%= log.getTimestamp()%></td>
+                                            <td class="tg-yw40"><%= log.getUser().getFullname()%></td>
                                             <td class="tg-yw40"><%= log.getUser().getUser_levelname()%></td>
-                                            <td class="tg-yw40"><%= log.getIp() %></td>
-                                            <td class="tg-yw40"><%= log.getDescription() %></td>
+                                            <td class="tg-yw40"><%= log.getIp()%></td>
+                                            <td class="tg-yw40"><%= log.getDescription()%></td>
                                         </tr>
                                         <%  }
                                             }
@@ -86,7 +86,7 @@
 
 
                         </div>
-                        <!----->
+                        <!-- - -->
 
                     </div>
                     <%@include file="admin_footer.jsp" %>

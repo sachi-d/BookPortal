@@ -14,7 +14,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Branch reports</title>
-
+        <link rel="shortcut icon" href="admin/images/logo.png">
+        
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
@@ -65,17 +66,16 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <%                 
-                                                            ArrayList<Report> arrReport = DBDatalist.getCustomReportList("MB");
+                                                        <%                                                            ArrayList<Report> arrReport = DBDatalist.getCustomReportList("MB");
                                                             if (arrReport != null) {
                                                                 for (int i = 0; i < arrReport.size(); i++) {
                                                                     Report report = (Report) arrReport.get(i);
 
                                                         %>
                                                         <tr>
-                                                            <td class="tg-yw40"><%= report.getYear() %></td>
-                                                            <td class="tg-yw40"><%= report.getMonth() %></td>
-                                                            <td class="tg-yw40"><%= report.getBranch() %></td>
+                                                            <td class="tg-yw40"><%= report.getYear()%></td>
+                                                            <td class="tg-yw40"><%= report.getMonth()%></td>
+                                                            <td class="tg-yw40"><%= report.getBranch()%></td>
                                                             <td class="tg-yw40"><a href="<%= report.getLocation()%>" target="blank"><%= report.getTitle()%></a></td>
                                                         </tr>
                                                         <%  }
@@ -86,7 +86,7 @@
                                                 </table>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
-                                                
+
                                                 <!-- ---------------------------ANNUAL BRANCH REPORTS ----------------------------------------->
                                                 <table class="tg" id="table_branch_annual">
                                                     <thead>
@@ -97,7 +97,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <%                                                            
+                                                        <%
                                                             ArrayList<Report> arrReport2 = DBDatalist.getCustomReportList("AB");
                                                             if (arrReport2 != null) {
                                                                 for (int i = 0; i < arrReport2.size(); i++) {
@@ -105,8 +105,8 @@
 
                                                         %>
                                                         <tr>
-                                                            <td class="tg-yw40"><%= report.getYear() %></td>
-                                                            <td class="tg-yw40"><%= report.getBranch() %></td>
+                                                            <td class="tg-yw40"><%= report.getYear()%></td>
+                                                            <td class="tg-yw40"><%= report.getBranch()%></td>
                                                             <td class="tg-yw40"><a href="<%= report.getLocation()%>" target="blank"><%= report.getTitle()%></a></td>
                                                         </tr>
                                                         <%  }

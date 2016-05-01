@@ -14,8 +14,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View user</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
+        
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-
 
         <!-- Custom Theme files -->
         <link href="admin/css/style.css" rel='stylesheet' type='text/css' />

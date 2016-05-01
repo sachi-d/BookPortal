@@ -15,6 +15,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>General reports</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
         <link href="admin/css/hover.css" rel="stylesheet"> 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />

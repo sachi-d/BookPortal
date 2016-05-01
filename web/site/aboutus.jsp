@@ -11,10 +11,24 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>About Us</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/prettyPhoto.css" rel="stylesheet">
+        <link href="css/price-range.css" rel="stylesheet">
+        <link href="css/animate.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+        <link href="css/responsive.css" rel="stylesheet">
     </head>
     <body>
+        
         <%@include file="header.jsp" %>
         <div id="contact-page" class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="home.jsp">Home</a></li>
+                    <li class="active">About Us</li>
+                </ol>
+            </div>
             <div class="bg">
                 <div class="row">    		
                     <div class="col-sm-12">    			   			
@@ -35,7 +49,7 @@
                         </div>
                     </div>			 		
                 </div>    	
-                
+
             </div>	
         </div><!--/#contact-page-->
 

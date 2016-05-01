@@ -216,4 +216,16 @@ public class Book {
         this.status = status;
     }
     
+    public String getShortDescription(){
+        String m=this.description.trim();
+        if(m.length()<123){
+            this.description=m+m;
+            return getShortDescription();
+        }
+        else{
+            String s=m.substring(0,124)+"...";
+            return s;
+        }
+    }
+    
 }

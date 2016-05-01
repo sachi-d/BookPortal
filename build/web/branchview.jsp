@@ -13,6 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Branches</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -103,7 +104,7 @@
                                                 <td class="tg-yw40"><%= branch.getTelNo()%></td>
                                                 <td class="tg-yw40">
                                                     <%
-                                                        User u =DBDatalist.getBranchadminfromBranch(branch);
+                                                        User u = DBDatalist.getBranchadminfromBranch(branch);
                                                         if (u != null) {
                                                     %>
                                                     <%= u.getFullname()%> 

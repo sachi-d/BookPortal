@@ -15,6 +15,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Issued bills</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -63,17 +64,16 @@
                                     </thead>
 
                                     <tbody>
-                                        <%                                            
-                                            ArrayList<Bill> arrBill = DBDatalist.getBillList();
+                                        <%                                            ArrayList<Bill> arrBill = DBDatalist.getBillList();
                                             if (arrBill != null) {
-                                               
+
                                                 for (int i = 0; i < arrBill.size(); i++) {
                                                     Bill bill = (Bill) arrBill.get(i);
                                         %>
                                         <tr>
                                             <td class="tg-yw40"><%= bill.getIdbill()%></td>
                                             <td class="tg-yw40"><%= bill.getDate()%></td>
-                                            <td class="tg-yw40"><%= bill.getIssue_user().getBranch().getName() %></td>
+                                            <td class="tg-yw40"><%= bill.getIssue_user().getBranch().getName()%></td>
                                             <td class="tg-yw40"><%= bill.getIssue_user().getFullname()%></td>
                                             <td class="tg-yw40">
                                                 <%  HashMap<Book, Integer> h = bill.getItems();
@@ -88,7 +88,7 @@
                                                 <%
                                                     for (Integer q : h.values()) {
                                                 %>
-                                                <%= q %> <br>
+                                                <%= q%> <br>
 
                                                 <%
                                                     }%></td>

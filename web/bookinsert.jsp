@@ -20,6 +20,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Insert book</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!--<link rel="stylesheet" type="text/css" href="plugins/datatables/media/css/dataTables.bootstrap.css">-->
@@ -76,7 +77,7 @@
 
 
 
-                                <!-- ---------------- ADD NEW INVENTORY ITEM --------------------->
+                                <!-- - - - - - - - - - - ADD NEW INVENTORY ITEM - - - - - - - - - - - - - - - - -->
 
                                 <form class="form-horizontal" action="savebook" method="POST" enctype="multipart/form-data">
 
@@ -102,10 +103,10 @@
                                         <label class="col-sm-3 control-label">Author 1 : </label>
                                         <label class="col-md-3">
 
-                                            <input type="radio" name="isauth1"  value="exauth1" onclick="selectnew('existingauth1', 'newauth1')"> Existing author
+                                            <input type="radio" name="isauth1"  value="exauth1" onclick="selectnew('existingauth1', 'newauth1')" checked="" > Existing author
                                         </label>
                                         <div class="col-sm-6">
-                                            <select name="existingauth1" id="existingauth1" class="form-control" >
+                                            <select name="existingauth1" id="existingauth1" class="form-control">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Author> arrAuthor = DBDatalist.getAuthorList();
@@ -129,7 +130,7 @@
                                             <input type="radio" name="isauth1" value="newauth1" onclick="selectnew('newauth1', 'existingauth1')"> New author
                                         </label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="newauth1" id="newauth1" placeholder="Enter the name of new author" >
+                                            <input class="form-control" name="newauth1" id="newauth1" placeholder="Enter the name of new author" disabled="">
                                         </div>
 
                                     </div>
@@ -141,7 +142,7 @@
                                     <div class="form-group" >
                                         <label class="col-sm-3 control-label">Author 2 : </label>
                                         <label class="col-md-3">
-                                            <input type="radio" name="isauth2"  value="exauth2" onclick="selectnew('existingauth2', 'newauth2')"> Existing author
+                                            <input type="radio" name="isauth2"  value="exauth2" onclick="selectnew('existingauth2', 'newauth2')" checked=""> Existing author
                                         </label>
                                         <div class="col-sm-6">
                                             <select name="existingauth2" id="existingauth2" class="form-control" >
@@ -167,7 +168,7 @@
                                             <input type="radio" name="isauth2" value="newauth2" onclick="selectnew('newauth2', 'existingauth2')"> New author
                                         </label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="newauth2" id="newauth2" placeholder="Enter the name of new author" >
+                                            <input class="form-control" name="newauth2" id="newauth2" placeholder="Enter the name of new author" disabled="">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -179,7 +180,7 @@
                                     <div class="form-group" >
                                         <label class="col-sm-3 control-label">Author 3 : </label>
                                         <label class="col-md-3">
-                                            <input type="radio" name="isauth3"  value="exauth3" onclick="selectnew('existingauth3', 'newauth3')"> Existing author
+                                            <input type="radio" name="isauth3"  value="exauth3" onclick="selectnew('existingauth3', 'newauth3')" checked=""> Existing author
                                         </label>
                                         <div class="col-sm-6">
                                             <select name="existingauth3" id="existingauth3" class="form-control" >
@@ -205,7 +206,7 @@
                                             <input type="radio" name="isauth3" value="newauth3" onclick="selectnew('newauth3', 'existingauth3')"> New author
                                         </label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="newauth3" id="newauth3" placeholder="Enter the name of new author" >
+                                            <input class="form-control" name="newauth3" id="newauth3" placeholder="Enter the name of new author" disabled="">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -216,7 +217,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Publisher :</label>
                                         <label class="col-md-3">
-                                            <input type="radio" name="ispub"  value="expub" onclick="selectnew('existingpub', 'newpub')"> Existing author
+                                            <input type="radio" name="ispub"  value="expub" onclick="selectnew('existingpub', 'newpub')" checked=""> Existing publisher
                                         </label>
                                         <div class="col-sm-6">
                                             <select name="existingpub" id="existingpub" class="form-control" >
@@ -239,16 +240,16 @@
                                     <div class="form-group" >
                                         <label class="col-sm-3 control-label"> </label>
                                         <label class="col-md-3">
-                                            <input type="radio" name="ispub" value="newpub" onclick="selectnew('newpub', 'existingpub')"> New author
+                                            <input type="radio" name="ispub" value="newpub" onclick="selectnew('newpub', 'existingpub')"> New publisher
                                         </label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="newpub" id="newpub" placeholder="Enter the name of new author" >
+                                            <input class="form-control" name="newpub" id="newpub" placeholder="Enter the name of new author" disabled="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Published date:</label>
                                         <div class="col-md-9">
-                                            <input class="form-control" type="date" name="pub_date" required="">
+                                            <input name="pubdate" type="date" class="form-control" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -286,13 +287,13 @@
                                         </div>
                                         <label class="col-md-3 control-label" > Edition :</label>
                                         <div class="col-md-3">
-                                            <input class="form-control" name="edition" required="">
+                                            <input class="form-control" name="edition" required="" id="edition">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Type :</label>
                                         <div class="col-sm-3">
-                                            <select name="type" id="type" class="form-control" required="">
+                                            <select name="type" id="type" class="form-control" required="" onselect="setsubjects()">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Type> arrType = DBDatalist.getTypeList();
@@ -329,7 +330,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Price:</label>
+                                        <label class="col-sm-3 control-label">Price (Rs.):</label>
                                         <div class="col-md-3">
                                             <input class="form-control" name="price" required="">
                                         </div>
@@ -338,7 +339,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Image:</label>
                                         <div class="col-md-3">
-                                            <input class="form-control" type="file" name="filecover" />
+                                            <input class="form-control" type="file" name="filecover" required=""/>
+                                            <p><small>Please use a default image if an image is unavailable</small></p>
                                         </div>
                                         <div class="col-md-6"></div>
                                     </div>
@@ -399,20 +401,23 @@
         <script type="text/javascript" src="js/portBox.slimscroll.min.js"></script>
         <script type="text/javascript" src="js/validation.js"></script>
 
-        
+
         <script type="text/javascript">
-            function removeoptions(selectbox) {
-                var i;
-                for (i = selectbox.options.length - 1; i >= 0; i--) {
-                    selectbox.remove(i);
-                }
-            }
-            function selectnew(el1, el2) {
-                document.getElementById(el1).disabled = false;
-                document.getElementById(el2).disabled = true;
-            }
+                                                function removeoptions(selectbox) {
+                                                    var i;
+                                                    for (i = selectbox.options.length - 1; i >= 0; i--) {
+                                                        selectbox.remove(i);
+                                                    }
+                                                }
+                                                function selectnew(el1, el2) {
+                                                    document.getElementById(el1).disabled = false;
+                                                    document.getElementById(el2).disabled = true;
+                                                }
 
-
+                                                function setsubjects() {
+                                                    document.getElementById("edition").innerHTML = "hajak";
+                                                    
+                                                }
 
         </script>      
 

@@ -48,7 +48,12 @@ public class DBDatalist {
             while (rsetPurreq.next()) {
                 Bill bill = getBill(rsetPurreq.getInt(5));
 
-                Purchaserequest pur = new Purchaserequest(rsetPurreq.getInt(1), rsetPurreq.getString(2), rsetPurreq.getString(3), rsetPurreq.getString(4), bill);
+                Purchaserequest pur = new Purchaserequest(
+                        rsetPurreq.getInt(1),
+                        rsetPurreq.getString(2),
+                        rsetPurreq.getString(3),
+                        rsetPurreq.getString(4),
+                        bill);
 
                 arr.add(pur);
 
@@ -73,9 +78,12 @@ public class DBDatalist {
 
             while (rsetPurreq.next()) {
                 Bill bill = getBill(rsetPurreq.getInt(5));
-
-                Purchaserequest pur = new Purchaserequest(rsetPurreq.getInt(1), rsetPurreq.getString(2), rsetPurreq.getString(3), rsetPurreq.getString(4), bill);
-
+                Purchaserequest pur = new Purchaserequest(
+                        rsetPurreq.getInt(1),
+                        rsetPurreq.getString(2),
+                        rsetPurreq.getString(3),
+                        rsetPurreq.getString(4),
+                        bill);
                 arr.add(pur);
 
             }
@@ -98,12 +106,12 @@ public class DBDatalist {
             ResultSet rsetStock = ps.executeQuery();
 
             while (rsetStock.next()) {
-                int id=rsetStock.getInt(1);
+                int id = rsetStock.getInt(1);
                 Branch branch = getBranch(rsetStock.getInt(2));
                 Book book = getBook(rsetStock.getInt(3));
-                Date d=rsetStock.getDate(5);
+                Date d = rsetStock.getDate(5);
                 int q = rsetStock.getInt(4);
-                Stock stock = new Stock(id,book, branch, q,d);
+                Stock stock = new Stock(id, book, branch, q, d);
                 arr.add(stock);
 
             }
@@ -369,6 +377,7 @@ public class DBDatalist {
             ResultSet rsetBranch = ps.executeQuery();
 
             while (rsetBranch.next()) {
+//                User user = null;
                 User user = getUser(rsetBranch.getInt(4));
                 Log log = new Log(
                         rsetBranch.getInt(1),
@@ -588,13 +597,20 @@ public class DBDatalist {
 
     public static ArrayList<Subject> getSubjectsfromType(Type t) {
         try {
-            ArrayList<Subject> fbl = new ArrayList<>();
-            for (Subject i : DBDatalist.getSubjectList()) {
-                if (i.getType() == t) {
-                    fbl.add(i);
-                }
+            ArrayList<Subject> arr = new ArrayList<>();
+            int idtype = t.getIdType();
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM subject where type_idtype=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idtype);
+            ResultSet rsetSub = ps.executeQuery();
+
+            while (rsetSub.next()) {
+                Subject sub = new Subject(rsetSub.getInt(1), rsetSub.getString(2), t);
+                arr.add(sub);
             }
-            return fbl;
+            con.close();
+            return arr;
 
         } catch (Exception e) {
             System.out.println(e);
@@ -604,13 +620,42 @@ public class DBDatalist {
 
     public static ArrayList<Book> getFeaturedBookList() {
         try {
-            ArrayList<Book> fbl = new ArrayList<>();
-            for (Book i : DBDatalist.getBookList()) {
-                if (i.getFeatured() == 1) {
-                    fbl.add(i);
-                }
+            ArrayList<Book> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM book where status=? AND featured=? order by name";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setInt(2, 1);
+            ResultSet rsetBook = ps.executeQuery();
+
+            while (rsetBook.next()) {
+
+                Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
+                Book b = new Book(
+                        rsetBook.getInt(1),
+                        rsetBook.getString(2),
+                        rsetBook.getString(3),
+                        rsetBook.getDate(4),//pub_date
+                        rsetBook.getInt(5),
+                        rsetBook.getDate(6),//pur_date
+                        rsetBook.getDouble(7),
+                        rsetBook.getString(8),
+                        rsetBook.getString(9),
+                        rsetBook.getInt(10),
+                        rsetBook.getInt(11),
+                        publisher,//publisher
+                        language,//language
+                        subject,
+                        authors);
+//                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
+                arr.add(b);
             }
-            return fbl;
+            con.close();
+            return arr;
 
         } catch (Exception e) {
             System.out.println(e);
@@ -638,9 +683,9 @@ public class DBDatalist {
         }
     }
 
-    public static ArrayList<String> getAuthorfromBook(int idBook) {
+    public static ArrayList<Author> getAuthorfromBook(int idBook) {
         try {
-            ArrayList<String> arr = new ArrayList<>();
+            ArrayList<Author> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
             String query = "SELECT * FROM author a, book_has_author b Where b.book_idbook=? AND a.idauthor=b.author_idauthor ";
@@ -651,12 +696,152 @@ public class DBDatalist {
             while (rsetAuth.next()) {
                 int idauthor = rsetAuth.getInt(1);
                 String name = rsetAuth.getString(2);
-//                String author = new Author(idauthor, name);
-                arr.add(name);
+                Author author = new Author(idauthor, name);
+                arr.add(author);
             }
             con.close();
             return arr;
 
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Book> getBookListfromSubject(int idsub) {
+        try {
+            ArrayList<Book> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM book where status=? and subject_idsubject=? order by name";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setInt(2, idsub);
+            ResultSet rsetBook = ps.executeQuery();
+
+            while (rsetBook.next()) {
+
+                Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
+                Book b = new Book(
+                        rsetBook.getInt(1),
+                        rsetBook.getString(2),
+                        rsetBook.getString(3),
+                        rsetBook.getDate(4),//pub_date
+                        rsetBook.getInt(5),
+                        rsetBook.getDate(6),//pur_date
+                        rsetBook.getDouble(7),
+                        rsetBook.getString(8),
+                        rsetBook.getString(9),
+                        rsetBook.getInt(10),
+                        rsetBook.getInt(11),
+                        publisher,//publisher
+                        language,//language
+                        subject,
+                        authors);
+//                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
+                arr.add(b);
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Book> getBookListfromType(int idtype) {
+        try {
+            ArrayList<Book> arr = new ArrayList<>();
+            Type t = getType(idtype);
+            ArrayList<Subject> sublist = getSubjectsfromType(t);
+            Connection con = DBConnectionHandler.createConnection();
+            for (int i = 0; i < sublist.size(); i++) {
+                int idsub = sublist.get(i).getIdsubject();
+
+                String query = "SELECT * FROM book where status=? and subject_idsubject=? order by name";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, 1);
+                ps.setInt(2, idsub);
+                ResultSet rsetBook = ps.executeQuery();
+
+                while (rsetBook.next()) {
+
+                    Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                    Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                    String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                    ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
+                    Book b = new Book(
+                            rsetBook.getInt(1),
+                            rsetBook.getString(2),
+                            rsetBook.getString(3),
+                            rsetBook.getDate(4),//pub_date
+                            rsetBook.getInt(5),
+                            rsetBook.getDate(6),//pur_date
+                            rsetBook.getDouble(7),
+                            rsetBook.getString(8),
+                            rsetBook.getString(9),
+                            rsetBook.getInt(10),
+                            rsetBook.getInt(11),
+                            publisher,//publisher
+                            language,//language
+                            subject,
+                            authors);
+//                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
+                    arr.add(b);
+                }
+
+            }
+            con.close();
+            return arr;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Book> getBookListfromName(String name) {
+        try {
+            String n = "%" + name + "%";
+            ArrayList<Book> arr = new ArrayList<>();
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM book where status=? and name like ? order by name";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setString(2, n);
+            ResultSet rsetBook = ps.executeQuery();
+
+            while (rsetBook.next()) {
+
+                Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
+                Book b = new Book(
+                        rsetBook.getInt(1),
+                        rsetBook.getString(2),
+                        rsetBook.getString(3),
+                        rsetBook.getDate(4),//pub_date
+                        rsetBook.getInt(5),
+                        rsetBook.getDate(6),//pur_date
+                        rsetBook.getDouble(7),
+                        rsetBook.getString(8),
+                        rsetBook.getString(9),
+                        rsetBook.getInt(10),
+                        rsetBook.getInt(11),
+                        publisher,//publisher
+                        language,//language
+                        subject,
+                        authors);
+//                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
+                arr.add(b);
+            }
+
+            con.close();
+            return arr;
         } catch (Exception e) {
             System.out.println(e);
             return null;
@@ -708,49 +893,160 @@ public class DBDatalist {
     }
 
     public static User getUser(int iduser) {
-        for (User i : DBDatalist.getUserList()) {
-            if (i.getIduser() == iduser) {
-                return i;
+        try {
+            User arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM user where iduser=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, iduser);
+            ResultSet rsetUser = ps.executeQuery();
+
+            while (rsetUser.next()) {
+                Branch b = DBDatalist.getBranch(rsetUser.getInt(8));
+                arr = new User(
+                        rsetUser.getInt(1),
+                        rsetUser.getString(2),
+                        rsetUser.getString(3),
+                        rsetUser.getString(4),
+                        rsetUser.getString(5),
+                        rsetUser.getString(6),
+                        rsetUser.getString(7),
+                        b);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println("getuserlist error " + e);
+            return null;
         }
-        System.out.println("GetUser-----");
-        return null;
     }
 
     public static Book getBook(int idbook) {
-        for (Book i : DBDatalist.getBookList()) {
-            if (i.getIdbook() == idbook) {
-                return i;
+        try {
+            Book arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM book where status=? AND idbook=? order by name";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setInt(2, idbook);
+            ResultSet rsetBook = ps.executeQuery();
+
+            while (rsetBook.next()) {
+
+                Subject subject = DBDatalist.getSubject(rsetBook.getInt(14));
+                Publisher publisher = DBDatalist.getPublisher(rsetBook.getInt(12));
+                String language = DBDatalist.getLanguage(rsetBook.getInt(13));
+                ArrayList authors = DBDatalist.getAuthorfromBook(rsetBook.getInt(1));
+                arr = new Book(
+                        rsetBook.getInt(1),
+                        rsetBook.getString(2),
+                        rsetBook.getString(3),
+                        rsetBook.getDate(4),//pub_date
+                        rsetBook.getInt(5),
+                        rsetBook.getDate(6),//pur_date
+                        rsetBook.getDouble(7),
+                        rsetBook.getString(8),
+                        rsetBook.getString(9),
+                        rsetBook.getInt(10),
+                        rsetBook.getInt(11),
+                        publisher,//publisher
+                        language,//language
+                        subject,
+                        authors);
+//                (int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, String publisher, String language, String subject, String type) {
             }
+            con.close();
+            return arr;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static Bill getBill(int idbill) {
-        for (Bill i : DBDatalist.getBillList()) {
-            if (i.getIdbill() == idbill) {
-                return i;
+        try {
+            Bill arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM bill where idBill=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idbill);
+            ResultSet rsetBill = ps.executeQuery();
+
+            while (rsetBill.next()) {
+                HashMap<Book, Integer> items = getBillitemsfromBill(rsetBill.getInt(1));
+                User user = getUser(rsetBill.getInt(5));
+                arr = new Bill(
+                        rsetBill.getInt(1),
+                        rsetBill.getDate(2),
+                        rsetBill.getDouble(3),
+                        rsetBill.getString(4),
+                        user,
+                        items);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static Branch getBranch(int idbranch) {
-        for (Branch i : DBDatalist.getBranchList()) {
-            if (i.getIdbranch() == idbranch) {
-                return i;
+        try {
+            Branch bb = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM branch where status=? AND idbranch=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, 1);
+            ps.setInt(2, idbranch);
+            ResultSet rsetBranch = ps.executeQuery();
+
+            while (rsetBranch.next()) {
+//                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
+                bb = new Branch(
+                        rsetBranch.getInt(1),
+                        rsetBranch.getString(2),
+                        rsetBranch.getString(3),
+                        rsetBranch.getString(4));
+
             }
+            con.close();
+            return bb;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static Publisher getPublisher(int idpublisher) {
-        for (Publisher i : DBDatalist.getPublisherList()) {
-            if (i.getIdpub() == idpublisher) {
-                return i;
+        try {
+            Publisher arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM publisher WHERE idpublisher=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idpublisher);
+            ResultSet rsetSub = ps.executeQuery();
+
+            while (rsetSub.next()) {
+                int id = rsetSub.getInt(1);
+                String sub = rsetSub.getString(2);
+                arr = new Publisher(id, sub);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static String getLanguage(int idlanguage) {
@@ -774,37 +1070,107 @@ public class DBDatalist {
     }
 
     public static Subject getSubject(int idsubject) {
-        for (Subject i : DBDatalist.getSubjectList()) {
-            if (i.getIdsubject() == idsubject) {
-                return i;
+        try {
+            Subject arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM subject where idsubject=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idsubject);
+            ResultSet rsetSub = ps.executeQuery();
+
+            while (rsetSub.next()) {
+                Type type = getType(rsetSub.getInt(3));
+                arr = new Subject(rsetSub.getInt(1), rsetSub.getString(2), type);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static Type getType(int idtype) {
-        for (Type i : DBDatalist.getTypeList()) {
-            if (i.getIdType() == idtype) {
-                return i;
+        try {
+            Type arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM type where idtype=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idtype);
+            ResultSet rsetSub = ps.executeQuery();
+
+            while (rsetSub.next()) {
+                int id = rsetSub.getInt(1);
+                String sub = rsetSub.getString(2);
+                arr = new Type(id, sub);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 
     public static Report getReport(int idrep) {
-        for (Report i : DBDatalist.getReportList()) {
-            if (i.getIdreport() == idrep) {
-                return i;
+        try {
+            Report arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM report where idReport=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idrep);
+            ResultSet rsetReport = ps.executeQuery();
+
+            while (rsetReport.next()) {
+                arr = new Report(
+                        rsetReport.getInt(1),
+                        rsetReport.getString(2),
+                        rsetReport.getString(3),
+                        rsetReport.getInt(4),
+                        rsetReport.getString(5),
+                        rsetReport.getString(6),
+                        rsetReport.getString(7));
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
-     public static Purchaserequest getPurchaserequest(int idpurreq) {
-        for (Purchaserequest i : DBDatalist.getPurreqList()) {
-            if (i.getIdpurreq() == idpurreq) {
-                return i;
+
+    public static Purchaserequest getPurchaserequest(int idpurreq) {
+        try {
+            Purchaserequest arr = null;
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM purchase_req where idPurchase_req=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idpurreq);
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                Bill bill = getBill(rsetPurreq.getInt(5));
+
+                arr = new Purchaserequest(
+                        rsetPurreq.getInt(1),
+                        rsetPurreq.getString(2),
+                        rsetPurreq.getString(3),
+                        rsetPurreq.getString(4),
+                        bill);
             }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
-        return null;
     }
 }

@@ -10,6 +10,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Purchase requests</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
+
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -61,27 +63,27 @@
                                             <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">All purchase requests</a></li>
                                         </ul>
                                         <div id="myTabContent" class="tab-content">
-                                            <div role="tabpanel" class="tab-pane fade " id="home" aria-labelledby="home-tab">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 
                                                 <!-- - - - - - - - - - - - - - - - - - - - - NEW NOTIFICATIONS - - - - - - - - - - - - - - - - - - - - -->
                                                 <div class="form-horizontal">
                                                     <div class="form-group">
                                                         <div class="col-md-2">
-                                                            <h5 >Customer </h5>
+                                                            <h5 class="table-header">Customer </h5>
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                            <h5 >Address</h5>
+                                                            <h5 class="table-header">Address</h5>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <h5>Bill details</h5>
+                                                            <h5 class="table-header">Bill details</h5>
                                                         </div>
 
                                                         <div class="col-md-2">
-                                                            <h5>Status</h5>
+                                                            <h5 class="table-header">Status</h5>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <h5>Action</h5>
+                                                            <h5 class="table-header">Action</h5>
                                                         </div>
                                                         <hr>
                                                     </div>
@@ -126,8 +128,6 @@
                                                         <%
                                                             }
                                                         %>
-
-
                                                         <hr>
                                                     </div>
                                                     <%                                        }
@@ -138,8 +138,6 @@
                                                     <%
                                                         }
                                                     %>
-
-
 
                                                 </div>
 

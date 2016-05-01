@@ -11,9 +11,8 @@
         <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="keywords" content="Minimal Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-              Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <link rel="shortcut icon" href="admin/images/logo.png">
+
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
         <!-- Custom Theme files -->
         <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
@@ -23,31 +22,31 @@
     </head>
     <body>
         <div class="login">
-            <h1><a href="index.jsp">Book Portal </a></h1>
-            
+            <h1><a href="site/home.jsp" target="blank">Book Portal </a></h1>
+
             <div class="login-bottom">
                 <div class="col-md-12">
-                <%                        if (request.getParameter("msg") != null) {
-                        if (request.getParameter("msg").equals("error")) {
-                %>
-                <div class="col-md-12 text-center">
-                    <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
-                        Login failed. <br/>Please try again.</label><hr>
-                </div>
-                <%
-                    }
-                    if (request.getParameter("msg").equals("success")) {
-                %>
-                <div class="col-md-12 text-center">
-                    <label class="alert alert-success"><i class="fa fa-check"></i> Success:
-                        Login successful</label><hr>
-                </div>
-                <%
+                    <%                        if (request.getParameter("msg") != null) {
+                            if (request.getParameter("msg").equals("error")) {
+                    %>
+                    <div class="col-md-12 text-center">
+                        <label class="alert alert-warning"><i class="fa fa-warning"></i> Warning:
+                            Login failed. <br/>Please try again.</label><hr>
+                    </div>
+                    <%
                         }
-                    }
-                %>
+                        if (request.getParameter("msg").equals("success")) {
+                    %>
+                    <div class="col-md-12 text-center">
+                        <label class="alert alert-success"><i class="fa fa-check"></i> Success:
+                            Login successful</label><hr>
+                    </div>
+                    <%
+                            }
+                        }
+                    %>
 
-            </div>
+                </div>
                 <h2>Login</h2>
                 <form action="login" method="POST">
                     <div class="col-md-6">

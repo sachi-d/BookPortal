@@ -12,6 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Branch Stock</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
 
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -87,7 +88,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%                                                
+                                            <%
                                                 ArrayList<Stock> arrStock = DBDatalist.getStockList();
                                                 if (arrStock != null) {
                                                     for (int i = 0; i < arrStock.size(); i++) {
@@ -126,7 +127,7 @@
                                                                 <label class="col-md-3 control-label"> Branch name :</label>
                                                                 <div class="col-md-9">
                                                                     <% User u = (User) session.getAttribute("user");%>
-                                                                    <input class="form-control" name="branch" 
+                                                                    <input class="form-control" name="branch" disabled=""
                                                                            value="<%= u.getBranch().getName()%>">
                                                                 </div>
                                                             </div>
@@ -142,7 +143,7 @@
                                                                                 for (int i = 0; i < arrBook.size(); i++) {
                                                                                     Book book = (Book) arrBook.get(i);
                                                                         %>
-                                                                        <option value="<%=book.getIdbook() %>"><%=book.getTitle()%></option>
+                                                                        <option value="<%=book.getIdbook()%>"><%=book.getTitle()%></option>
                                                                         <%
                                                                                 }
                                                                             }
@@ -161,7 +162,7 @@
                                                             <div class="form-group">
                                                                 <div class="col-md-3 "></div><div class="col-md-3 "></div>
                                                                 <div class="col-md-3 ">
-                                                                    <button type="submit" class="btn btn-primary form-control">Add new stock</button>
+                                                                    <button type="submit" class="btn btn-primary ">Add new stock</button>
                                                                 </div>
                                                                 <div class="col-md-3 ">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

@@ -14,7 +14,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Recent arrivals</title>
-
+        <link rel="shortcut icon" href="admin/images/logo.png">
+        <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+        <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>
@@ -29,27 +31,26 @@
                                 <div class="col-md-12">
                                     <div class="bs-example2 bs-example-padded-bottom">
                                         <h3 class="head-top">Recent arrivals</h3>
-                                            <p>List of books that are featured in the website under <a href="index.jsp" >recent arrivals </a> </p>
+                                        <p>List of books that are featured in the website under <a href="index.jsp" >recent arrivals </a> </p>
                                         <form class="form-horizontal">
 
                                             <div class="form-group">
                                                 <div class="col-md-1">
-                                                    <h4 id="h4.-bootstrap-heading">#</h4>
+                                                    <h4 class="table-header">#</h4>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <h4 id="h4.-bootstrap-heading">Title</h4>
+                                                    <h4 class="table-header">Title</h4>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <h4 id="h4.-bootstrap-heading">Type/Subject</h4>
+                                                    <h4 class="table-header">Type/Subject</h4>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <h4 id="h4.-bootstrap-heading">Purchased on</h4>
+                                                    <h4 class="table-header">Purchased on</h4>
                                                 </div>
                                             </div>
 
-                                            <%                      
-                                                ArrayList<Book> arrBook = DBDatalist.getRecentBookList();
+                                            <%                                                ArrayList<Book> arrBook = DBDatalist.getRecentBookList();
                                                 if (arrBook != null) {
                                                     for (int i = 0; i < arrBook.size(); i++) {
                                                         Book book = (Book) arrBook.get(i);
@@ -60,20 +61,21 @@
                                                     <p><%= i + 1%> </p>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input class="form-control" disabled="" value="<%= book.getTitle() %>" style="color: black">
+                                                    <p ><%= book.getTitle()%></p>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input class="form-control" disabled="" value="<%= book.getSubject().getType().getName() + " - " + book.getSubject().getName() %>" style="color: black">
+                                                    <p><%= book.getSubject().getType().getName() + " - " + book.getSubject().getName()%></p>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <input class="form-control" disabled="" value="<%= new SimpleDateFormat("dd-MM-yyyy").format(book.getPur_date())%>" style="color: black">
+                                                    <p><%= new SimpleDateFormat("dd-MM-yyyy").format(book.getPur_date())%></p>
                                                 </div>
+
                                             </div>
                                             <%                                                    }
                                                 }
                                             %>
-                                            
+
                                         </form>
 
                                     </div>

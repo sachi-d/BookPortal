@@ -4,6 +4,12 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.Enumeration"%>
+<%@page import="Model.Cart"%>
+<%@page import="Model.Subject"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.Type"%>
+<%@page import="Controller.DBDatalist"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +26,8 @@
         <link href="css/animate.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <link href="css/responsive.css" rel="stylesheet">
+        <link href="css/ddmenu.css" rel="stylesheet">
+
         <!--[if lt IE 9]>
         <script src="js/html5shiv.js/"></script>
         <script src="js/respond.min.js/"></script>
@@ -32,7 +40,33 @@
     </head><!--/head-->
 
     <body>	
+        <%
+            String str = request.getRequestURL() + "?";
+            Enumeration<String> paramNames = request.getParameterNames();
+            while (paramNames.hasMoreElements()) {
+                String paramName = paramNames.nextElement();
+                String[] paramValues = request.getParameterValues(paramName);
+                for (int i = 0; i < paramValues.length; i++) {
+                    String paramValue = paramValues[i];
+                    str = str + paramName + "=" + paramValue;
+                }
+                str = str + "&";
+            }
+            String URL= str.substring(0, str.length() - 1);
+            String[] m= URL.split("site/", 2);
+            String pagename=m[1];
+//            String uri = request.getRequestURI();
+//            String pageName = uri.substring(uri.lastIndexOf("/") + 1);
+            session.setAttribute("currentpage",pagename);
+        %>
         <div>
+            <%
+                Cart shoppingCart = (Cart) session.getAttribute("cart");
+                if (shoppingCart == null) {
+                    shoppingCart = new Cart();
+                    session.setAttribute("cart", shoppingCart);
+                }
+            %>
             <header id="header"><!--header-->
                 <div class="header_top"><!--header_top-->
                     <div class="container">
@@ -74,7 +108,7 @@
                                         <li><a href="home.jsp"><i class="fa fa-home"></i> Home</a></li>
                                         <!--<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>-->
                                         <!--<li><a href="checkout.php" ><i class="fa fa-crosshairs"></i> Checkout</a></li>-->
-                                        <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                        <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart<% if (shoppingCart.getCartSize() != 0) {%><span class="number"><%= shoppingCart.getCartSize()%></span><% } %></a></li>
                                         <li><a href="aboutus.jsp"><i class="fa fa-pencil"></i> About us</a></li>
                                         <li><a href="contactus.jsp"><i class="fa fa-phone"></i> Contact us</a></li>
                                     </ul>
@@ -96,26 +130,62 @@
                                         <span class="icon-bar"></span>
                                     </button>
                                 </div>
-                                <div class="mainmenu pull-left">
-                                    <ul class="nav navbar-nav collapse navbar-collapse">
+                                <nav id="ddmenu">
+                                    <ul>  
+                                        <%
+                                            ArrayList<Type> arrType = DBDatalist.getTypeList();
+                                            if (arrType != null) {
+                                                for (int i = 0; i < arrType.size(); i++) {
+                                                    Type type = (Type) arrType.get(i);
+                                        %>
+                                        <li>
+                                            <a class="top-heading" href="viewbooklist.jsp?type=<%=type.getIdType()%>"><%= type.getName()%></a>
+                                            <i class="caret"></i>
+                                            <div class="dropdown">
+                                                <div class="dd-inner">
+                                                    <%
+                                                        ArrayList<Subject> sublist = DBDatalist.getSubjectsfromType(type);
+                                                        if (sublist != null) {
+                                                            for (int j = 0; j < sublist.size(); j++) {
+                                                                Subject s = sublist.get(j);
+                                                                if (j % 7 == 0) {
+                                                                    if (j != 0) {
+                                                    %>
+                                                    </ul>
+                                                    <% }
+                                                    %>
+                                                    <ul class="column">
+                                                        <%
+                                                            }
+                                                        %>
+                                                        <li><p><a href="viewbooklist.jsp?sub=<%=s.getIdsubject()%>"><%= s.getName()%></a></p></li>
+                                                                    <%
+                                                                        }
+                                                                    %>
+                                                    </ul>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </div>
 
-                                        <li class="dropdown"><a href="#">TYPE1<i class="fa fa-angle-down"></i></a>
-                                            <ul role="menu" class="sub-menu">
-                                                <li>Sample list item1</li>
-                                                
-                                            </ul>
+                                            </div>
                                         </li>
-                                        <li class = "dropdown"><a href = "#">TYPE2<i class = "fa fa-angle-down"></i></a>
-                                            <ul role = "menu" class = "sub-menu">
-                                               
-                                            </ul>
-                                        </li>
+                                        <%
+                                                }
+                                            }
+                                        %>
+
+
                                     </ul>
-                                </div>
+                                </nav>
+
                             </div>
                             <div class = "col-sm-3">
                                 <div class = "search_box pull-right">
-                                    <input type = "text" placeholder = "Search"/>
+                                    <form action="searchresult.jsp" method="GET">
+                                        <input type = "text" placeholder = "Search for books" name="keyword"/>
+                                        <input type="hidden" name="action" value="search" />
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +193,6 @@
                 </div><!--/header-bottom-->
             </header><!--/header-->
         </div>
-
+        <script src="js/ddmenu.js"></script>
     </body>
 </html>

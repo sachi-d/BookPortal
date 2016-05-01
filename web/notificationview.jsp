@@ -15,6 +15,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Notifications</title>
+        <link rel="shortcut icon" href="admin/images/logo.png">
+        
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -75,11 +77,30 @@
                                             <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">All notifications</a></li>
                                         </ul>
                                         <div id="myTabContent" class="tab-content">
-                                            <div role="tabpanel" class="tab-pane fade " id="home" aria-labelledby="home-tab">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 
                                                 <!-- - - - - - - - - - - - - - - - - - - - - NEW NOTIFICATIONS - - - - - - - - - - - - - - - - - - - - -->
                                                 <div class="form-horizontal">
-                                                    <%                                                        User u = (User) session.getAttribute("user");
+                                                    <div class="form-group">
+                                                        <div class="col-md-2">
+                                                            <h5 class="table-header">Message </h5>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <h5 class="table-header">New user / new report</h5>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <h5 class="table-header">Information</h5>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <h5 class="table-header">Action</h5>
+                                                        </div>
+                                                     
+                                                        <hr>
+                                                    </div>
+                                                    <%                                                        
+                                                        User u = (User) session.getAttribute("user");
                                                         ArrayList<Notification> arrNotification = DBDatalist.getNewNotificationsforUser(u.getIduser());
                                                         if (arrNotification != null) {
                                                             for (int i = 0; i < arrNotification.size(); i++) {
