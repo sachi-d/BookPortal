@@ -31,7 +31,7 @@
                                 <div class="col-md-12">
                                     <div class="bs-example2 bs-example-padded-bottom">
                                         <h3 class="head-top">Recent arrivals</h3>
-                                        <p>List of books that are featured in the website under <a href="index.jsp" >recent arrivals </a> </p>
+                                        <p>List of books that are featured in the website under <a href="site/home.jsp#recent" target="blank" >recent arrivals </a> </p>
                                         <form class="form-horizontal">
 
                                             <div class="form-group">

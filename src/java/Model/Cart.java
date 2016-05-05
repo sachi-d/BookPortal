@@ -43,57 +43,54 @@ public class Cart {
         this.total = total;
     }
 
-    public void addToCart(Book b, int q) {
-        items.put(b, q);
-        System.out.println("items added-" + items.get(b));
-    }
-
-    public void removeFromCart(Book b) {
-        for(Book bb:items.keySet()){
-            if(bb.getIdbook()==b.getIdbook()){
-                items.remove(bb);
-                break;
-            }
-        }
-    }
-
-    public void incrementQuantity(Book b) {
+    public Book getBookinCart(Book b) {
+        Book mybook = null;
         for (Book bb : items.keySet()) {
             if (bb.getIdbook() == b.getIdbook()) {
-//                System.out.println("item q - " + items.get(bb));
-                int newq = (items.get(bb)) + 1;
-//                System.out.println("newq-" + newq);
-                items.put(bb, newq);
+                mybook = bb;
                 break;
             }
         }
+        return mybook;
+    }
+
+    //Add book to the cart
+    public void addToCart(Book b, int q) {
+        items.put(b, q);
+    }
+
+    //Remove book from cart
+    public void removeFromCart(Book b) {
+        items.remove(getBookinCart(b));
+    }
+
+    //Increment the quantity of the book in cart
+    public void incrementQuantity(Book b) {
+        Book bb = getBookinCart(b);
+        int newq = (items.get(bb)) + 1;
+        items.put(bb, newq);
 
     }
 
     public void decrementQuantity(Book b) {
-        for (Book bb : items.keySet()) {
-            if (bb.getIdbook() == b.getIdbook()) {
-                int newq = (items.get(bb)) - 1;
-                if (newq >= 0) {
-                    items.put(bb, newq);
-                }
-                break;
-            }
+        Book bb = getBookinCart(b);
+        int newq = (items.get(bb)) - 1;
+        if (newq >= 0) {
+            items.put(bb, newq);
+
         }
-        
     }
+    
 
     public int getCartSize() {
         return this.items.size();
     }
 
     public boolean isIn(Book b) {
-        boolean isin=false;
-        for(Book bb:items.keySet()){
-            if(bb.getIdbook()==b.getIdbook()){
-                isin=true;
-                break;
-            }
+        boolean isin = false;
+        Book bb = getBookinCart(b);
+        if(bb!=null){
+            isin=true;
         }
         return isin;
     }
@@ -109,6 +106,5 @@ public class Cart {
             tot += (b.getPrice() * items.get(b));
         }
         this.total = tot;
-//        System.out.println("total updated");
     }
 }

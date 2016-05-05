@@ -110,7 +110,7 @@
                     <%@include file="sidebar.jsp" %>
 
                     <div class="col-sm-9 padding-right">
-                        <div class="features_items"><!--features_items-->
+                        <div class="features_items" id="featured"><!--features_items-->
                             <h2 class="title text-center">Featured Books</h2>
 
                             <%                                if (blist != null) {
@@ -145,7 +145,7 @@
 
                         </div><!--recent_items-->
 
-                        <div class="features_items"><!--features_items-->
+                        <div class="features_items" id="recent"><!--features_items-->
                             <h2 class="title text-center">Recent arrivals</h2>
 
                             <%                                ArrayList<Book> blist2 = DBDatalist.getRecentBookList();

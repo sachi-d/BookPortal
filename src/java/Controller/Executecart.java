@@ -7,9 +7,7 @@ package Controller;
 
 import Model.Book;
 import Model.Cart;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.homeType;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +26,6 @@ public class Executecart extends HttpServlet {
         String para = request.getParameter("para");
         int bookid = Integer.parseInt(request.getParameter("id"));
         Book book = DBDatalist.getBook(bookid);
-        System.out.println("book - " + book.getTitle());
         Cart cart = (Cart) request.getSession().getAttribute("cart");
 
         if (para.equals("add")) {
@@ -48,6 +45,7 @@ public class Executecart extends HttpServlet {
         response.sendRedirect("site/" + page);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

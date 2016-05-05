@@ -10,8 +10,11 @@ import Model.Branch;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sachi
  */
-public class savestock extends HttpServlet {
+public class Savestock extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,28 +36,28 @@ public class savestock extends HttpServlet {
 
         try {
 
-            String branchname = request.getParameter("branch");
+            String branch = request.getParameter("idbranch");
             String book = request.getParameter("book");
             String quantity = request.getParameter("quantity");
-            int idbranch=0;
-            for(Branch b: DBDatalist.getBranchList()){
-                if(b.getName().equals(branchname)){
-                    idbranch=b.getIdbranch();
-                }
-            }
-            int idbook=Integer.parseInt(book);
-            int q=Integer.parseInt(quantity);
+            int idbranch = Integer.parseInt(branch);
+            System.out.println("branch id= " + idbranch);
+            int idbook = Integer.parseInt(book);
+            int q = Integer.parseInt(quantity);
+            java.sql.Date today = new Date(Calendar.getInstance().getTimeInMillis());
 
             con.setAutoCommit(false);
+
             String query = "INSERT INTO branch_stock "
-                    + "(branch_idbranch,book_idbook,quantity) "
-                    + "VALUES (?,?,?)";
+                    + "(branch_idbranch,book_idbook,quantity,date) "
+                    + "VALUES (?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, idbranch);
             ps.setInt(2, idbook);
             ps.setInt(3, q);
+            ps.setDate(4, today);
 
             ps.executeUpdate();
+
             con.commit();
             Savelog.saveLog(request, "branch stock added successfully");
             response.sendRedirect("stockview.jsp?msg=success");
@@ -69,7 +72,7 @@ public class savestock extends HttpServlet {
                 response.sendRedirect("stockview.jsp?msg=error");
             }
             out.println("Oops! Something went wrong.\n");
-            out.println(e.toString());
+            System.out.println(e.toString());
 
             response.sendRedirect("stockview.jsp?msg=error");
         } finally {

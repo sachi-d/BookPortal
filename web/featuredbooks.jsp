@@ -29,7 +29,8 @@
                             <div class="col-md-12">
 
                                 <h3 class="head-top">Featured books</h3>
-                                <form class="form-horizontal" action="savebook">
+                                <p>List of books that are featured in the website under <a href="site/home.jsp#featured" target="blank" >Featured books </a> </p>
+                                <form class="form-horizontal" action="savebook" method="GET">
 
                                     <div class="form-group">
                                         <div class="col-md-1">
@@ -88,9 +89,9 @@
                                         </div>
 
                                         <div class="col-md-3">
-                                            <input hidden="" id="para" name="para" value="fadd">
+                                            <input hidden="" name="para" value="fadd">
                                             <!--<input class="form-control" placeholder="start typing..." id="newfeatbook" name="newfeatbook">-->
-                                            <select id="newfeatbook" name="newfeatbook" class="form-control" required="">
+                                            <select id="newfeatbook" name="newfeatbook" class="form-control" required="" onchange="document.getElementById('addnewfeat').disabled=false">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Book> bb = DBDatalist.getBookList();
@@ -115,14 +116,14 @@
 
                                         <div class="col-md-2">
                                             <!--<button data-toggle="modal" data-target="#myModaladd" type="button" class="btn-xs btn-primary">Add <span class='fa fa-check'></span></button>-->
-                                            <a href="savebook?para=fadd&book="><button class="btn-xs btn-primary" type="button"  id="addnewfeat">Add <span class='fa fa-check'></span></button></a>
+                                            <button class="btn-xs btn-primary" type="submit"  id="addnewfeat" disabled="">Add <span class='fa fa-check'></span></button>
                                         </div>
                                     </div>
                                     <%
                                         }
                                     %>
                                     <%
-                                        for (int j = arrBook.size() + 1; j < 9; j++) {
+                                        for (int j = arrBook.size() + 1; j < 10; j++) {
                                     %>
                                     <div class="form-group">
                                         <div class="col-md-1">

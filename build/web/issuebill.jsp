@@ -55,9 +55,9 @@
                                     </div>
                                     <div class="col-md-6" style="width: 50%">
                                         <h3 id="forms-example" class="" style="border:2px solid #d95459; display: inline; line-height: 50px; padding: 0 0 0 5px;">Invoice </h3><br>
-                                        <label>Date: </label><%= new Date() %><br>
+                                        <label>Date: </label><%= new Date()%><br>
                                         <label>Invoice no.:</label><br>
-                                        <label>Cashier: </label><% User u=(User)session.getAttribute("user"); %><%=u.getFullname()%><br>
+                                        <label>Cashier: </label><% User u = (User) session.getAttribute("user");%><%=u.getFullname()%><br>
                                     </div>
 
                                     <br>
@@ -73,7 +73,7 @@
                                                 <th class="tg-yw4l">Quantity</th>
                                                 <th class="tg-yw4l">Total</th>
                                             </tr>
-                                            <%                                                for (int i = 0; i < 10; i++) { %>
+                                            <%                                                for (int i = 0; i < 10; i++) {%>
                                             <tr>
                                                 <td class="tg-yw33"><input type="text" class="form-control" name="ID<%=i%>" ></td>
                                                 <td class="tg-yw33"><input type="text" class="form-control" ></td>
@@ -127,16 +127,6 @@
         <script type="text/javascript" src="js/validation.js"></script>
         <script type="text/javascript">
 
-                                        function printDiv(divName) {
-                                            var printContents = document.getElementById(divName).innerHTML;
-                                            var originalContents = document.body.innerHTML;
-
-                                            document.body.innerHTML = printContents;
-
-                                            window.print();
-
-                                            document.body.innerHTML = originalContents;
-                                        }
 
                                         function PrintElem(elem)
                                         {

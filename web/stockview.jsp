@@ -84,7 +84,8 @@
                                             <tr>
                                                 <th class="tg-yw4l">Branch name</th>
                                                 <th class="tg-yw4l">Book</th>
-                                                <th class="tg-yw4l">quantity</th>
+                                                <th class="tg-yw4l">Quantity</th>
+                                                <th class="tg-yw4l">Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,6 +100,7 @@
                                                 <td class="tg-yw40"><%= stock.getBranch().getName()%></td>
                                                 <td class="tg-yw40"><%= stock.getBook().getTitle()%></td>
                                                 <td class="tg-yw40"> <%= stock.getQuantity()%></td>
+                                                <td class="tg-yw40"> <%= stock.getDate() %></td>
                                             </tr>
                                             <%  }
                                                 }
@@ -129,6 +131,7 @@
                                                                     <% User u = (User) session.getAttribute("user");%>
                                                                     <input class="form-control" name="branch" disabled=""
                                                                            value="<%= u.getBranch().getName()%>">
+                                                                    <input hidden="" value="<%= u.getBranch().getIdbranch() %>" name="idbranch">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">

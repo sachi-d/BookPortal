@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +27,6 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -37,7 +37,7 @@ import javax.servlet.http.Part;
         maxFileSize = 1024 * 1024 * 10,
         maxRequestSize = 1024 * 1024 * 50)
 
-public class savebook extends HttpServlet {
+public class Savebook extends HttpServlet {
 
     private String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
@@ -64,250 +64,247 @@ public class savebook extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out1 = response.getWriter()) {
+
+        String isdeffile = request.getParameter("isdefaultfile");
+        String fileName="";
+        OutputStream out = null;
+        InputStream filecontent = null;
+        
+        if (isdeffile.equals("newfile")) {
             Part filePart = request.getPart("filecover");
 
             String path = "C:\\Users\\Sachi\\Documents\\NetBeansProjects\\BookPortal\\web\\site\\images\\book_images";
 
             File file = new File(path);
             file.mkdir();
-            String fileName = getFileName(filePart);
-
-            OutputStream out = null;
-
-            InputStream filecontent = null;
+            fileName = getFileName(filePart);
 
             PrintWriter writer = response.getWriter();
-            try {
-                out = new FileOutputStream(new File(path + File.separator
-                        + fileName));
 
-                filecontent = filePart.getInputStream();
+            out = new FileOutputStream(new File(path + File.separator
+                    + fileName));
 
-                int read = 0;
-                final byte[] bytes = new byte[1024];
+            filecontent = filePart.getInputStream();
 
-                while ((read = filecontent.read(bytes)) != -1) {
-                    out.write(bytes, 0, read);
+            int read = 0;
+            final byte[] bytes = new byte[1024];
 
-                    String photo = "path/" + fileName;
+            while ((read = filecontent.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
 
-                }
-              
-
-                PrintWriter outt = response.getWriter();
-                outt.println("added image");
-                
-                
-                Connection con = DBConnectionHandler.createConnection();
-                try {
-
-                    String title = request.getParameter("title");
-                    String isbn = request.getParameter("isbn");
-
-                    String existingauth1 = request.getParameter("existingauth1");
-                    String newauth1 = request.getParameter("newauth1");
-
-                    String existingauth2 = request.getParameter("existingauth2");
-                    String newauth2 = request.getParameter("newauth2");
-
-                    String existingauth3 = request.getParameter("existingauth3");
-                    String newauth3 = request.getParameter("newauth3");
-
-                    String existingpub = request.getParameter("existingpub");
-                    String newpub = request.getParameter("newpub");
-
-                    String finalpub = "";
-                    String finalauth1 = "";
-                    String finalauth2 = "";
-                    String finalauth3 = "";
-
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    java.util.Date pub_date1 = format.parse(request.getParameter("pub_date"));
-                    java.sql.Date pub_date2 = new java.sql.Date(pub_date1.getTime());
-
-                    String description = request.getParameter("description");
-                    String language = request.getParameter("language");
-                    String edition = request.getParameter("edition");
-                    String subject = request.getParameter("subject");
-                    String price = request.getParameter("price");
-
-                    String image = "site/images/book_images/" + fileName;
-                    java.sql.Date today = new Date(Calendar.getInstance().getTimeInMillis());
-
-                    con.setAutoCommit(false);
-
-                    String query = "";
-                    PreparedStatement ps = null;
-
-                    if (!newpub.equals("")) {
-                        outt.println("Inside if pub is new");
-                        query = "INSERT into publisher (name)" + "VALUES(?)";
-                        ps = con.prepareStatement(query);
-                        ps.setString(1, newpub);
-                        ps.executeUpdate();
-                        Savelog.saveLog(request, "New publisher inserted - " + newpub);
-
-                        query = "SELECT MAX(idpublisher) FROM publisher ";
-                        ps = con.prepareStatement(query);
-                        ResultSet rset = ps.executeQuery();
-                        if (rset.next()) {
-                            outt.println("Inside if pub is new - resultset iterator");
-                            finalpub = rset.getString(1);
-                        }
-                         outt.println("added new pub");
-
-                    } else if (!existingpub.equals("select")) {
-                        finalpub = existingpub;
-                    }
-
-                    query = "Insert into book"
-                            + " (name,ISBN,pub_date,edition,pur_date,price,description,image,featured,reserved,publisher_idpublisher,language_idlanguage,subject_idsubject,status) "
-                            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                    ps = con.prepareStatement(query);
-                    ps.setString(1, title);
-                    ps.setString(2, isbn);
-                    ps.setDate(3, pub_date2);
-                    ps.setInt(4, Integer.parseInt(edition));
-                    ps.setDate(5, today);
-                    ps.setInt(6, Integer.parseInt(price));
-                    ps.setString(7, description);
-                    ps.setString(8, image);
-                    ps.setInt(9, 0);
-                    ps.setInt(10, 0);
-                    ps.setInt(11, Integer.parseInt(finalpub));
-                    ps.setInt(12, Integer.parseInt(language));
-                    ps.setInt(13, Integer.parseInt(subject));
-                    ps.setInt(14, 1);
-
-                    ps.executeUpdate();
-
-                    //get the id of the book
-                    query = "SELECT MAX(idbook) FROM book ";
-                    String idbook = "";
-                    ps = con.prepareStatement(query);
-                    ResultSet rset = ps.executeQuery();
-                    if (rset.next()) {
-                        idbook = rset.getString(1);
-                    }
-                    Savelog.saveLog(request, "New book inserted - " + idbook);
-                     outt.println("added book");
-
-                    //insert authors
-                    if (!(existingauth1.equals("select") && newauth1.equals(""))) {
-                        outt.println("Inside main if auth1");
-                        if (!newauth1.equals("")) {
-                            outt.println("Inside main if auth1 inside new auth");
-                            query = "INSERT into author (name)" + "VALUES(?)";
-                            ps = con.prepareStatement(query);
-                            ps.setString(1, newauth1);
-                            ps.executeUpdate();
-                            Savelog.saveLog(request, "New author inserted - " + newauth1);
-
-                            query = "SELECT MAX(idauthor) FROM author ";
-                            ps = con.prepareStatement(query);
-                            rset = ps.executeQuery();
-                            if (rset.next()) {
-                                outt.println("Inside main if auth1 - new auth resultset iterator");
-                                finalauth1 = rset.getString(1);
-                            }
-                        } else {
-                            finalauth1 = existingauth1;
-                        }
-                        query = "INSERT into book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
-                        ps = con.prepareStatement(query);
-                        ps.setString(1, idbook);
-                        ps.setString(2, finalauth1);
-                        ps.executeUpdate();
-                        Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth1);
-                         outt.println("added new author book - 1");
-                    }
-
-                    if (!(existingauth2.equals("select") && newauth2.equals(""))) {
-                        if (!newauth2.equals("")) {
-                            query = "INSERT into author (name)" + "VALUES(?)";
-                            ps = con.prepareStatement(query);
-                            ps.setString(1, newauth2);
-                            ps.executeUpdate();
-                            Savelog.saveLog(request, "New author inserted - " + newauth2);
-
-                            query = "SELECT MAX(idauthor) FROM author ";
-                            ps = con.prepareStatement(query);
-                            rset = ps.executeQuery();
-                            if (rset.next()) {
-                                finalauth2 = rset.getString(1);
-                            }
-                        } else {
-                            finalauth2 = existingauth2;
-                        }
-                        query = "INSERT into book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
-                        ps = con.prepareStatement(query);
-                        ps.setString(1, idbook);
-                        ps.setString(2, finalauth2);
-                        ps.executeUpdate();
-                        Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth2);
-                    }
-
-                    if (!(existingauth3.equals("select") && newauth3.equals(""))) {
-                        if (!newauth3.equals("")) {
-                            query = "INSERT into author (name)" + "VALUES(?)";
-                            ps = con.prepareStatement(query);
-                            ps.setString(1, newauth3);
-                            ps.executeUpdate();
-                            Savelog.saveLog(request, "New author inserted - " + newauth3);
-
-                            query = "SELECT MAX(idauthor) FROM author ";
-                            ps = con.prepareStatement(query);
-                            rset = ps.executeQuery();
-                            if (rset.next()) {
-                                finalauth3 = rset.getString(1);
-                            }
-                        } else {
-                            finalauth3 = existingauth3;
-                        }
-                        query = "INSERT into book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
-                        ps = con.prepareStatement(query);
-                        ps.setString(1, idbook);
-                        ps.setString(2, finalauth3);
-                        ps.executeUpdate();
-                        Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth3);
-                    }
-
-//
-//                    Savelog.saveLog(request, "book added successfully");
-                    con.commit();
-                    response.sendRedirect("bookinsert.jsp?msg=success");
-
-                } catch (SQLException | IOException e) {
-                    try {
-                        con.rollback();
-                    } catch (SQLException ex) {
-                        outt.println("Oops! Something went wrong.\n");
-                        outt.println(ex.toString());
-                        Savelog.saveLog(request, "book addition failed");
-                        response.sendRedirect("bookinsert.jsp?msg=error");
-                    }
-                    outt.println("Oops! Something went wrong.\n");
-                    outt.println(e.toString());
-
-                    response.sendRedirect("bookinsert.jsp?msg=error");
-                } finally {
-                    try {
-                        con.close();
-                    } catch (SQLException e) {
-                        System.out.println("Oops! Something went wrong.\n");
-                    }
-                }
-
-//                response.sendRedirect("inventoryview.jsp?msg=success");
-            } catch (Exception e) {
+                String photo = "path/" + fileName;
 
             }
 
+        } else if (isdeffile.equals("def")) {
+            fileName="default.jpg";
         }
 
+        PrintWriter outt = response.getWriter();
+
+        Connection con = DBConnectionHandler.createConnection();
+        try {
+            String title = request.getParameter("title");
+            String isbn = request.getParameter("isbn");
+
+            String existingauth1 = request.getParameter("existingauth1");
+            String newauth1 = request.getParameter("newauth1");
+
+            String existingauth2 = request.getParameter("existingauth2");
+            String newauth2 = request.getParameter("newauth2");
+
+            String existingauth3 = request.getParameter("existingauth3");
+            String newauth3 = request.getParameter("newauth3");
+
+            String existingpub = request.getParameter("existingpub");
+            String newpub = request.getParameter("newpub");
+
+            String finalpub = "";
+            String finalauth1 = "";
+            String finalauth2 = "";
+            String finalauth3 = "";
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date pub_date1 = format.parse(request.getParameter("pubdate"));
+            java.sql.Date pub_date2 = new java.sql.Date(pub_date1.getTime());
+
+            String description = request.getParameter("description");
+            String language = request.getParameter("language");
+            String edition = request.getParameter("edition");
+            String subject = request.getParameter("subject");
+            String price = request.getParameter("price");
+
+            String image = "site/images/book_images/" + fileName;
+//            String image = "site/images/book_images/";
+
+            java.sql.Date today = new Date(Calendar.getInstance().getTimeInMillis());
+            con.setAutoCommit(false);
+
+            String query = "";
+            PreparedStatement ps = null;
+
+            if (newpub != null) {
+                query = "INSERT INTO publisher (name)" + "VALUES(?)";
+                ps = con.prepareStatement(query);
+                ps.setString(1, newpub);
+                ps.executeUpdate();
+                Savelog.saveLog(request, "New publisher inserted - " + newpub);
+
+                query = "SELECT MAX(idpublisher) FROM publisher ";
+                ps = con.prepareStatement(query);
+                ResultSet rset = ps.executeQuery();
+                if (rset.next()) {
+                    finalpub = rset.getString(1);
+                }
+
+            } else if (existingpub != null) {
+                finalpub = existingpub;
+            }
+
+            query = "INSERT INTO book"
+                    + " (name,ISBN,pub_date,edition,pur_date,price,description,image,featured,reserved,publisher_idpublisher,language_idlanguage,subject_idsubject,status) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            ps = con.prepareStatement(query);
+            ps.setString(1, title);
+            ps.setString(2, isbn);
+            ps.setDate(3, pub_date2);
+            ps.setInt(4, Integer.parseInt(edition));
+            ps.setDate(5, today);
+            ps.setInt(6, Integer.parseInt(price));
+            ps.setString(7, description);
+            ps.setString(8, image);
+            ps.setInt(9, 0);
+            ps.setInt(10, 0);
+            ps.setInt(11, Integer.parseInt(finalpub));
+            ps.setInt(12, Integer.parseInt(language));
+            ps.setInt(13, Integer.parseInt(subject));
+            ps.setInt(14, 1);
+
+            ps.executeUpdate();
+
+            //get the id of the book
+            query = "SELECT MAX(idbook) FROM book ";
+            String idbook = "";
+            ps = con.prepareStatement(query);
+            ResultSet rset = ps.executeQuery();
+            if (rset.next()) {
+                idbook = rset.getString(1);
+            }
+            Savelog.saveLog(request, "New book inserted - " + idbook);
+
+            //insert authors
+            if (!(existingauth1 == null && newauth1 == null)) {
+                if (newauth1 != null) {
+                    query = "INSERT INTO author (name)" + "VALUES(?)";
+                    ps = con.prepareStatement(query);
+                    ps.setString(1, newauth1);
+                    ps.executeUpdate();
+                    Savelog.saveLog(request, "New author inserted - " + newauth1);
+
+                    query = "SELECT MAX(idauthor) FROM author ";
+                    ps = con.prepareStatement(query);
+                    rset = ps.executeQuery();
+                    if (rset.next()) {
+                        finalauth1 = rset.getString(1);
+                    }
+                } else {
+                    finalauth1 = existingauth1;
+                }
+                query = "INSERT INTO book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
+                ps = con.prepareStatement(query);
+                ps.setString(1, idbook);
+                ps.setString(2, finalauth1);
+                ps.executeUpdate();
+                Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth1);
+            }
+
+            if (!(existingauth2 == null && newauth2 == null)) {
+                if (newauth2 != null) {
+                    query = "INSERT INTO author (name)" + "VALUES(?)";
+                    ps = con.prepareStatement(query);
+                    ps.setString(1, newauth2);
+                    ps.executeUpdate();
+                    Savelog.saveLog(request, "New author inserted - " + newauth2);
+
+                    query = "SELECT MAX(idauthor) FROM author ";
+                    ps = con.prepareStatement(query);
+                    rset = ps.executeQuery();
+                    if (rset.next()) {
+                        finalauth2 = rset.getString(1);
+                    }
+                } else {
+                    finalauth2 = existingauth2;
+                }
+                query = "INSERT INTO book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
+                ps = con.prepareStatement(query);
+                ps.setString(1, idbook);
+                ps.setString(2, finalauth2);
+                ps.executeUpdate();
+                Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth2);
+            }
+
+            if (!(existingauth3 == null && newauth3 == null)) {
+                if (newauth3 != null) {
+                    query = "INSERT INTO author (name)" + "VALUES(?)";
+                    ps = con.prepareStatement(query);
+                    ps.setString(1, newauth3);
+                    ps.executeUpdate();
+                    Savelog.saveLog(request, "New author inserted - " + newauth3);
+
+                    query = "SELECT MAX(idauthor) FROM author ";
+                    ps = con.prepareStatement(query);
+                    rset = ps.executeQuery();
+                    if (rset.next()) {
+                        finalauth3 = rset.getString(1);
+                    }
+                } else {
+                    finalauth3 = existingauth3;
+                }
+                query = "INSERT INTO book_has_author (book_idbook,author_idauthor) " + "VALUES (?,?)";
+                ps = con.prepareStatement(query);
+                ps.setString(1, idbook);
+                ps.setString(2, finalauth3);
+                ps.executeUpdate();
+                Savelog.saveLog(request, "New book_has_author inserted book - " + idbook + " author - " + finalauth3);
+            }
+            con.commit();
+//            response.sendRedirect("bookinsert.jsp?msg=success");
+
+        } catch (SQLException e) {
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                System.out.println("Oops! Something went wrong.\n");
+                System.out.println(ex.toString());
+                Savelog.saveLog(request, "book addition failed");
+                response.sendRedirect("bookinsert.jsp?msg=error");
+            }
+            System.out.println("Oops! Something went wrong.\n");
+            System.out.println(e.toString());
+
+            response.sendRedirect("bookinsert.jsp?msg=error");
+        } catch (ParseException ex) {
+            System.out.println("PARSE exception");
+            Logger.getLogger(Savebook.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Oops! Something went wrong.\n");
+            }
+        }
+
+        if(out!=null){
+            out.close();
+        }
+        if(filecontent!=null){
+            filecontent.close();
+        }
+        response.sendRedirect("bookinsert.jsp?msg=success");
+//        response.sendRedirect("inventoryview.jsp?msg=success");
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -315,16 +312,18 @@ public class savebook extends HttpServlet {
         try {
             String para = request.getParameter("para");
             if (para.equals("fadd")) {
-                String idd = request.getParameter("newfeatbook");
+                int idd = Integer.parseInt(request.getParameter("newfeatbook"));
+                System.out.println("new book id=" + idd);
                 Connection con = DBConnectionHandler.createConnection();
                 String query = "UPDATE book SET featured=1 WHERE idbook=?";
                 PreparedStatement ps = con.prepareStatement(query);
-                ps.setString(1, idd);
+                ps.setInt(1, idd);
                 ps.executeUpdate();
                 con.close();
                 Savelog.saveLog(request, "added new featured book - " + idd);
             } else if (para.equals("fremove")) {
                 int idbook = Integer.parseInt(request.getParameter("book"));
+                System.out.println("removed - " + idbook);
                 Connection con = DBConnectionHandler.createConnection();
                 String query = "UPDATE book SET featured=0 WHERE idbook=?";
                 PreparedStatement ps = con.prepareStatement(query);
@@ -339,7 +338,6 @@ public class savebook extends HttpServlet {
             out.println("Oops! Something went wrong.\n");
             out.println(e.toString());
 
-//            response.sendRedirect("notificationview.jsp?msg=error");
         }
 
     }
@@ -356,7 +354,7 @@ public class savebook extends HttpServlet {
             con.close();
         } catch (SQLException ex) {
             Savelog.saveLog(req, "failed to load max book id");
-            Logger.getLogger(savebook.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Savebook.class.getName()).log(Level.SEVERE, null, ex);
         }
         return idbook;
     }

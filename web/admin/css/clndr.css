@@ -109,25 +109,25 @@
   transition: all 0.3s ease-in-out;
 }
 .cal1 .clndr .clndr-table tr .day.today {
-  	 background:#FBB03B;
+  	 background:#FF4C69;
 	 color: #FFF;
 	 position:relative;
 }
 
 .cal1 .clndr .clndr-table tr .day.today:hover {
   	color: #FFF;
-  	background:#FBB03B;
+  	background:#FF4C69;
 }
 .cal1 .clndr .clndr-table tr .day:hover{
 	color: #FFF;
-  	background:#FBB03B;
+  	background:#FF4C69;
 }
 .cal1 .clndr .clndr-table tr .day.today.event {
-     background:#FBB03B;
+     background:#FF4C69;
 	 color:#FFF;
 }
 .day.today.event:hover{
-	background:#FBB03B;
+	background:#FF4C69;
 	color:#FFF;
 }
 .cal1 .clndr .clndr-table tr .day .day-contents {

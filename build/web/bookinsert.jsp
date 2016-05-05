@@ -339,10 +339,22 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Image:</label>
                                         <div class="col-md-3">
-                                            <input class="form-control" type="file" name="filecover" required=""/>
-                                            <p><small>Please use a default image if an image is unavailable</small></p>
+                                            <input type="radio" name="isdefaultfile"  value="def" onclick="selectnew('defaultfilecover', 'filecover')" checked=""> Default Image
                                         </div>
-                                        <div class="col-md-6"></div>
+                                        
+                                        <div class="col-md-6"><input type="hidden" id="defaultfilecover"></div>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3">
+                                            <input type="radio" name="isdefaultfile"  value="newfile" onclick="selectnew('filecover', 'defaultfilecover')" checked=""> New Image
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input class="form-control" type="file" name="filecover" id="filecover"/>
+                                            <!--<p><small>Please use a default image if an image is unavailable</small></p>-->
+                                        </div>
+                                        <div class="col-md-3"></div>
                                     </div>
 
 
@@ -416,8 +428,9 @@
 
                                                 function setsubjects() {
                                                     document.getElementById("edition").innerHTML = "hajak";
-                                                    
+
                                                 }
+
 
         </script>      
 

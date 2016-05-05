@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sachi
  */
-public class executepurreq extends HttpServlet {
+public class Executepurreq extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

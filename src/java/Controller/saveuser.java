@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sachi
  */
-public class saveuser extends HttpServlet {
+public class Saveuser extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -94,8 +94,8 @@ public class saveuser extends HttpServlet {
                     }
                 }
             }
-            System.out.println("targetuserr----------------" + newuser);
-            executenotification.insertnotification(targetuser, "UserReg", "New user registered", newuser, 0);
+//            System.out.println("targetuserr----------------" + newuser);
+            Executenotification.insertnotification(targetuser, "UserReg", "New user registered", newuser, 0);
             con.commit();
             response.sendRedirect("index.jsp?msg=success");
 

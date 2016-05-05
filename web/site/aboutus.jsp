@@ -20,7 +20,7 @@
         <link href="css/responsive.css" rel="stylesheet">
     </head>
     <body>
-        
+
         <%@include file="header.jsp" %>
         <div id="contact-page" class="container">
             <div class="breadcrumbs">
@@ -34,17 +34,16 @@
                     <div class="col-sm-12">    			   			
                         <h2 class="title text-center">About <strong>Us</strong></h2>    			    				    				
                         <div id="gmap" class="contact-map">
-                            <h1>H1 HEADER</h1>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            </p>
-                            <h2> H2 HEADER</h2>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            </p>
-                            <h3>H3 HEADER</h3>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                The BookPortal Bookstore is the surprising small town bookstore. Located in beautiful Grand Rapids, Minnesota, we have been an independent bookseller for over 30 years. Regional books are our specialty. We offer a large selection of titles relating to Minnesota history, biographies, outdoor activities, nature, and much more.
+                                <br><br>
+                                We also carry the latest bestsellers and new releases for adult and children in a wide variety of subjects.   You’ll find a wonderfully stocked children’s section filled with a wide variety of books from beloved classics to new favorites!  Our children’s department also has fun and educational games, puzzles, and activity kits.
+                                <br><br>
+                                In addition to books, we carry topographical maps for Itasca County, McKenzie/Fisher canoe maps, and a great selection of Singing Pines wild rice.  The BookPortal Bookstore also has an impressive selection of puzzles, games, and gifts for all ages!
+                                <br><br>
+                                We pride ourselves on exceptional customer service and are happy to help each customer find the perfect book or gift!  If we don’t stock the title you’re looking for, we’ll gladly special order for you.  We place orders several times a week and there is no additional charge for titles shipped to the store!
+                                <br><br>
+                                Thank you for supporting your local independent bookstore!
                             </p>
                         </div>
                     </div>			 		

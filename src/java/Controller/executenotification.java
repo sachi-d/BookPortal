@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sachi
  */
-public class executenotification extends HttpServlet {
+public class Executenotification extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +43,7 @@ public class executenotification extends HttpServlet {
         try {
             String para = request.getParameter("para");
             if (para.equals("accept")) {
+                System.out.println("accept user");
                 String userId = request.getParameter("user");
                 Connection con = DBConnectionHandler.createConnection();
                 String query = "UPDATE user SET status=1 WHERE iduser=?";
@@ -66,7 +67,7 @@ public class executenotification extends HttpServlet {
             response.sendRedirect("notificationview.jsp?msg=ignoresuccess");
 
         } catch (Exception e) {
-            Savelog.saveLog(request, "error admin panel");
+            Savelog.saveLog(request, "error - user reg notification");
             out.println("Oops! Something went wrong.\n");
             out.println(e.toString());
 
@@ -84,7 +85,7 @@ public class executenotification extends HttpServlet {
             ps.executeUpdate();
             con.close();
         } catch (SQLException ex) {
-            Logger.getLogger(executenotification.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Executenotification.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -121,11 +122,11 @@ public class executenotification extends HttpServlet {
                 }
                 con.commit();
             } catch (SQLException ex) {
-                Logger.getLogger(executenotification.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Executenotification.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(executenotification.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Executenotification.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
