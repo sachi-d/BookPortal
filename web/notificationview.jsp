@@ -127,8 +127,8 @@
                                                             <a href="userview.jsp?user=<%= not.getNewuser().getIduser()%>">View user details</a>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <a href="executenotification?para=accept&user=<%= not.getNewuser().getIduser()%>"><button class="btn-xs btn-success" type="button">Accept <span class='fa fa-check'></span></button></a>
-                                                            <a href="executenotification?para=reject&user=<%= not.getNewuser().getIduser()%>"><button class="btn-xs btn-danger" type="button">Reject <span class='fa fa-remove'></span></button></a>
+                                                            <a href="executenotification?para=accept&user=<%= not.getNewuser().getIduser()%>&not=<%= not.getIdnotification()%>"><button class="btn-xs btn-success" type="button">Accept <span class='fa fa-check'></span></button></a>
+                                                            <a href="executenotification?para=reject&user=<%= not.getNewuser().getIduser()%>&not=<%= not.getIdnotification()%>"><button class="btn-xs btn-danger" type="button">Reject <span class='fa fa-remove'></span></button></a>
                                                         </div>
                                                         <%
                                                         } else {

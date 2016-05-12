@@ -51,6 +51,7 @@ public class DBDatalist {
                 Purchaserequest pur = new Purchaserequest(
                         rsetPurreq.getInt(1),
                         rsetPurreq.getString(2),
+                        rsetPurreq.getString(6),
                         rsetPurreq.getString(3),
                         rsetPurreq.getString(4),
                         bill);
@@ -81,6 +82,7 @@ public class DBDatalist {
                 Purchaserequest pur = new Purchaserequest(
                         rsetPurreq.getInt(1),
                         rsetPurreq.getString(2),
+                        rsetPurreq.getString(6),
                         rsetPurreq.getString(3),
                         rsetPurreq.getString(4),
                         bill);
@@ -1161,6 +1163,7 @@ public class DBDatalist {
                 arr = new Purchaserequest(
                         rsetPurreq.getInt(1),
                         rsetPurreq.getString(2),
+                        rsetPurreq.getString(6),
                         rsetPurreq.getString(3),
                         rsetPurreq.getString(4),
                         bill);

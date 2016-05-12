@@ -14,7 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View bill details</title>
         <link rel="shortcut icon" href="admin/images/logo.png">
-        
+
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
         <!-- Custom Theme files -->
         <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
@@ -50,7 +50,7 @@
                                     if (request.getParameter("purreq") != null) {
                                         int purreq = Integer.parseInt(request.getParameter("purreq"));
                                         Purchaserequest pur = DBDatalist.getPurchaserequest(purreq);
-                                        Bill bill = pur.getIdbill();
+                                        Bill bill = pur.getBill();
                                     %>
                                 <form class="form-horizontal">
                                     <div class="form-group">
@@ -58,6 +58,14 @@
                                         <label class="col-md-2 "> Customer : </label>
                                         <div class="col-md-8">
                                             <p> <%= pur.getCustomer()%> </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <label class="col-md-2 "> Email : </label>
+                                        <div class="col-md-8">
+                                            <p> <%= pur.getEmail()%> </p>
                                         </div>
 
                                     </div>
@@ -73,7 +81,7 @@
                                         <div class="col-md-2"></div>
                                         <label class="col-md-2 "> Date : </label>
                                         <div class="col-md-8">
-                                            <p> <%= pur.getIdbill().getDate()%> </p>
+                                            <p> <%= pur.getBill().getDate()%> </p>
                                         </div>
 
                                     </div>
@@ -81,13 +89,13 @@
                                         <div class="col-md-2"></div>
                                         <label class="col-md-2 "> Bill ID : </label>
                                         <div class="col-md-8">
-                                            <p> <%= pur.getIdbill().getIdbill()%> </p>
+                                            <p> <%= pur.getBill().getIdbill()%> </p>
                                             <%
                                                 if (pur.getStatus().equals("New")) {
                                             %><label class="label label-warning">New</label><%
-                                                    } else if (pur.getStatus().equals("Accepted")) {
+                                            } else if (pur.getStatus().equals("Accepted")) {
                                             %><label class="label label-primary">Accpted</label><%
-                                                        }
+                                                }
                                             %>
                                         </div>
 
@@ -107,7 +115,7 @@
                                         %>
                                         <div class="col-md-4"></div>
                                         <div class="col-md-3">       <p>   <%= b.getTitle()%> <br></p><hr></div>
-                                        <div class="col-md-3">       <p>   <%= b.getISBN() %> <br></p><hr></div>
+                                        <div class="col-md-3">       <p>   <%= b.getISBN()%> <br></p><hr></div>
                                         <div class="col-md-2">       <p>   <%= h.get(b)%> <br></p><hr></div>
                                                 <%
                                                     }%>
@@ -118,7 +126,7 @@
                                         <div class="col-md-2"></div>
                                         <label class="col-md-2 "> Total : </label>
                                         <div class="col-md-8">
-                                            <p> Rs. <%= pur.getIdbill().getTotal()%> </p>
+                                            <p> Rs. <%= pur.getBill().getTotal()%> </p>
                                         </div>
                                         <hr>
                                     </div>

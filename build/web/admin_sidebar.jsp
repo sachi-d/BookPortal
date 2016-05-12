@@ -113,7 +113,7 @@
 
                                         <div class="user-new">
                                             <p>New purchase request</p>
-                                            <span><%=  pur.getIdbill().getDate() %></span>
+                                            <span><%=  pur.getBill().getDate() %></span>
                                         </div>
                                         <div class="user-new-left">
                                             <i class="fa fa-shopping-cart"></i>
@@ -176,6 +176,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span class=" name-caret"><%= u.getFullname()%><i class="caret"></i></span><img src="admin/images/user.png" alt="profile pic"></a>
                             <ul class="dropdown-menu " role="menu">
+                                <li><a href="userview.jsp?user=<%=u.getIduser()%>"><i class="fa fa-user"></i>View profile</a></li>
                                 <li><a href="signout"><i class="fa fa-user"></i>Logout</a></li>
                             </ul>
                         </li>

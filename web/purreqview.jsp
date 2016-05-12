@@ -165,10 +165,10 @@
 
                                                         %>
                                                         <tr>
-                                                            <td class="tg-yw40"><%= pur.getIdbill().getDate()%></td>
+                                                            <td class="tg-yw40"><%= pur.getBill().getDate()%></td>
                                                             <td class="tg-yw40"><%= pur.getCustomer()%></td>
                                                             <td class="tg-yw40"><%= pur.getAddress()%></td>
-                                                            <td class="tg-yw40"><%= pur.getIdbill().getIdbill()%></td>
+                                                            <td class="tg-yw40"><%= pur.getBill().getIdbill()%></td>
                                                             <td class="tg-yw40"><%= pur.getStatus()%></td>
                                                         </tr>
                                                         <%  }

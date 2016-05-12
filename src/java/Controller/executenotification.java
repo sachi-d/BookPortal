@@ -41,6 +41,7 @@ public class Executenotification extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
+            String result = "";
             String para = request.getParameter("para");
             if (para.equals("accept")) {
                 System.out.println("accept user");
@@ -51,7 +52,7 @@ public class Executenotification extends HttpServlet {
                 ps.setString(1, userId);
                 ps.executeUpdate();
                 con.close();
-                response.sendRedirect("notificationview.jsp?msg=success");
+                result = "success";
             } else if (para.equals("reject")) {
                 String userId = request.getParameter("user");
                 Connection con = DBConnectionHandler.createConnection();
@@ -60,11 +61,15 @@ public class Executenotification extends HttpServlet {
                 ps.setString(1, userId);
                 ps.executeUpdate();
                 con.close();
-                response.sendRedirect("notificationview.jsp?msg=rejected");
+                result = "rejected";
             }
             String notId = request.getParameter("not");
             ignorenotification(Integer.parseInt(notId));
-            response.sendRedirect("notificationview.jsp?msg=ignoresuccess");
+            if (result.equals("")) {
+                response.sendRedirect("notificationview.jsp?msg=ignoresuccess");
+            } else {
+                response.sendRedirect("notificationview.jsp?msg=" + result);
+            }
 
         } catch (Exception e) {
             Savelog.saveLog(request, "error - user reg notification");

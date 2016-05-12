@@ -15,7 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View user</title>
         <link rel="shortcut icon" href="admin/images/logo.png">
-        
+
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
 
         <!-- Custom Theme files -->
@@ -56,14 +56,14 @@
                                     } else if (request.getParameter("msg").equals("rejected")) {
                                     %>
                                 <label class="label label-default">User rejected. </label>
-                                    <%
-                                            }
+                                <%
                                         }
+                                    }
 
-                                        if (request.getParameter("user") != null) {
-                                            int iduser = Integer.parseInt(request.getParameter("user"));
-                                            User u = DBDatalist.getUser(iduser);
-                                    %>
+                                    if (request.getParameter("user") != null) {
+                                        int iduser = Integer.parseInt(request.getParameter("user"));
+                                        User u = DBDatalist.getUser(iduser);
+                                %>
                                 <form class="form-horizontal">
                                     <div class="form-group">
                                         <div class="col-md-2"></div>
@@ -100,6 +100,10 @@
                                     <div class="form-group">
                                         <hr>
                                     </div>
+                                    <%
+                                        User myuser = (User) session.getAttribute("user");
+                                        if (iduser != myuser.getIduser()) {
+                                    %>
                                     <div class="form-group">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-2">
@@ -114,6 +118,10 @@
                                         </div>
                                         <div class="col-md-4"></div>
                                     </div>
+                                    <%
+                                        }
+                                    %>
+
 
                                 </form>
                                 <%  }%>

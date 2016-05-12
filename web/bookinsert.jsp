@@ -339,7 +339,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Image:</label>
                                         <div class="col-md-3">
-                                            <input type="radio" name="isdefaultfile"  value="def" onclick="selectnew('defaultfilecover', 'filecover')" checked=""> Default Image
+                                            <input type="radio" name="isdefaultfile"  value="def" onclick="selectnew('defaultfilecover', 'filecover')" > Default Image
                                         </div>
                                         
                                         <div class="col-md-6"><input type="hidden" id="defaultfilecover"></div>

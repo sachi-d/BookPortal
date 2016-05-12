@@ -6,6 +6,7 @@
 package Controller;
 
 import DB.DBConnectionHandler;
+import Model.Purchaserequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -46,6 +47,8 @@ public class Executepurreq extends HttpServlet {
                 ps.executeUpdate();
                 con.close();
                 Savelog.saveLog(request, "Marked as accepted purchase request - " + pur);
+                Purchaserequest purreq=DBDatalist.getPurchaserequest(Integer.parseInt(pur));
+                purreq.sendEmail();
                 response.sendRedirect("billdetailsview.jsp?msg=accepted&purreq=" + pur);
             } else if (para.equals("process")) {
                 Connection con = DBConnectionHandler.createConnection();
@@ -55,6 +58,8 @@ public class Executepurreq extends HttpServlet {
                 ps.executeUpdate();
                 con.close();
                 Savelog.saveLog(request, "Marked as processed purchase request - " + pur);
+                Purchaserequest purreq=DBDatalist.getPurchaserequest(Integer.parseInt(pur));
+                purreq.sendEmail();
                 response.sendRedirect("billdetailsview.jsp?msg=processed&purreq=" + pur);
             }
 //            response.sendRedirect("notificationview.jsp?msg=ignoresuccess");

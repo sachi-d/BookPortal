@@ -19,7 +19,7 @@ public class User implements java.io.Serializable {
     private String lname;
     private String nic;
     private Branch branch;
-    private int status;
+    private int status; //new user=2, accepted=1, rejected=0
 
     public User(int iduser, String username, String password, String user_level, String fname, String lname, String nic, Branch branch_idbranch) {
         this.iduser = iduser;
