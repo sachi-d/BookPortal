@@ -28,10 +28,17 @@ public class Savelog {
             String timestamp = "timestamp";
 
             con.setAutoCommit(false);
-            User u = (User) request.getSession().getAttribute("user");
+            User u=null;
+            if(request!=null){
+                u = (User) request.getSession().getAttribute("user");
+            }
             String query = "INSERT INTO log(user_iduser,ip,action) VALUES(?,?,?)";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, u.getIduser());
+            if(request!=null){
+                ps.setInt(1, u.getIduser());
+            }else{
+                ps.setInt(1, 0);
+            }
 //            ps.setString(2, timestamp);
             ps.setString(2, Inet4Address.getLocalHost().getHostAddress());
 //            ps.setString(2, "ip");

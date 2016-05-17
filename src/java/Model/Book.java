@@ -5,6 +5,7 @@
  */
 package Model;
 
+import Controller.DBDatalist;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
  * @author Sachi
  */
 public class Book {
+
     private int idbook;
     private String title;
     private String ISBN;
@@ -29,7 +31,6 @@ public class Book {
     private Subject subject;
     private int status;
     private ArrayList<String> authors;
-    
 
     public Book() {
     }
@@ -50,7 +51,7 @@ public class Book {
         this.language = language;
         this.subject = subject;
         this.status = status;
-        
+
     }
 
     public Book(int idbook, String title, Subject subject, String type) {    //for featured book
@@ -68,7 +69,7 @@ public class Book {
         this.subject = subject;
     }
 
-    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, Publisher publisher, String language, Subject subject,ArrayList<String> auth) {
+    public Book(int idbook, String title, String ISBN, Date pub_date, int edition, Date pur_date, double price, String description, String image, int featured, int reserved, Publisher publisher, String language, Subject subject, ArrayList<String> auth) {
         this.idbook = idbook;
         this.title = title;
         this.ISBN = ISBN;
@@ -83,7 +84,7 @@ public class Book {
         this.publisher = publisher;
         this.language = language;
         this.subject = subject;
-        this.authors=auth;
+        this.authors = auth;
     }
 
     public ArrayList getAuthors() {
@@ -93,8 +94,6 @@ public class Book {
     public void setAuthors(ArrayList authors) {
         this.authors = authors;
     }
-    
-    
 
     public int getIdbook() {
         return idbook;
@@ -215,17 +214,54 @@ public class Book {
     public void setStatus(int status) {
         this.status = status;
     }
-    
-    public String getShortDescription(){
-        String m=this.description.trim();
-        if(m.length()<123){
-            this.description=m+m;
+
+    public String getShortDescription() {
+        String m = this.description.trim();
+        if (m.length() < 123) {
+            this.description = m + m;
             return getShortDescription();
-        }
-        else{
-            String s=m.substring(0,124)+"...";
+        } else {
+            String s = m.substring(0, 124) + "...";
             return s;
         }
     }
-    
+
+    public static String bookListtoJSArray() {
+
+        //format
+//        var projects = [
+//            {
+//               value: "java",
+//               label: "Java",
+//               desc: "write once run anywhere",
+//            },
+//            {
+//               value: "jquery-ui",
+//               label: "jQuery UI",
+//               desc: "the official user interface library for jQuery",
+//            },
+//            {
+//               value: "Bootstrap",
+//               label: "Twitter Bootstrap",
+//               desc: "popular front end frameworks ",
+//            }
+//         ];
+        ArrayList<Book> arr = DBDatalist.getBookList();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String title = "label:" + "\"" + arr.get(i).getTitle() + "\"";
+            String id = "value:" + "\"" + String.valueOf(arr.get(i).getIdbook()) + "\"";
+            String price = "desc:" + "\"" + String.valueOf(arr.get(i).getPrice()) + "\"";
+            String val = "{" + title + "," + id + "," + price + ",}";
+            sb.append(val);
+            if (i + 1 < arr.size()) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
+
 }

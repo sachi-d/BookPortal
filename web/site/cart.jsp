@@ -145,11 +145,28 @@
             <div class="container">
                 <div class="heading">
                     <div class="col-md-6">
-                        <h3>Click checkout to complete your order</h3>
+                        <h3>Checkout to complete your order</h3>
                     </div>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
-                        <button class="btn btn-lg btn-default check_out" >Checkout</button>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <div class="chose_area">
+                            <h3 style="text-align: center">Checkout with <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo"></h3>
+                            <h3 style="text-align: center;">Total bill value : <span style="color: #E74C3C">Rs. <%=shoppingCart.getTotal()%></span></h3>
+                            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST"> 
+                                <input type="hidden" name="business" value="bookportal@bookportal.lk">
+                                <input type="hidden" name="cmd" value="_xclick">
+                                <input type="hidden" name="item_name" value="Total bill">
+                                <input type="hidden" name="amount" value="<%=shoppingCart.getTotal()%>">
+
+                                <input type="hidden" name="currency_code" value="USD">
+                                <input type="hidden" name="return" value="http://localhost:8080/BookPortal/site/payment/paypalsuccess.jsp">
+                                <input type="hidden" name="rm" value="2">
+                                <input type="hidden" name="cancel_return" value="http://localhost:8080/BookPortal/site/payment/paypalcancel.jsp"> 
+                                <p style="text-align: center"><input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online" ></p>
+                                <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" >
+                            </form>
+                        </div>
+
                     </div>
 
                 </div>

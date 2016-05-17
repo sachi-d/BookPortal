@@ -84,5 +84,7 @@ public class Report {
         this.branch = branch;
     }
     
-    
+    public void genMonthlyBranchReport(){
+        
+    }
 }

@@ -24,6 +24,7 @@ import Model.Stock;
 import Model.Subject;
 import Model.Type;
 import Model.User;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -1174,6 +1175,27 @@ public class DBDatalist {
         } catch (Exception e) {
             System.out.println(e);
             return null;
+        }
+    }
+
+    public static int getInvoice() {
+        int n = Calendar.getInstance().get(Calendar.SECOND);
+        try {
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT MAX(idBill) FROM Bill";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                n = rsetPurreq.getInt(1);
+            }
+            con.close();
+            return n+1;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return n+1;
         }
     }
 }

@@ -48,6 +48,10 @@
         <servlet-name>Executecart</servlet-name>
         <servlet-class>Controller.Executecart</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Loadsubjects</servlet-name>
+        <servlet-class>Controller.Loadsubjects</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>saveuser</servlet-name>
         <url-pattern>/saveuser</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>Executecart</servlet-name>
         <url-pattern>/Executecart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Loadsubjects</servlet-name>
+        <url-pattern>/Loadsubjects</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

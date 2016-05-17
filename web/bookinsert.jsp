@@ -287,7 +287,7 @@
                                         </div>
                                         <label class="col-md-3 control-label" > Edition :</label>
                                         <div class="col-md-3">
-                                            <input class="form-control" name="edition" required="" id="edition">
+                                            <input class="form-control" name="edition" required="" id="edition" type="number" value="1">
                                         </div>
                                     </div>
                                     <div class="form-group">
