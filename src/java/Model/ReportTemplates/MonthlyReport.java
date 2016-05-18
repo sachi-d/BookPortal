@@ -6,7 +6,11 @@
 package Model.ReportTemplates;
 
 import Controller.DBDatalist;
+import Controller.Executenotification;
 import Model.Branch;
+import Model.Report;
+import Model.User;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 
 /**
@@ -51,9 +55,17 @@ public final class MonthlyReport {
             this.purchases.add(mgitem2);
             this.totalpurchases += mbr.getTotalpurchases();
             this.totalpurchaserevenue += mbr.getTotalpurchaserevenue();
-            
+
             //add to database
-            mbr.addDatatoDB();
+//            mbr.addDatatoDB();
+//generate notifications for each branchadmin and admin
+//            String reporttitle = "Monthly Report - " + b.getName() + " - " + this.month ;
+//            String reportmonth=new DateFormatSymbols().getMonths()[this.month - 1];
+//            int repid=Report.addNewReport("MB", reporttitle, this.year,reportmonth,b.getName(),"location");
+//            User badmin=DBDatalist.getBranchadminfromBranch(b);
+//            Executenotification.insertnotification(badmin.getIduser(), "MB", reporttitle, 0, repid);
+//            int adminid=1;
+//            Executenotification.insertnotification(adminid, "MB", reporttitle, 0, repid);
         }
     }
 
@@ -81,5 +93,43 @@ public final class MonthlyReport {
         return totalpurchaserevenue;
     }
 
-    
+    public String MGPurchasestoJSArray() {
+
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<MonthlyGeneralItem> arr = getPurchases();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
+
+    public String MGSalestoJSArray() {
+
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<MonthlyGeneralItem> arr = getSales();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
 }

@@ -44,8 +44,11 @@
                     <ol class="breadcrumb">
                         <li><a href="home.jsp">Home</a></li>
                         <li class="active">Shopping Cart</li>
+
                     </ol>
+
                 </div>
+
                 <div class="table-responsive cart_info">
 
                     <table class="table table-condensed">
@@ -146,6 +149,10 @@
                 <div class="heading">
                     <div class="col-md-6">
                         <h3>Checkout to complete your order</h3>
+                        <hr>
+
+                        <button class="btn btn-danger" onclick="emptyCart()">Empty the cart</button>
+
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
@@ -159,9 +166,9 @@
                                 <input type="hidden" name="amount" value="<%=shoppingCart.getTotal()%>">
 
                                 <input type="hidden" name="currency_code" value="USD">
-                                <input type="hidden" name="return" value="http://localhost:8080/BookPortal/site/payment/paypalsuccess.jsp">
+                                <input type="hidden" name="return" value="http://localhost:8080/BookPortal/site/paypalsuccess.jsp">
                                 <input type="hidden" name="rm" value="2">
-                                <input type="hidden" name="cancel_return" value="http://localhost:8080/BookPortal/site/payment/paypalcancel.jsp"> 
+                                <input type="hidden" name="cancel_return" value="http://localhost:8080/BookPortal/site/paypalcancel.jsp"> 
                                 <p style="text-align: center"><input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online" ></p>
                                 <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" >
                             </form>
@@ -186,17 +193,21 @@
         <script src="js/jquery.prettyPhoto.js"></script>
         <script src="js/main.js"></script>
         <script>
-            function incrementvalue(el1)
-            {
-                var value = parseInt(document.getElementById(el1).value, 10);
-                value = isNaN(value) ? 0 : value;
-                value++;
-                document.getElementById(el1).value = value;
-            }
-            function incremenxtvalue(el1)
-            {
-
-            }
+                            function incrementvalue(el1)
+                            {
+                                var value = parseInt(document.getElementById(el1).value, 10);
+                                value = isNaN(value) ? 0 : value;
+                                value++;
+                                document.getElementById(el1).value = value;
+                            }
+//                            function emptyCart()
+//                            {
+//            <%
+//                    shoppingCart = new Cart();
+//                    session.setAttribute("cart", shoppingCart);
+            %>//
+//                                location.reload();
+//                            }
         </script>
     </body>
 </html>

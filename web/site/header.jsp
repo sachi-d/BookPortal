@@ -52,12 +52,12 @@
                 }
                 str = str + "&";
             }
-            String URL= str.substring(0, str.length() - 1);
-            String[] m= URL.split("site/", 2);
-            String pagename=m[1];
+            String URL = str.substring(0, str.length() - 1);
+            String[] m = URL.split("site/", 2);
+            String pagename = m[1];
 //            String uri = request.getRequestURI();
 //            String pageName = uri.substring(uri.lastIndexOf("/") + 1);
-            session.setAttribute("currentpage",pagename);
+            session.setAttribute("currentpage", pagename);
         %>
         <div>
             <%
@@ -111,6 +111,7 @@
                                         <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart<% if (shoppingCart.getCartSize() != 0) {%><span class="number"><%= shoppingCart.getCartSize()%></span><% } %></a></li>
                                         <li><a href="aboutus.jsp"><i class="fa fa-pencil"></i> About us</a></li>
                                         <li><a href="contactus.jsp"><i class="fa fa-phone"></i> Contact us</a></li>
+                                        <li><a href="cart.jsp" ><i class="fa fa-money"></i>Checkout!</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -181,10 +182,12 @@
 
                             </div>
                             <div class = "col-sm-3">
+
                                 <div class = "search_box pull-right">
                                     <form action="searchresult.jsp" method="GET">
-                                        <input type = "text" placeholder = "Search for books" name="keyword"/>
+                                        <input type = "text" placeholder = "Search for books" name="keyword" pattern="[^'\x22\x40\x21\x23\x24\x25\x5E\x26*\x28\x29\x5C\x2F\x3D]+"/>
                                         <input type="hidden" name="action" value="search" />
+                                        
                                     </form>
                                 </div>
                             </div>

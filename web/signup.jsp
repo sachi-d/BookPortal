@@ -67,8 +67,8 @@
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="login-mail">
-                            <input name="NIC" type="text" placeholder="NIC" required="" maxlength="10" >
-
+                            <input name="NIC" type="text" placeholder="NIC" required="" maxlength="9" pattern="[0-9]{9}" >
+                            <span>V</span>
                             <i class="fa fa-credit-card"></i>
                         </div>
                         <div class="login-mail">
@@ -87,14 +87,14 @@
                             <div>
                                 <select name="branch" id="category" class="form-control" >
                                     <option value = "select" selected = "">Select branch..</option>
-                                    <%                                                
+                                    <%
                                         ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
                                         if (arrBranch != null) {
                                             for (int i = 0; i < arrBranch.size(); i++) {
                                                 Branch branch = (Branch) arrBranch.get(i);
 
                                     %>
-                                    <option value = "<%= branch.getIdbranch() %>" ><%= branch.getName() %></option>
+                                    <option value = "<%= branch.getIdbranch()%>" ><%= branch.getName()%></option>
                                     <%         }
                                         }
 
@@ -108,21 +108,21 @@
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="login-mail">
-                            <input type="password" placeholder="Password" required="" name="pw">
+                            <input type="password" placeholder="Password" required="" name="pw" id="pw">
                             <i class="fa fa-lock"></i>
                         </div>
                         <div class="login-mail">
-                            <input type="password" placeholder="Repeat password" required="" name="pw2">
+                            <input type="password" placeholder="Repeat password" required="" name="pw2" id="pw2">
                             <i class="fa fa-lock"></i>
                         </div>
                         <a class="news-letter" href="#">
-                            <label class="checkbox1"><input type="checkbox" name="checkbox" ><i> </i>I agree with the terms</label>
+                            <label class="checkbox1"><input type="checkbox" name="check" id="check" required=""><i> </i>I agree with the terms</label>
                         </a>
 
                     </div>
                     <div class=" login-do">
                         <label class="hvr-shutter-in-horizontal login-sub">
-                            <input type="submit" value="Submit">
+                            <input type="submit" value="Submit" onclick="validate()">
                             <!--<a href="login.jsp" class="hvr-shutter-in-horizontal">Login</a>-->
                             <!--<button type="submit" class="btn btn-primary">Register</button>-->
                         </label>
@@ -140,6 +140,15 @@
         <!--scrolling js-->
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
+        <script>
+            function validate(){
+                if(document.getElementById('pw').value !== document.getElementById('pw2')){
+                    alert("Passwords do not match.");
+                    return false;
+                }
+                return true;
+            }
+        </script>
         <!--//scrolling js-->
     </body>
 </html>

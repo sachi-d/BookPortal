@@ -12,7 +12,6 @@ import Model.Bill;
 import Model.Book;
 import Model.Branch;
 import Model.Stock;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,12 +25,12 @@ import java.util.HashMap;
  */
 public final class MonthlyBranch {
 
-    private int year;
-    private int month;
-    private Branch branch;
+    private final int year;
+    private final int month;
+    private final Branch branch;
 //    String filelocation;
-    private ArrayList<MonthlyBranchItem> sales;
-    private ArrayList<MonthlyBranchItem> purchases;
+    private final ArrayList<MonthlyBranchItem> sales;
+    private final ArrayList<MonthlyBranchItem> purchases;
     private int totalsales;
     private int totalpurchases;
     private double totalsalesincome;
@@ -218,5 +217,43 @@ public final class MonthlyBranch {
 //        MonthlyBranch m = new MonthlyBranch(2016, 2, b);
 //        m.generatePurchaseArray();
 //    }
-}
+    public String MBPurchasestoJSArray() {
 
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<MonthlyBranchItem> arr = getPurchases();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);//the book name
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
+
+    public String MBSalestoJSArray() {
+
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<MonthlyBranchItem> arr = getSales();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
+}

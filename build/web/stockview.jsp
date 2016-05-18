@@ -30,6 +30,8 @@
         <link href="admin/css/custom.css" rel="stylesheet">
         <script src="admin/js/custom.js"></script>
         <script src="admin/js/screenfull.js"></script>
+        
+        
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>
@@ -137,6 +139,8 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Book :</label>
                                                                 <div class="col-sm-9">
+<!--                                                                    <input type="text" name="book" id="book">
+                                                                    <input type="hidden" name="bookid" id="bookid">-->
                                                                     <select name="book" class="form-control">
                                                                         <option value="select" selected="" disabled="">Select..</option>
                                                                         <%
@@ -157,7 +161,7 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Quantity :</label>
                                                                 <div class="col-md-9">
-                                                                    <input class="form-control" name="quantity">
+                                                                    <input class="form-control" name="quantity" type="number">
                                                                 </div>
                                                             </div>
 

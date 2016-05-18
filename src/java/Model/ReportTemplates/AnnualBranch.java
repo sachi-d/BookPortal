@@ -49,7 +49,7 @@ public final class AnnualBranch {
     public void generateSalesArray() {
         Connection con = DBConnectionHandler.createConnection();
         for (int month = 1; month < 13; month++) {
-            String m = new DateFormatSymbols().getMonths()[month];
+            String m = new DateFormatSymbols().getMonths()[month - 1];
             try {
                 String query = "SELECT * FROM monthlybranchreport where year=? AND month=? AND branch=?";
                 PreparedStatement ps = con.prepareStatement(query);
@@ -57,17 +57,16 @@ public final class AnnualBranch {
                 ps.setInt(2, month);
                 ps.setString(3, this.branch.getName());
                 ResultSet rsetPurreq = ps.executeQuery();
-
+                AnnualBranchItem pur = new AnnualBranchItem(m, 0, 0);
                 while (rsetPurreq.next()) {
-                    AnnualBranchItem pur = new AnnualBranchItem(
+                    pur = new AnnualBranchItem(
                             m,
                             rsetPurreq.getInt(5),
                             rsetPurreq.getDouble(7));
-                    this.salesrecords.add(pur);
-                    this.totalsales += pur.quantity;
-                    this.salesincome += pur.monetary_value;
                 }
-
+                this.salesrecords.add(pur);
+                this.totalsales += pur.quantity;
+                this.salesincome += pur.monetary_value;
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -83,7 +82,7 @@ public final class AnnualBranch {
     public void generatePurchaseArray() {
         Connection con = DBConnectionHandler.createConnection();
         for (int month = 1; month < 13; month++) {
-            String m = new DateFormatSymbols().getMonths()[month];
+            String m = new DateFormatSymbols().getMonths()[month-1];
             try {
                 String query = "SELECT * FROM monthlybranchreport where year=? AND month=? AND branch=?";
 
@@ -92,17 +91,16 @@ public final class AnnualBranch {
                 ps.setInt(2, month);
                 ps.setString(3, this.branch.getName());
                 ResultSet rsetPurreq = ps.executeQuery();
-
+                AnnualBranchItem pur = new AnnualBranchItem(m, 0, 0);
                 while (rsetPurreq.next()) {
-                    AnnualBranchItem pur = new AnnualBranchItem(
+                    pur = new AnnualBranchItem(
                             m,
                             rsetPurreq.getInt(6),
                             rsetPurreq.getDouble(8));
-
-                    purchaserecords.add(pur);
-                    totalpurchases += pur.quantity;
-                    purchaserevenue += pur.monetary_value;
                 }
+                purchaserecords.add(pur);
+                totalpurchases += pur.quantity;
+                purchaserevenue += pur.monetary_value;
 
             } catch (Exception e) {
                 System.out.println(e);
@@ -171,6 +169,46 @@ public final class AnnualBranch {
                 System.out.println("Oops! Something went wrong.\n");
             }
         }
+    }
+
+    public String ABPurchasestoJSArray() {
+
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<AnnualBranchItem> arr = getPurchaserecords();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);//the book name
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
+    }
+
+    public String ABSalestoJSArray() {
+
+        //format
+//data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
+        ArrayList<AnnualBranchItem> arr = getSalesrecords();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < arr.size(); i++) {
+            String monthdigit = String.valueOf(i + 1);
+            String salescount = String.valueOf(arr.get(i).getQuantity());
+            String val = "[" + monthdigit + "," + salescount + "]";
+            sb.append(val);
+//            if (i + 1 < arr.size()) {
+            sb.append(",");
+//            }
+        }
+        sb.append("]");
+        return sb.toString();////
     }
 
 }

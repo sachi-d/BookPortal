@@ -59,8 +59,8 @@ public class Executecart extends HttpServlet {
             cart.incrementQuantity(book);
         } else if (para.equals("decrement")) {
             cart.decrementQuantity(book);
-        } else {
-
+        } else  {
+//            cart=new 
         }
         String page = (String) request.getSession().getAttribute("currentpage");
 

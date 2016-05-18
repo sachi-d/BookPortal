@@ -176,14 +176,14 @@
                 // Graph Data ##############################################
                 var graphData = [{
                         // Visits
-                        data: [[1, 1000], [2, 1200], [3, 1900], [4, 1040], [5, 1200], [6, 1300], [7, 1600], [8, 1900], [9, 2100], [10, 2500], [11, 2200], [12, 2000], ],
+                        data: [[1, 1000], [2, 1200], [3, 1900], [4, 1040] ],
                         color: '#A7DBDB'
                     }, {
                         // Returning Visits
-                        data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
-                        color: '#ED6498',
+                        data: [[1, 800], [2, 600], [3, 200], [4, 200]  ],
+                        color: '#ED6498'
 //                        points: {radius: 4, fillColor: '#E'}
-                        points: {radius: 4}
+//                        points: {radius: 4}
                     }
                 ];
 
@@ -201,16 +201,16 @@
                     },
                     grid: {
                         color: '#7f8c8d',
-                        borderColor: 'transparent',
-                        borderWidth: 20,
+                        borderColor: '#000000',
+//                        borderWidth: 20,
                         hoverable: true
                     },
                     xaxis: {
-                        tickColor: 'transparent',
-                        tickDecimals: 2
+                        tickColor: 'transparent'//,
+//                        tickDecimals: 2
                     },
                     yaxis: {
-                        tickSize: 1000
+                        tickSize: 500
                     }
                 });
 
@@ -218,8 +218,8 @@
                 $.plot($('#graph-bars'), graphData, {
                     series: {
                         bars: {
-                            show: true,
-                            barWidth: .9,
+//                            show: true,
+//                            barWidth: .9,
                             align: 'center'
                         },
                         shadowSize: 0
@@ -231,8 +231,8 @@
                         hoverable: true
                     },
                     xaxis: {
-                        tickColor: 'transparent',
-                        tickDecimals: 2
+                        tickColor: 'transparent'//,
+//                        tickDecimals: 2
                     },
                     yaxis: {
                         tickSize: 1000
@@ -275,7 +275,7 @@
                             $('#tooltip').remove();
                             var x = item.datapoint[0],
                                     y = item.datapoint[1];
-                            showTooltip(item.pageX, item.pageY, y + ' visitors at ' + x + '.00h');
+                            showTooltip(item.pageX, item.pageY, y + ' items ' );
                         }
                     } else {
                         $('#tooltip').remove();

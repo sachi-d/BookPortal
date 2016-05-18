@@ -40,25 +40,25 @@
             }
         </script>
         <script>
-            $(function () {
-                var availableTags = <%= Book.bookListtoJSArray()%>;
-
-                $("#tags").autocomplete({
-                    minLength: 0,
-                    source: availableTags,
-                    focus: function (event, ui) {
-                        $("#tags").val(ui.item.label);
-                        return false;
-                    },
-                    select: function (event, ui) {
-                        $("#tags").val(ui.item.label);
-                        $("#tagid").val(ui.item.value);
-                        $("#tagname").val(ui.item.desc);
-//                        document.getElementById('tags').disabled=true;
-                        return false;
-                    }
-                });
-            });
+//            $(function () {
+//                var availableTags = 
+//
+//                $("#tags").autocomplete({
+//                    minLength: 0,
+//                    source: availableTags,
+//                    focus: function (event, ui) {
+//                        $("#tags").val(ui.item.label);
+//                        return false;
+//                    },
+//                    select: function (event, ui) {
+//                        $("#tags").val(ui.item.label);
+//                        $("#tagid").val(ui.item.value);
+//                        $("#tagname").val(ui.item.desc);
+////                        document.getElementById('tags').disabled=true;
+//                        return false;
+//                    }
+//                });
+//            });
         </script>
         <!--        <script>
                     function setType() {
@@ -84,10 +84,63 @@
         <link href="admin/css/custom.css" rel="stylesheet">
         <script src="admin/js/custom.js"></script>
         <script src="admin/js/screenfull.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+        <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
+
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+        <script type="text/javascript">
+            var doc = new jsPDF();
+            var specialElementHandlers = {
+                '#editor': function (element, renderer) {
+                    return true;
+                }
+            };
+
+            $(document).ready(function () {
+                $('#btn').click(function () {
+                    doc.fromHTML($('#content').html(), 15, 15, {
+                        'width': 170,
+                        'elementHandlers': specialElementHandlers
+                    });
+                    doc.save('sample-content.pdf');
+                });
+            });
+        </script>
     </head>
     <body>
+        <div id="widget">
+            <div class="container">
+                <div align="center">
+                    <h1 align="center" id="download_pdf" class="glyphicon glyphicon-download" style="cursor:pointer;" title="Click to Download Page as PDF"></h1>
+                </div>
+                <br>
+                <section id="page_content">
 
-        <form action="login.jsp" onsubmit="return(validate());">
+
+                    <p> Content goes here, for pdf formatContent goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format Content goes here, for pdf format</p>
+
+
+                </section>
+            </div>
+            <hr>
+        </div>
+        <div id="img-out"></div>
+        <!--<input type="image" id="img-out" alt="image">-->
+        <input type="button" id="btnSave" value="Save PNG"/>
+        <div id="content">
+            <h3>The quick brown fox jumps over the lazy dog</h3>
+            <p>"The quick brown fox jumps over the lazy dog" is an English-language pangram—a phrase that contains all of the letters of the alphabet.</p>
+        </div>
+        <div id="editor"></div>
+        <button id="btn">Generate PDF</button>
+        <hr>
+        <section id="download-sec">
+            <h1>hi download</h1>
+            <p>ffdsbjkl fnhjkl. sdhf </p>
+        </section>
+        <button onclick="downloadpdf()" type="button">Download</button>
+        <form action="trial2.jsp" onsubmit="return(validate());" method="POST">
             <label>Date:</label>
             <input type="date" id="txtDateEntered"  >
             <button onclick="checkDate()">Compare</button><br>
@@ -169,9 +222,9 @@
                 // In JQuery
 //                var dateEntered = $("#txtDateEntered").val();
 
-                var date = dateEntered.substring(8,10)
-                var month = dateEntered.substring(5,7);
-                var year = dateEntered.substring(0,4);
+                var date = dateEntered.substring(8, 10)
+                var month = dateEntered.substring(5, 7);
+                var year = dateEntered.substring(0, 4);
 
                 var dateToCompare = new Date(year, month - 1, date);
                 var currentDate = new Date();
@@ -183,6 +236,59 @@
                     return false;
                 }
             }
+        </script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type='text/javascript' src="jspdf.debug.js"></script>
+        <script>
+            function downloadpdf() {
+                var pdf = new jsPDF('p', 'pt', 'letter')
+                        , source = $('#download-sec')[0]
+                        , specialElementHandlers = {
+                            '#bypassme': function (element, renderer) {
+                                return true
+                            }
+                        }
+
+                margins = {
+                    top: 60,
+                    bottom: 60,
+                    left: 40,
+                    width: 522
+                };
+                // all coords and widths are in jsPDF instance's declared units
+                // 'inches' in this case
+                pdf.fromHTML(
+                        source // HTML string or DOM elem ref.
+                        , margins.left // x coord
+                        , margins.top // y coord
+                        , {
+                            'width': margins.width // max width of content on PDF
+                            , 'elementHandlers': specialElementHandlers
+                        },
+                        function (dispose) {
+                            // dispose: object with X, Y of the last line add to the PDF
+                            //          this allow the insertion of new lines after html
+                            pdf.save('Downloaded.pdf');
+                        },
+                        margins
+                        )
+            }
+        </script>
+        <script>
+            $(function () {
+                $("#btnSave").click(function () {
+                    html2canvas($("#widget"), {
+                        onrendered: function (canvas) {
+                            var data = canvas.toDataURL('image/png');
+                            // AJAX call to send `data` to a PHP file that creates an image from the dataURI string and saves it to a directory on the server
+
+                            var image = new Image();
+                            image.src = data;
+                            document.getElementById('img-out').appendChild(image);
+                        }
+                    });
+                });
+            });
         </script>
     </body>
 </html>

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : paypalsuccess
-    Created on : May 13, 2016, 8:35:42 AM
+    Document   : trial2
+    Created on : May 18, 2016, 5:50:16 PM
     Author     : Sachi
 --%>
 
@@ -12,6 +12,12 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>paypal payment success!</h1>
+        <%
+            
+            %>
+        <h1>Hello World!</h1>
+        <div>
+            <%=request.getParameter("img-out")%>
+        </div>
     </body>
 </html>

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public final class AnnualReport {
 
     private int year;
-    private ArrayList<AnnualBranchItem> salesrecords;
-    private ArrayList<AnnualBranchItem> purchaserecords;
+    private ArrayList<AnnualGeneralItem> salesrecords;
+    private ArrayList<AnnualGeneralItem> purchaserecords;
     private int totalsales;
     private int totalpurchase;
     private double totalsalesincome;
@@ -40,13 +40,13 @@ public final class AnnualReport {
             //add to the collection of branch reports
 
             //add ttal sales and total sales income
-            AnnualBranchItem abi = new AnnualBranchItem(b.getName(), abr.getTotalsales(), abr.getSalesincome());
+            AnnualGeneralItem abi = new AnnualGeneralItem(b.getName(), abr.getTotalsales(), abr.getSalesincome());
             this.salesrecords.add(abi);
             this.totalsales += abr.getTotalsales();
             this.totalsalesincome += abr.getSalesincome();
 
             //add total purchases and purchase revenue
-            AnnualBranchItem abii = new AnnualBranchItem(b.getName(), abr.getTotalpurchases(), abr.getPurchaserevenue());
+            AnnualGeneralItem abii = new AnnualGeneralItem(b.getName(), abr.getTotalpurchases(), abr.getPurchaserevenue());
             this.purchaserecords.add(abii);
             this.totalpurchase += abr.getTotalpurchases();
             this.totalpurchaserevenue += abr.getPurchaserevenue();
@@ -56,11 +56,11 @@ public final class AnnualReport {
         }
     }
 
-    public ArrayList<AnnualBranchItem> getSalesrecords() {
+    public ArrayList<AnnualGeneralItem> getSalesrecords() {
         return salesrecords;
     }
 
-    public ArrayList<AnnualBranchItem> getPurchaserecords() {
+    public ArrayList<AnnualGeneralItem> getPurchaserecords() {
         return purchaserecords;
     }
 
@@ -84,7 +84,7 @@ public final class AnnualReport {
 
         //format
 //data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
-        ArrayList<AnnualBranchItem> arr = getPurchaserecords();
+        ArrayList<AnnualGeneralItem> arr = getPurchaserecords();
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < arr.size(); i++) {
@@ -104,7 +104,7 @@ public final class AnnualReport {
 
         //format
 //data: [[1, 800], [2, 600], [3, 200], [4, 200], [5, 90], [6, 500], [7, 600], [8, 550], [9, 600], [10, 800], [11, 900], [12, 800], ],
-        ArrayList<AnnualBranchItem> arr = getSalesrecords();
+        ArrayList<AnnualGeneralItem> arr = getSalesrecords();
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < arr.size(); i++) {
