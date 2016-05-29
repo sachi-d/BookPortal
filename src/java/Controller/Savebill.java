@@ -34,11 +34,11 @@ public class Savebill extends HttpServlet {
             throws ServletException, IOException {
 
         int count = Integer.parseInt(request.getParameter("itemcount"));
-        System.out.println(request.getParameter("trial"));
         boolean executionstatus = false;
         HashMap<Book, Integer> items = new HashMap<>();
+        System.out.println("count="+count);
         for(int i=0;i<count;i++){
-            System.out.println("--"+request.getParameter("bookid_0"));
+            System.out.println("bookid_"+i+"="+request.getParameter("bookid_"+i));
             int id=Integer.parseInt(request.getParameter("bookid_"+i));
             Book b=DBDatalist.getBook(id);
             int q=Integer.parseInt(request.getParameter("q_"+i));
@@ -67,14 +67,8 @@ public class Savebill extends HttpServlet {
             System.out.println("insert bill");
 
             //get the id of the report
-            query = "SELECT MAX(idBill) FROM bill ";
-            ps = con.prepareStatement(query);
-            ResultSet rset = ps.executeQuery();
-            if (rset.next()) {
-                lastid = rset.getInt(1);
-            } else {
-                executionstatus = false;
-            }
+            lastid=DBDatalist.getInvoice();
+            System.out.println("lastid="+lastid);
             if (lastid != 0) {
                 for (Book b : items.keySet()) {
                     query = "INSERT INTO book_has_bill (book_idbook,Bill_idBill,quantity) VALUES (?,?,?)";

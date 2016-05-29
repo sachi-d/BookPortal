@@ -35,6 +35,10 @@
         <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
+        <%
+            User usr = (User) session.getAttribute("user");
+            if (usr.getULevel() == 0 || usr.getULevel() == 1) {
+        %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
             <!----->
@@ -68,8 +72,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <%  
-                                                            ArrayList<Report> arrReport = DBDatalist.getCustomReportList("MG");
+                                                        <%                                                            ArrayList<Report> arrReport = DBDatalist.getCustomReportList("MG");
                                                             if (arrReport != null) {
                                                                 for (int i = 0; i < arrReport.size(); i++) {
                                                                     Report report = (Report) arrReport.get(i);
@@ -157,5 +160,11 @@
                 $("#table_general_annual").DataTable();
             });
         </script>
+        <%
+        } else {
+        %>
+        <%@include file="404.jsp" %>
+        <%    }
+        %>
     </body>
 </html>

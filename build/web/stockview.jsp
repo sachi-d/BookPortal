@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Branch Stock</title>
+        <title>Purchases</title>
         <link rel="shortcut icon" href="admin/images/logo.png">
 
         <!-- DATA TABLES -->
@@ -30,8 +30,8 @@
         <link href="admin/css/custom.css" rel="stylesheet">
         <script src="admin/js/custom.js"></script>
         <script src="admin/js/screenfull.js"></script>
-        
-        
+
+
     </head>
     <body>
         <%@include file="admin_sidebar.jsp" %>
@@ -70,13 +70,20 @@
                                 <!-- - - - - - - - - - - - - - - - - - -STOCK TABLE - - - - - - - - - - - - - - - - - ----->
                                 <div class="col-md-12" >
                                     <div class="col-md-4 pull-left">
-                                        <h3 >Branch stock</h3>
+                                        <h3 >Stock purchases</h3>
                                     </div>
                                     <div class="col-md-4">
 
                                     </div>
                                     <div class="col-md-4 ">
+                                        <%
+                                            User usr = (User) session.getAttribute("user");
+                                            if (usr.getULevel() == 1) {
+                                        %>
                                         <button class="btn btn-lg btn-default pull-right" data-toggle="modal" data-target="#myModal">Add new stock <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
+                                            <%
+                                                }
+                                            %>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -102,7 +109,7 @@
                                                 <td class="tg-yw40"><%= stock.getBranch().getName()%></td>
                                                 <td class="tg-yw40"><%= stock.getBook().getTitle()%></td>
                                                 <td class="tg-yw40"> <%= stock.getQuantity()%></td>
-                                                <td class="tg-yw40"> <%= stock.getDate() %></td>
+                                                <td class="tg-yw40"> <%= stock.getDate()%></td>
                                             </tr>
                                             <%  }
                                                 }
@@ -133,14 +140,14 @@
                                                                     <% User u = (User) session.getAttribute("user");%>
                                                                     <input class="form-control" name="branch" disabled=""
                                                                            value="<%= u.getBranch().getName()%>">
-                                                                    <input hidden="" value="<%= u.getBranch().getIdbranch() %>" name="idbranch">
+                                                                    <input hidden="" value="<%= u.getBranch().getIdbranch()%>" name="idbranch">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label"> Book :</label>
                                                                 <div class="col-sm-9">
-<!--                                                                    <input type="text" name="book" id="book">
-                                                                    <input type="hidden" name="bookid" id="bookid">-->
+                                                                    <!--                                                                    <input type="text" name="book" id="book">
+                                                                                                                                        <input type="hidden" name="bookid" id="bookid">-->
                                                                     <select name="book" class="form-control">
                                                                         <option value="select" selected="" disabled="">Select..</option>
                                                                         <%

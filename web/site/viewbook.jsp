@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Stock"%>
 <%@page import="Model.Author"%>
 <%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -59,6 +60,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="product-information"><!--/product-information-->
+
                                     <%
                                         if (b.getFeatured() == 1) {
                                     %>
@@ -85,59 +87,78 @@
                                             </button>
                                         </span>
                                     </form>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Author(s): </label>
-                                        <div class="col-md-9">
-                                            <%
-                                                ArrayList<Author> auth = DBDatalist.getAuthorfromBook(b.getIdbook());
-                                                if (auth != null) {
-                                                    for (int i = 0; i < auth.size(); i++) {
-                                            %>
-                                            <p><%= auth.get(i).getName()%></p>
-                                            <%
-                                                }
-                                            } else {
-                                            %>
-                                            <p>Not specified</p>
-                                            <%
-                                                }
-                                            %>
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Availability : </label>
+                                            <div class="col-md-9">
+                                                <%
+                                                    int q=Stock.getAvailability(idbook);
+                                                    if(q>0){
+                                                        %>
+                                                        <label class="label label-success">In stock</label>
+                                                        <%                                                        
+                                                    }
+                                                    else{
+                                                        %>
+                                                        <label class="label label-danger">Out of stock</label>
+                                                        <%  
+                                                    }
+                                                    %>
+                                                
+                                            </div>
                                         </div>
-                                    </div>  
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Author(s): </label>
+                                            <div class="col-md-9">
+                                                <%
+                                                    ArrayList<Author> auth = DBDatalist.getAuthorfromBook(b.getIdbook());
+                                                    if (auth != null) {
+                                                        for (int i = 0; i < auth.size(); i++) {
+                                                %>
+                                                <p><%= auth.get(i).getName()%></p>
+                                                <%
+                                                    }
+                                                } else {
+                                                %>
+                                                <p>Not specified</p>
+                                                <%
+                                                    }
+                                                %>
+                                            </div>
+                                        </div>  
 
-                                    <div class="form-group">
-                                        <label class="col-md-3">ISBN: </label>
-                                        <div class="col-md-9">
-                                            <p><%= b.getISBN()%></p>
+                                        <div class="form-group">
+                                            <label class="col-md-3">ISBN: </label>
+                                            <div class="col-md-9">
+                                                <p><%= b.getISBN()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Edition: </label>
-                                        <div class="col-md-9">
-                                            <p><%= b.getEdition()%></p>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Edition: </label>
+                                            <div class="col-md-9">
+                                                <p><%= b.getEdition()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Publisher: </label>
-                                        <div class="col-md-9">
-                                            <p><%= b.getPublisher().getName()%></p>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Publisher: </label>
+                                            <div class="col-md-9">
+                                                <p><%= b.getPublisher().getName()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Pub. date: </label>
-                                        <div class="col-md-9">
-                                            <p><%= b.getPub_date()%></p>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Pub. date: </label>
+                                            <div class="col-md-9">
+                                                <p><%= b.getPub_date()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Description: </label>
-                                        <div class="col-md-9">
-                                            <p><%= b.getDescription()%></p>
+                                        <div class="form-group">
+                                            <label class="col-md-3">Description: </label>
+                                            <div class="col-md-9">
+                                                <p><%= b.getDescription()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-
-
-
+                                    </form>
                                     <!--<a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>-->
                                 </div>
                             </div>

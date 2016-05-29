@@ -102,7 +102,7 @@
                                     </div>
                                     <%
                                         User myuser = (User) session.getAttribute("user");
-                                        if (iduser != myuser.getIduser()) {
+                                        if(u.getStatus()==2){
                                     %>
                                     <div class="form-group">
                                         <div class="col-md-2"></div>

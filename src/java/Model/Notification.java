@@ -5,15 +5,7 @@
  */
 package Model;
 
-import Controller.Savelog;
-import DB.DBConnectionHandler;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 /**
  *

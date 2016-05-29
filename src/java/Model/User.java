@@ -30,9 +30,9 @@ public class User implements java.io.Serializable {
         this.lname = lname;
         this.nic = nic;
         this.branch = branch_idbranch;
-        this.status=1;
+        this.status = 1;
     }
-    
+
     public int getIduser() {
         return iduser;
     }
@@ -60,18 +60,22 @@ public class User implements java.io.Serializable {
     public String getUser_level() {
         return user_level;
     }
-    public String getUser_levelname(){
-        if(this.user_level.equals("0")){
-            return "Admin";
-        }
-        else if(this.user_level.equals("1")){
-            return "Branch admin";
-        }
-        else if(this.user_level.equals("2")){
-            return "Sales staff";
-        }
-        else{
-            return "invalid";
+
+    public int getULevel() {
+        int u = Integer.parseInt(this.user_level);
+        return u;
+    }
+
+    public String getUser_levelname() {
+        switch (this.user_level) {
+            case "0":
+                return "Admin";
+            case "1":
+                return "Branch admin";
+            case "2":
+                return "Sales staff";
+            default:
+                return "invalid";
         }
     }
 
@@ -95,10 +99,10 @@ public class User implements java.io.Serializable {
         this.lname = lname;
     }
 
-    public String getFullname(){
-        return this.fname+" "+this.lname;
+    public String getFullname() {
+        return this.fname + " " + this.lname;
     }
-    
+
     public String getNic() {
         return nic;
     }

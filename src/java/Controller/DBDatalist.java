@@ -20,6 +20,7 @@ import Model.Notification;
 import Model.Publisher;
 import Model.Purchaserequest;
 import Model.Report;
+import Model.ReportTemplates.MonthlyBranchItem;
 import Model.Stock;
 import Model.Subject;
 import Model.Type;
@@ -34,6 +35,52 @@ import java.util.concurrent.TimeUnit;
  * @author Sachi
  */
 public class DBDatalist {
+
+    public static int getBranchIDfromName(String name) {
+        int id = 0;
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM branch where name=? ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rsetBranch = ps.executeQuery();
+
+            while (rsetBranch.next()) {
+//                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
+                id = rsetBranch.getInt(1);
+                break;
+            }
+            con.close();
+            return id;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return id;
+        }
+    }
+
+    public static boolean isMonthlyReportSet(int year, int month) {
+        try {
+            boolean isset = false;
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM monthlybranchreport where year=? AND month=? ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, year);
+            ps.setInt(2, month);
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                isset = true;
+
+            }
+            con.close();
+            return isset;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
 
     public static ArrayList<Purchaserequest> getNewPurreqList() {
         try {
@@ -115,6 +162,33 @@ public class DBDatalist {
                 Date d = rsetStock.getDate(5);
                 int q = rsetStock.getInt(4);
                 Stock stock = new Stock(id, book, branch, q, d);
+                arr.add(stock);
+
+            }
+            con.close();
+            return arr;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<Stock> getCurrentStockList() {
+        try {
+            ArrayList<Stock> arr = new ArrayList<>();
+
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM current_stock ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetStock = ps.executeQuery();
+
+            while (rsetStock.next()) {
+                int id = rsetStock.getInt(1);
+                Branch branch = getBranch(rsetStock.getInt(2));
+                Book book = getBook(rsetStock.getInt(3));
+                int q = rsetStock.getInt(4);
+                Stock stock = new Stock(id, book, branch, q);
                 arr.add(stock);
 
             }
@@ -1191,11 +1265,11 @@ public class DBDatalist {
                 n = rsetPurreq.getInt(1);
             }
             con.close();
-            return n+1;
+            return n + 1;
 
         } catch (Exception e) {
             System.out.println(e);
-            return n+1;
+            return n + 1;
         }
     }
 }

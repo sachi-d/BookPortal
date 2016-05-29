@@ -107,7 +107,6 @@ public final class MonthlyBranch {
                         stocks.add(s);
                     }
                 }
-
             }
         }
         HashMap<Book, Integer> purchasedbooks = new HashMap<>();

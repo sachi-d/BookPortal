@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="Model.User"%>
 <%@page import="Model.Subject"%>
 <%@page import="Model.Type"%>
 <%@page import="Model.Language"%>
@@ -41,6 +42,10 @@
         <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
+        <%
+            User usr = (User) session.getAttribute("user");
+            if (usr.getULevel() == 1) {
+        %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
             <!----->
@@ -341,7 +346,7 @@
                                         <div class="col-md-3">
                                             <input type="radio" name="isdefaultfile"  value="def" onclick="selectnew('defaultfilecover', 'filecover')" > Default Image
                                         </div>
-                                        
+
                                         <div class="col-md-6"><input type="hidden" id="defaultfilecover"></div>
                                     </div>
                                     <div class="form-group">
@@ -387,6 +392,13 @@
             </div>
             <div class="clearfix"></div>
         </div>
+        <%
+        } else {
+        %>
+        <%@include file="404.jsp" %>
+        <%
+            }
+        %>
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
 

@@ -18,6 +18,10 @@
         <link href="admin/css/style.css" rel='stylesheet' type='text/css' />
     </head>
     <body>
+        <%
+            User usr = (User) session.getAttribute("user");
+            if (usr.getULevel() == 0) {
+        %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
             <!----->
@@ -91,7 +95,7 @@
                                         <div class="col-md-3">
                                             <input hidden="" name="para" value="fadd">
                                             <!--<input class="form-control" placeholder="start typing..." id="newfeatbook" name="newfeatbook">-->
-                                            <select id="newfeatbook" name="newfeatbook" class="form-control" required="" onchange="document.getElementById('addnewfeat').disabled=false">
+                                            <select id="newfeatbook" name="newfeatbook" class="form-control" required="" onchange="document.getElementById('addnewfeat').disabled = false">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Book> bb = DBDatalist.getBookList();
@@ -167,6 +171,11 @@
                                                     document.getElementById('addnewfeat').disabled = false;
                                                 }
         </script>
-
+        <%
+        } else {
+        %>
+        <%@include file="404.jsp" %>
+        <%    }
+        %>
     </body>
 </html>

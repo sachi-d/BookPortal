@@ -5,12 +5,14 @@
  */
 package Model;
 
-import Controller.Savelog;
+import Controller.DBDatalist;
 import DB.DBConnectionHandler;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -92,10 +94,6 @@ public class Report {
         this.branch = branch;
     }
 
-    public void genMonthlyBranchReport() {
-
-    }
-
     public static int addNewReport(String type, String title, int year, String month, String branch, String location) {
         int lastid = 0;
 
@@ -113,15 +111,15 @@ public class Report {
             ps.setString(5, branch);
             ps.setString(6, location);
             ps.executeUpdate();
-            
-             //get the id of the report
+
+            //get the id of the report
             query = "SELECT MAX(idReport) FROM report ";
             ps = con.prepareStatement(query);
             ResultSet rset = ps.executeQuery();
             if (rset.next()) {
                 lastid = rset.getInt(1);
             }
-            
+
             con.commit();
 
         } catch (SQLException e) {
@@ -140,4 +138,6 @@ public class Report {
 
         return lastid;
     }
+
+   
 }

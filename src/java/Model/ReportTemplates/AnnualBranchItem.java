@@ -5,6 +5,8 @@
  */
 package Model.ReportTemplates;
 
+import java.text.DateFormatSymbols;
+
 /**
  *
  * @author Sachi
@@ -33,5 +35,14 @@ public class AnnualBranchItem {
         return monetary_value;
     }
     
+    public static int getMonthIDfromName(String name){
+        for(int i=1;i<13;i++){
+            String m = new DateFormatSymbols().getMonths()[i-1];
+            if(m.equals(name)){
+                return i;
+            }
+        }
+        return 0;
+    }
 
 }

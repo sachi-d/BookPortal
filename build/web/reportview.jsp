@@ -4,6 +4,9 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.util.Date"%>
+<%@page import="java.text.DateFormatSymbols"%>
+<%@page import="Model.Branch"%>
 <%@page import="Model.ReportTemplates.AnnualGeneralItem"%>
 <%@page import="Model.ReportTemplates.AnnualBranch"%>
 <%@page import="Controller.DBDatalist"%>
@@ -38,539 +41,571 @@
         <link href="admin/css/custom.css" rel="stylesheet">
         <script src="admin/js/custom.js"></script>
         <script src="admin/js/screenfull.js"></script>
+        <script>
+            function openNewWindow() {
+                window.open("trial2.jsp");
+
+            }
+        </script>
+        <style type="text/css">
+             /*@page { size:12in 11in }*/
+             @media print{@page {size: 16in 10in }}
+        </style>
     </head>
     <body>
         <%
-            AnnualReport annualgen = new AnnualReport(2016);
-            ArrayList<AnnualGeneralItem> annualgen_sales = annualgen.getSalesrecords();
-            ArrayList<AnnualGeneralItem> annualgen_purs = annualgen.getPurchaserecords();
-
-            MonthlyReport monthgen = new MonthlyReport(5, 2016);
-            ArrayList<MonthlyGeneralItem> monthgen_sales = monthgen.getSales();
-            ArrayList<MonthlyGeneralItem> monthgen_purs = monthgen.getPurchases();
-
-            MonthlyBranch monthbranch = new MonthlyBranch(2016, 3, DBDatalist.getBranch(1));
-            ArrayList<MonthlyBranchItem> monthbranch_sales = monthbranch.getSales();
-            ArrayList<MonthlyBranchItem> monthbranch_purs = monthbranch.getPurchases();
-
-            AnnualBranch annualbranch = new AnnualBranch(DBDatalist.getBranch(1), 2016);
-            ArrayList<AnnualBranchItem> annualbranch_sales = annualbranch.getSalesrecords();
-            ArrayList<AnnualBranchItem> annualbranch_purs = annualbranch.getPurchaserecords();
+            String salesArray = "null";
+            String purchaseArray = "null";
+            int month = 0;
+            int branchid = 0;
+            Branch branch = null;
+            String monthname = "null";
+            String type = request.getParameter("type");
+            int year = Integer.parseInt(request.getParameter("year"));
+            if (!request.getParameter("month").equals("null")) {
+                month = Integer.parseInt(request.getParameter("month"));
+                monthname = new DateFormatSymbols().getMonths()[month - 1];
+            }
+            if (!request.getParameter("branch").equals("null")) {
+                branchid = Integer.parseInt(request.getParameter("branch"));
+                branch = DBDatalist.getBranch(branchid);
+            }
         %>
-
-        <%--<%@include file="admin_sidebar.jsp" %>--%>
-        <div id="wrapper">
+        <!--<div id="wrapper">-->
             <!----->
 
-            <div id="page-wrapper" class="gray-bg dashbard-1">
-                <div class="content-main">
-                    <div class="grid-form" >
+            <!--<div id="page-wrapper" class="gray-bg dashbard-1">-->
+                <div class="col-md-12">
+                    <div class="content-main">
+                        <div class="grid-form" >
 
-                        <div class="grid-form1"> 
-                            <div class="col-md-12">
-                                <%                                    if (request.getParameter("msg") != null) {
-                                        if (request.getParameter("msg").equals("error")) {
-                                %>
-                                <div class="col-md-12 text-center">
-                                    <label class="label-warning"><i class="fa fa-warning"></i> Warning:
-                                        Oopsee! Something went wrong. <br/>Please try again.</label><hr>
-                                </div>
-                                <%
-                                    }
-                                    if (request.getParameter("msg").equals("incorrect")) {
-                                %>
-                                <div class="col-md-12 text-center">
-                                    <!--<div class="callout callout-danger" style="margin-bottom: 0!important;">-->												
-                                    <label class="label-warning"><i class="fa fa-warning"></i> Warning:
-                                        Incorrect details</label><hr>
-                                    <!--</div>-->
-                                </div>
-                                <%
-                                    }
-                                    if (request.getParameter("msg").equals("success")) {
-                                %>
-                                <div class="col-md-12 text-center">
-                                    <!--<div class="callout callout-danger" style="margin-bottom: 0!important;">-->												
-                                    <label class="label-warning"><i class="fa fa-warning"></i> Warning:
-                                        Success</label><hr>
-                                    <!--</div>-->
-                                </div>
-                                <%
-                                        }
-                                    }
-                                %>
-                                <!--                                <div id="AGR">
-                                                                    <h3 class="head-top">Annual general report for the year 2016</h3>
-                                                                    <div class="content-top">
-                                                                        <div class="col-md-12 content-top-2">
-                                                                            <div class="content-graph">
-                                                                                <div class="content-color">
-                                                                                    <div class="content-ch">
-                                                                                        <p><i></i> Purchases </p>
-                                                                                        
-                                                                                        <div class="clearfix"> </div>
-                                                                                    </div>
-                                                                                    <div class="content-ch1">
-                                                                                        <p><i></i> Sales</p>
-                                                                                      
-                                                                                        <div class="clearfix"> </div>
-                                                                                    </div>
-                                                                                </div>
-                                
-                                
-                                                                                <div class="graph-container">
-                                
-                                                                                    <div id="graph-lines"> </div>
-                                                                                    <div id="graph-bars"> </div>
-                                                                                </div>
-                                
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        <div class="content-top">
-                                                                            <div class="content-box">
-                                                                                <div class="head-top">
-                                                                                    <h3 style="text-align: center;text-decoration: underline"><br>Annual sales</h3>
-                                                                                </div>
-                                                                                <div class="col-md-12">
-                                                                                    <div class="col-md-4">
-                                                                                        <label class="active" style="text-decoration: underline">Branch name</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-4">
-                                                                                        <label class="active" style="text-decoration: underline">Total sales</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-4">
-                                                                                        <label class="active" style="text-decoration: underline">Total sales income</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <hr>
-                                <%
-                                    for (AnnualGeneralItem b : annualgen_sales) {
-                                %>
+                            <div class="grid-form1"> 
                                 <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <p><%=b.getBranch()%></p>
+                                    <div  class="col-md-6" style="width: 50%">
+                                        <img src="admin/images/logo-full.png" alt="logo">
+                                        <h5>
+                                            27, Happy Street,Colombo 3 <br>
+                                            2 123 456<br>
+                                            www.thebookportal.lk<br>
+                                        </h5>
+                                        <br>
                                     </div>
-                                    <div class="col-md-4">
-                                        <p><%=b.getQuantity()%></p>
+                                    <div class="col-md-6" style="width: 50%">
+                                        <label>Date: </label><%= new Date()%><br>
+                                        <label>Report no.:</label>132<br>
                                     </div>
-                                    <div class="col-md-4">
-                                        <p><%=b.getMonetary_value()%></p>
-                                    </div>
-                                </div>
+                                </div> 
+                                <!--<div class="col-md-12">-->
                                 <%
-                                    }
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p>Total</p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p><%=annualgen.getTotalsales()%></p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p><%=annualgen.getTotalsalesincome()%></p>
-                                        <hr>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix"></div>
-                            </div>
-
-                        </div>
-                        <div class="content-top">
-                            <div class="content-box">
-                                <div class="head-top">
-                                    <h3 style="text-align: center;text-decoration: underline"><br>Annual purchases</h3>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <label class="active" style="text-decoration: underline">Branch name</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="active" style="text-decoration: underline">Total purchases</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="active" style="text-decoration: underline">Total purchase revenue</label>
-                                    </div>
-                                </div>
-                                <hr>
-                                <%
-                                    for (AnnualGeneralItem b : annualgen_purs) {
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <p><%=b.getBranch()%></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><%=b.getQuantity()%></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><%=b.getMonetary_value()%></p>
-                                    </div>
-                                </div>
-                                <%
-                                    }
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p>Total</p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p><%=annualgen.getTotalpurchase()%></p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p><%=annualgen.getTotalpurchaserevenue()%></p>
-                                        <hr>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-
-                </div>-->
-                                <!--                                <div id="AGR">
-                                                                    <h3 class="head-top">Monthly Branch report for the March 2016 - Nugegoda branch</h3>
-                                                                    <div class="content-top">
-                                                                        <div class="col-md-12 content-top-2">
-                                                                            <div class="content-graph">
-                                                                                <div class="content-color">
-                                                                                    <div class="content-ch">
-                                                                                        <p><i></i> Purchases </p>
-                                                                                       
-                                                                                        <div class="clearfix"> </div>
-                                                                                    </div>
-                                                                                    <div class="content-ch1">
-                                                                                        <p><i></i> Sales</p>
-                                                                                       
-                                                                                        <div class="clearfix"> </div>
-                                                                                    </div>
-                                                                                </div>
-                                
-                                
-                                                                                <div class="graph-container">
-                                
-                                                                                    <div id="graph-lines"> </div>
-                                                                                    <div id="graph-bars"> </div>
-                                                                                </div>
-                                
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        <div class="content-top">
-                                                                            <div class="content-box">
-                                                                                <div class="head-top">
-                                                                                    <h3 style="text-align: center;text-decoration: underline"><br>Monthly sales</h3>
-                                                                                </div>
-                                                                                <div class="col-md-12">
-                                                                                    <div class="col-md-4">
-                                                                                        <label class="active" style="text-decoration: underline">Book</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        <label class="active" style="text-decoration: underline">Type</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        <label class="active" style="text-decoration: underline">Unit price</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        <label class="active" style="text-decoration: underline">Quantity</label>
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        <label class="active" style="text-decoration: underline">Sales income</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <hr>
-                                <%
-                                    for (MonthlyBranchItem b : monthbranch_sales) {
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <p><%=b.getBook()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getType()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getUprice()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getQuantity()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getMonetary_value()%></p>
-                                    </div>
-                                </div>
-                                <%
-                                    }
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p>Total</p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
-
-                                    </div>
-                                    <div class="col-md-2">
-                                        <hr>
-                                        <p><%=monthbranch.getTotalsales()%></p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <hr>
-                                        <p><%=monthbranch.getTotalsalesincome()%></p>
-                                        <hr>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix"></div>
-                            </div>
-
-                        </div>
-                        <div class="content-top">
-                            <div class="content-box">
-                                <div class="head-top">
-                                    <h3 style="text-align: center;text-decoration: underline"><br>Monthly purchases</h3>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <label class="active" style="text-decoration: underline">Book</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="active" style="text-decoration: underline">Type</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="active" style="text-decoration: underline">Unit price</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="active" style="text-decoration: underline">Quantity</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="active" style="text-decoration: underline">Sales income</label>
-                                    </div>
-                                </div>
-                                <hr>
-                                <%
-                                    for (MonthlyBranchItem b : monthbranch_purs) {
+                                    if (type.equals("AG")) {
+                                        AnnualReport annualgen = new AnnualReport(year);
+                                        annualgen.generate();
+                                        ArrayList<AnnualGeneralItem> annualgen_purs = annualgen.getPurchaserecords();
+                                        ArrayList<AnnualGeneralItem> annualgen_sales = annualgen.getSalesrecords();
+                                        salesArray = annualgen.AGSalestoJSArray();
+                                        purchaseArray = annualgen.AGPurchasestoJSArray();
                                 %>
 
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <p><%=b.getBook()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getType()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getUprice()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getQuantity()%></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><%=b.getMonetary_value()%></p>
-                                    </div>
-                                </div>
 
-                                <%
-                                    }
-                                %>
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <hr>
-                                        <p>Total</p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-4">
+                                <h3 class="head-top" style="text-align: center">Annual general report for the year <%=year%> </h3>
+                                <div class="content-top">
+                                    <div class="content-top-2">
+                                        <!--<div class="content-graph">-->
+                                        <div class="content-color">
+                                            <div class="content-ch">
+                                                <p><i></i> Purchases </p>
 
-                                    </div>
-                                    <div class="col-md-2">
-                                        <hr>
-                                        <p><%=monthbranch.getTotalpurchases()%></p>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <hr>
-                                        <p><%=monthbranch.getTotalpurchaserevenue()%></p>
-                                        <hr>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
+                                                <div class="clearfix"> </div>
+                                            </div>
+                                            <div class="content-ch1">
+                                                <p><i></i> Sales</p>
 
-                </div>-->
-
-                                <div id="AGR">
-                                    <h3 class="head-top">Annual branch report for March 2016 - Nugegoda</h3>
-                                    <div class="content-top">
-                                        <div class="col-md-12 content-top-2">
-                                            <div class="content-graph">
-                                                <div class="content-color">
-                                                    <div class="content-ch">
-                                                        <p><i></i> Purchases </p>
-
-                                                        <div class="clearfix"> </div>
-                                                    </div>
-                                                    <div class="content-ch1">
-                                                        <p><i></i> Sales</p>
-
-                                                        <div class="clearfix"> </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="graph-container">
-
-                                                    <div id="graph-lines"> </div>
-                                                    <div id="graph-bars"> </div>
-                                                </div>
-
+                                                <div class="clearfix"> </div>
                                             </div>
                                         </div>
+
+
+                                        <div class="graph-container">
+
+                                            <div id="graph-lines"> </div>
+                                            <div id="graph-bars"> </div>
+                                        </div>
+                                        <hr>
+                                        <!--</div>-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <!--<div class="content-top">-->
+                                    <div class="content-box">
+                                        <div class="head-top">
+                                            <h3 style="text-align: center;text-decoration: underline"><br>Annual sales</h3>
+                                        </div>
+                                        <table class="tg" >
+                                            <!--<thead>-->
+                                            <tr>
+                                                <th class="tg-yw4l">Branch ID</th>
+                                                <th class="tg-yw4l">Branch</th>
+                                                <th class="tg-yw4l">Quantity</th>
+                                                <th class="tg-yw4l">Total (Rs.)</th>
+                                            </tr>
+                                            <!--                                            </thead>
+                                                                                        <tbody>-->
+
+                                            <%
+                                                for (AnnualGeneralItem b : annualgen_sales) {
+                                            %>
+
+                                            <tr>
+                                                <td class="tg-yw33"><%=DBDatalist.getBranchIDfromName(b.getBranch())%></td>
+                                                <td class="tg-yw33"><%=b.getBranch()%></td>
+                                                <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                            </tr>
+
+                                            <%
+                                                }
+                                            %>
+
+
+                                            <tr>
+                                                <td class="tg-yw33">Total</td>
+                                                <td class="tg-yw33"></td>
+                                                <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualgen.getTotalsales()%></td>
+                                                <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualgen.getTotalsalesincome()%></td>
+                                            </tr>
+                                            <!--</tbody>-->
+                                        </table>
                                         <div class="clearfix"></div>
-                                        <div class="content-top">
-                                            <div class="content-box">
-                                                <div class="head-top">
-                                                    <h3 style="text-align: center;text-decoration: underline"><br>Annual sales</h3>
+                                    </div>
+
+                                    <!--</div>-->
+                                    <!--<div class="content-top">-->
+                                    <div class="content-box">
+                                        <div class="head-top">
+                                            <h3 style="text-align: center;text-decoration: underline"><br>Annual purchases</h3>
+                                        </div>
+                                        <table class="tg" >
+                                            <!--<thead>-->
+                                            <tr>
+                                                <th class="tg-yw4l">Branch ID</th>
+                                                <th class="tg-yw4l">Branch</th>
+                                                <th class="tg-yw4l">Quantity</th>
+                                                <th class="tg-yw4l">Total (Rs.)</th>
+                                            </tr>
+                                            <!--                                            </thead>
+                                                                                        <tbody>-->
+
+                                            <%
+                                                for (AnnualGeneralItem b : annualgen_purs) {
+                                            %>
+
+                                            <tr>
+                                                <td class="tg-yw33"><%=DBDatalist.getBranchIDfromName(b.getBranch())%></td>
+                                                <td class="tg-yw33"><%=b.getBranch()%></td>
+                                                <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                            </tr>
+
+                                            <%
+                                                }
+                                            %>
+
+
+                                            <tr>
+                                                <td class="tg-yw33">Total</td>
+                                                <td class="tg-yw33"></td>
+                                                <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualgen.getTotalpurchase()%></td>
+                                                <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualgen.getTotalpurchaserevenue()%></td>
+                                            </tr>
+                                            <!--</tbody>-->
+                                        </table>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <!--</div>-->
+                                    <div class="clearfix"> </div>
+
+                                </div>
+
+
+
+                                <%
+                                } else if (type.equals("AB") && branch != null) {
+                                    AnnualBranch annualbranch = new AnnualBranch(branch, year);
+                                    ArrayList<AnnualBranchItem> annualbranch_sales = annualbranch.getSalesrecords();
+                                    ArrayList<AnnualBranchItem> annualbranch_purs = annualbranch.getPurchaserecords();
+                                    salesArray = annualbranch.ABSalestoJSArray();
+                                    purchaseArray = annualbranch.ABPurchasestoJSArray();
+                                %>
+                                <h3 class="head-top" style="text-align: center">Annual branch report <%=year%> for <%=branch.getName()%> branch</h3>
+                                <div class="content-top">
+                                    <div class="col-md-12 content-top-2">
+                                        <div class="content-graph">
+                                            <div class="content-color">
+                                                <div class="content-ch">
+                                                    <p><i></i> Purchases </p>
+
+                                                    <div class="clearfix"> </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Month</label>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Total sales</label>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Total sales income</label>
-                                                    </div>
+                                                <div class="content-ch1">
+                                                    <p><i></i> Sales</p>
+
+                                                    <div class="clearfix"> </div>
                                                 </div>
-                                                <hr>
+                                            </div>
+
+
+                                            <div class="graph-container">
+
+                                                <div id="graph-lines"> </div>
+                                                <div id="graph-bars"> </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Annual sales</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">#</th>
+                                                    <th class="tg-yw4l">Month</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
                                                 <%
                                                     for (AnnualBranchItem b : annualbranch_sales) {
                                                 %>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getMonth()%></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getQuantity()%></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getMonetary_value()%></p>
-                                                    </div>
-                                                </div>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=AnnualBranchItem.getMonthIDfromName(b.getMonth())%></td>
+                                                    <td class="tg-yw33"><%=b.getMonth()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
                                                 <%
                                                     }
                                                 %>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p>Total</p>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p><%=annualbranch.getTotalsales()%></p>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p><%=annualbranch.getSalesincome()%></p>
-                                                        <hr>
-                                                    </div>
-                                                </div>
 
-                                                <div class="clearfix"></div>
-                                            </div>
 
+                                                <tr>
+                                                    <td class="tg-yw33">Total</td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"></td>
+                                                    <td class="tg-yw33"><%=annualbranch.getTotalsales()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualbranch.getSalesincome()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+                                            <div class="clearfix"></div>
                                         </div>
-                                        <div class="content-top">
-                                            <div class="content-box">
-                                                <div class="head-top">
-                                                    <h3 style="text-align: center;text-decoration: underline"><br>Annual purchases</h3>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Month</label>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Total purchases</label>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="active" style="text-decoration: underline">Total purchase revenue</label>
-                                                    </div>
-                                                </div>
-                                                <hr>
+
+                                    </div>
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Annual purchases</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">#</th>
+                                                    <th class="tg-yw4l">Month</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
                                                 <%
                                                     for (AnnualBranchItem b : annualbranch_purs) {
                                                 %>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getMonth()%></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getQuantity()%></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><%=b.getMonetary_value()%></p>
-                                                    </div>
-                                                </div>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=AnnualBranchItem.getMonthIDfromName(b.getMonth())%></td>
+                                                    <td class="tg-yw33"><%=b.getMonth()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
                                                 <%
                                                     }
                                                 %>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p>Total</p>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p><%=annualbranch.getTotalpurchases()%></p>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <hr>
-                                                        <p><%=annualbranch.getPurchaserevenue()%></p>
-                                                        <hr>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix"> </div>
-                                    </div>
 
+
+                                                <tr>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000">Total</td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"><%=annualbranch.getTotalpurchases()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=annualbranch.getPurchaserevenue()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                <div class="clearfix"> </div>
+
+                                <%
+
+                                } else if (type.equals("MG") && month != 0) {
+                                    MonthlyReport monthgen = new MonthlyReport(month, year);
+                                    monthgen.generate();
+                                    ArrayList<MonthlyGeneralItem> monthgen_sales = monthgen.getSales();
+                                    ArrayList<MonthlyGeneralItem> monthgen_purs = monthgen.getPurchases();
+                                    salesArray = monthgen.MGSalestoJSArray();
+                                    purchaseArray = monthgen.MGPurchasestoJSArray();
+                                %>
+                                <h3 class="head-top" style="text-align: center">Monthly General report <%=monthname%> <%=year%> </h3>
+                                <div class="content-top">
+                                    <div class="col-md-12 content-top-2">
+                                        <div class="content-graph">
+                                            <div class="content-color">
+                                                <div class="content-ch">
+                                                    <p><i></i> Purchases </p>
+
+                                                    <div class="clearfix"> </div>
+                                                </div>
+                                                <div class="content-ch1">
+                                                    <p><i></i> Sales</p>
+
+                                                    <div class="clearfix"> </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="graph-container">
+
+                                                <div id="graph-lines"> </div>
+                                                <div id="graph-bars"> </div>
+                                            </div>
+
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Monthly sales</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">Branch ID</th>
+                                                    <th class="tg-yw4l">Branch</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
+                                                <%
+                                                    for (MonthlyGeneralItem b : monthgen_sales) {
+                                                %>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=DBDatalist.getBranchIDfromName(b.getBranch())%></td>
+                                                    <td class="tg-yw33"><%=b.getBranch()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
+                                                <%
+                                                    }
+                                                %>
+
+
+                                                <tr>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000">Total</td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"><%=monthgen.getTotalsales()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=monthgen.getTotalsalesincome()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Monthly Purchases</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">Branch ID</th>
+                                                    <th class="tg-yw4l">Branch</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
+                                                <%
+                                                    for (MonthlyGeneralItem b : monthgen_purs) {
+                                                %>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=DBDatalist.getBranchIDfromName(b.getBranch())%></td>
+                                                    <td class="tg-yw33"><%=b.getBranch()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
+                                                <%
+                                                    }
+                                                %>
+
+
+                                                <tr>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000">Total</td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"><%=monthgen.getTotalpurchases()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=monthgen.getTotalpurchaserevenue()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                <%
+
+                                } else if (type.equals("MB") && branch != null && month != 0) {
+                                    MonthlyBranch monthbranch = new MonthlyBranch(year, month, branch);
+                                    ArrayList<MonthlyBranchItem> monthbranch_sales = monthbranch.getSales();
+                                    ArrayList<MonthlyBranchItem> monthbranch_purs = monthbranch.getPurchases();
+                                    salesArray = monthbranch.MBSalestoJSArray();
+                                    purchaseArray = monthbranch.MBPurchasestoJSArray();
+                                %>
+                                <h3 class="head-top">Monthly Branch report for <%=monthname%> <%=year%> for <%=branch.getName()%> branch</h3>
+                                <div class="content-top">
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Monthly sales</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">Book</th>
+                                                    <th class="tg-yw4l">Type</th>
+                                                    <th class="tg-yw4l">Unit price</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
+                                                <%
+                                                    for (MonthlyBranchItem b : monthbranch_sales) {
+                                                %>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=b.getBook()%></td>
+                                                    <td class="tg-yw33"><%=b.getType()%></td>
+                                                    <td class="tg-yw33"><%=b.getUprice()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
+                                                <%
+                                                    }
+                                                %>
+
+
+                                                <tr>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000">Total</td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"><%=monthbranch.getTotalsales()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=monthbranch.getTotalsalesincome()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="content-top">
+                                        <div class="content-box">
+                                            <div class="head-top">
+                                                <h3 style="text-align: center;text-decoration: underline"><br>Monthly purchases</h3>
+                                            </div>
+                                            <table class="tg" >
+                                                <!--<thead>-->
+                                                <tr>
+                                                    <th class="tg-yw4l">Book</th>
+                                                    <th class="tg-yw4l">Type</th>
+                                                    <th class="tg-yw4l">Unit price</th>
+                                                    <th class="tg-yw4l">Quantity</th>
+                                                    <th class="tg-yw4l">Total (Rs.)</th>
+                                                </tr>
+                                                <!--                                            </thead>
+                                                                                            <tbody>-->
+
+                                                <%
+                                                    for (MonthlyBranchItem b : monthbranch_purs) {
+                                                %>
+
+                                                <tr>
+                                                    <td class="tg-yw33"><%=b.getBook()%></td>
+                                                    <td class="tg-yw33"><%=b.getType()%></td>
+                                                    <td class="tg-yw33"><%=b.getUprice()%></td>
+                                                    <td class="tg-yw33"><%=b.getQuantity()%></td>
+                                                    <td class="tg-yw33"><%=b.getMonetary_value()%></td>
+                                                </tr>
+
+                                                <%
+                                                    }
+                                                %>
+
+
+                                                <tr >
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000">Total</td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"></td>
+                                                    <td class="tg-yw33"><%=monthbranch.getTotalpurchases()%></td>
+                                                    <td class="tg-yw33" style="background-color: #e0e0e0;color: #000"><%=monthbranch.getTotalpurchaserevenue()%></td>
+                                                </tr>
+                                                <!--</tbody>-->
+                                            </table>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"> </div>
                                 </div>
 
+                                <%
+
+                                    }
+                                %>
+
+
+                                <!--</div>-->
+
+                                <div class="clearfix"> </div>
                             </div>
-
-                            <div class="clearfix"> </div>
                         </div>
+
+                        <%@include file="admin_footer.jsp" %>
                     </div>
-
-                    <%@include file="admin_footer.jsp" %>
                 </div>
-
-            </div>
-            <div class="clearfix"></div>
-        </div>
+                <div class="clearfix"></div>
+            <!--</div>-->
+        <!--</div>-->
 
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
@@ -598,12 +633,12 @@
                 // Graph Data ##############################################
                 var graphData = [{
                         // Visits
-                        data: <%=annualbranch.ABSalestoJSArray()%>,
-                        color: '#A7DBDB'
+                        data: <%=salesArray%>,
+                        color: '#00AAA0'
                     }, {
                         // Returning Visits
-                        data: <%=annualbranch.ABPurchasestoJSArray()%>,
-                        color: '#ED6498',
+                        data: <%=purchaseArray%>,
+                        color: '#FF7A5A',
 //                        points: {radius: 4, fillColor: '#E'}
 //                        points: {radius: 4}
                     }

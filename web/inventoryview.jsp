@@ -75,19 +75,24 @@
 
                                 <div class="col-md-12" >
                                     <form action="bookinsert.jsp">
-                                    <div class="col-md-4 pull-left">
-                                        <h3 >Inventory</h3>
-                                    </div>
-                                    <div class="col-md-4">
+                                        <div class="col-md-4 pull-left">
+                                            <h3 >Inventory</h3>
+                                        </div>
+                                        <div class="col-md-4">
 
-                                    </div>
-                                    <div class="col-md-4 ">
-                                        
+                                        </div>
+                                        <div class="col-md-4 ">
+                                            <%
+                                                User usr = (User) session.getAttribute("user");
+                                                if (usr.getULevel() == 1) {
+                                            %>
                                             <button class="btn btn-lg btn-default pull-right"  >Add new item <img src="admin/images/add.png" alt="Add Branch" style="width: 20px;height: 20px;"></button>
-                                        
-                                    </div>
+                                                <%
+                                                    }
+                                                %>
+                                        </div>
                                     </form>
-                                        
+
                                 </div>
 
                                 <!-- ---------------- BOOKS TABLE ------------------------------->
@@ -115,10 +120,10 @@
                                             <tr>
                                                 <td class="tg-yw40"><%= book.getISBN()%></td>
                                                 <td class="tg-yw40"><%= book.getTitle()%></td>
-                                                <td class="tg-yw40"><% 
-                                                    ArrayList<Author> aa=DBDatalist.getAuthorfromBook(book.getIdbook());
+                                                <td class="tg-yw40"><%
+                                                    ArrayList<Author> aa = DBDatalist.getAuthorfromBook(book.getIdbook());
                                                     for (int j = 0; j < aa.size(); j++) {%>
-                                                    <%= aa.get(j).getName() %> <br>
+                                                    <%= aa.get(j).getName()%> <br>
                                                     <% }%></td>
                                                 <td class="tg-yw40"><%= book.getSubject().getType().getName()%></td>
                                                 <td class="tg-yw40"><%= book.getSubject().getName()%></td>

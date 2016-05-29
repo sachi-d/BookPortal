@@ -61,6 +61,7 @@
     <body>
         <%
             User u = (User) session.getAttribute("user");
+            int ulevel = u.getULevel();
         %>
         <nav class="navbar-default navbar-static-top" role="navigation">
             <div class="navbar-header">
@@ -113,7 +114,7 @@
 
                                         <div class="user-new">
                                             <p>New purchase request</p>
-                                            <span><%=  pur.getBill().getDate() %></span>
+                                            <span><%=  pur.getBill().getDate()%></span>
                                         </div>
                                         <div class="user-new-left">
                                             <i class="fa fa-shopping-cart"></i>
@@ -192,11 +193,20 @@
                                 <a href="inventoryview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-book nav_icon"></i> <span class="nav-label">Inventory</span> </a>
                             </li>
                             <li>
-                                <a href="stockview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-pie-chart nav_icon"></i> <span class="nav-label">Branch stock</span> </a>
+                                <a href="stockview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-plus nav_icon"></i> <span class="nav-label">Purchases</span> </a>
                             </li>
+                            <%
+                                if (ulevel == 2) {
+                            %>
                             <li>
                                 <a href="issuebill.jsp" class=" hvr-bounce-to-right"><i class="fa fa-file-text-o nav_icon"></i> <span class="nav-label">Issue a bill</span> </a>
                             </li>
+                            <%
+                                }
+                            %>
+                            <%
+                                if (ulevel == 0) {
+                            %>
                             <li>
                                 <a href="branchview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-sitemap nav_icon"></i> <span class="nav-label">Branches</span> </a>
                             </li>
@@ -204,21 +214,34 @@
                                 <a href="featuredbooks.jsp" class=" hvr-bounce-to-right"><i class="fa fa-star nav_icon"></i> <span class="nav-label">Featured books</span> </a>
                             </li>
                             <li>
-                                <a href="recentarrivals.jsp" class=" hvr-bounce-to-right"><i class="fa fa-clock-o nav_icon"></i> <span class="nav-label">Recent arrivals</span> </a>
-                            </li>
-                            <li>
                                 <a href="userlogview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-users nav_icon"></i> <span class="nav-label">User logs</span> </a>
                             </li>
+                            <%
+                                }
+                            %>
+                            <li>
+                                <a href="recentarrivals.jsp" class=" hvr-bounce-to-right"><i class="fa fa-clock-o nav_icon"></i> <span class="nav-label">Recent arrivals</span> </a>
+                            </li>
+
+                            <%
+                                if (ulevel == 0 || ulevel == 1) {
+                            %>
                             <li>
                                 <a href="generalreports.jsp" class=" hvr-bounce-to-right"><i class="fa fa-line-chart nav_icon"></i> <span class="nav-label">General reports</span> </a>
                             </li>
+
                             <li>
                                 <a href="branchreports.jsp" class=" hvr-bounce-to-right"><i class="fa fa-th-large nav_icon"></i> <span class="nav-label">Branch reports</span> </a>
                             </li>
+                            <%
+                                }
+                            %>
                             <li>
                                 <a href="billview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-th-list nav_icon"></i> <span class="nav-label">Issued bills</span> </a>
                             </li>
-
+                            <li>
+                                <a href="currentstockview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-pie-chart nav_icon"></i> <span class="nav-label">Current stock</span> </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

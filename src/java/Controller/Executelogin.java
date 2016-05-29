@@ -7,6 +7,9 @@ package Controller;
 
 import DB.DBConnectionHandler;
 import Model.Branch;
+import Model.Report;
+import Model.ReportTemplates.AnnualReport;
+import Model.ReportTemplates.MonthlyReport;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +74,7 @@ public class Executelogin extends HttpServlet {
             ResultSet rsetUser = ps.executeQuery();
 
             if (rsetUser.next()) {
-                Branch b=DBDatalist.getBranch(rsetUser.getInt(8));
+                Branch b = DBDatalist.getBranch(rsetUser.getInt(8));
                 User user = new User(rsetUser.getInt(1), rsetUser.getString(2), rsetUser.getString(3), rsetUser.getString(4), rsetUser.getString(5), rsetUser.getString(6), rsetUser.getString(7), b);
                 request.getSession().invalidate();
                 request.getSession().setAttribute("user", user);
@@ -83,8 +88,23 @@ public class Executelogin extends HttpServlet {
 
                 boolean s = Savelog.saveLog(request, "user logged in");
                 if (s) {
-
+                    if (user.getIduser() == 1) {
+                        Date today = new Date();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(today);
+                        int month = cal.get(Calendar.MONTH) + 1;
+                        int year = cal.get(Calendar.YEAR);
+                        if (!DBDatalist.isMonthlyReportSet(year, month)) {   
+                            MonthlyReport monthrep = new MonthlyReport(month, year);
+                            monthrep.addInformation();
+                            if (true) {  //if it is a new year (checked by january)  month==1
+                                AnnualReport annualrep = new AnnualReport(year - 1);
+                                annualrep.addInformation();
+                            }
+                        }
+                    }
                     response.sendRedirect("index.jsp");
+
                 } else {
                     response.sendRedirect("login.jsp?msg=error");
                 }

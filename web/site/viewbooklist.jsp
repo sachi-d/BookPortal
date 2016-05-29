@@ -75,7 +75,7 @@
                                         <div class="productinfo text-center">
                                             <a href="viewbook.jsp?book=<%=b.getIdbook()%>"><img src="../<%= b.getImage()%>" alt="<%=b.getTitle()%>" style="border: solid 1px #919191"/></a>
                                             <h2><%=b.getTitle()%></h2>
-                                            <p><%=b.getSubject().getName()%></p>
+                                            <p><a href="viewbooklist.jsp?sub=<%=b.getSubject().getIdsubject()%>"><%=b.getSubject().getName()%></a></p>
                                             <form action="../Executecart" method="POST">
                                                 <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                                 <input hidden="" value="add" name="para">

@@ -15,7 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Branch reports</title>
         <link rel="shortcut icon" href="admin/images/logo.png">
-        
+
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
@@ -34,6 +34,10 @@
         <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
+        <%
+            User usr = (User) session.getAttribute("user");
+            if (usr.getULevel() == 0 || usr.getULevel() == 1) {
+        %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
             <!----->
@@ -158,5 +162,11 @@
                 $("#table_branch_annual").DataTable();
             });
         </script>
+        <%
+        } else {
+        %>
+        <%@include file="404.jsp" %>
+        <%    }
+        %>
     </body>
 </html>

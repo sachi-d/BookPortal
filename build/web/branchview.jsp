@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.User"%>
 <%@page import="Model.Branch"%>
 <%@page import="Controller.DBDatalist"%>
 <%@page import="java.util.ArrayList"%>
@@ -33,6 +34,10 @@
         <script src="admin/js/screenfull.js"></script>
     </head>
     <body>
+        <%
+            User usr = (User) session.getAttribute("user");
+            if (usr.getULevel() == 0) {
+        %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
             <!----->
@@ -183,6 +188,7 @@
             <div class="clearfix"></div>
         </div>
 
+
         <script src="admin/js/jquery.nicescroll.js"></script>
         <script src="admin/js/scripts.js"></script>
 
@@ -205,5 +211,12 @@
 //                $("#table_branch").DataTable();
             });
         </script>
+        <%
+        } else {
+        %>
+        <%@include file="404.jsp" %>
+        <%
+            }
+        %>
     </body>
 </html>

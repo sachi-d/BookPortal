@@ -151,7 +151,7 @@
                         <h3>Checkout to complete your order</h3>
                         <hr>
 
-                        <button class="btn btn-danger" onclick="emptyCart()">Empty the cart</button>
+                        <!--<button class="btn btn-danger" onclick="emptyCart()">Empty the cart</button>-->
 
                     </div>
                     <div class="col-md-2"></div>

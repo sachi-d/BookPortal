@@ -6,6 +6,7 @@
 package Model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -13,24 +14,24 @@ import java.util.HashMap;
  */
 public class Cart {
 
-    private HashMap<Book, Integer> items;
+    private LinkedHashMap<Book, Integer> items;
     private double total;
 
-    public Cart(HashMap<Book, Integer> items, double total) {
+    public Cart(LinkedHashMap<Book, Integer> items, double total) {
         this.items = items;
         this.total = total;
     }
 
     public Cart() {
-        this.items = new HashMap<>();
+        this.items = new LinkedHashMap<>();
         this.total = 0;
     }
 
-    public HashMap<Book, Integer> getItems() {
+    public LinkedHashMap<Book, Integer> getItems() {
         return items;
     }
 
-    public void setItems(HashMap<Book, Integer> items) {
+    public void setItems(LinkedHashMap<Book, Integer> items) {
         this.items = items;
     }
 
@@ -44,8 +45,14 @@ public class Cart {
     }
 
     public Book getBookinCart(Book b) {
+        try {
+            b.getIdbook();
+        } catch (Exception e) {
+            return null;
+        }
         Book mybook = null;
         for (Book bb : items.keySet()) {
+
             if (bb.getIdbook() == b.getIdbook()) {
                 mybook = bb;
                 break;
@@ -56,7 +63,9 @@ public class Cart {
 
     //Add book to the cart
     public void addToCart(Book b, int q) {
-        items.put(b, q);
+        if (q >= 0) {
+            items.put(b, q);
+        }
     }
 
     //Remove book from cart
@@ -69,7 +78,6 @@ public class Cart {
         Book bb = getBookinCart(b);
         int newq = (items.get(bb)) + 1;
         items.put(bb, newq);
-
     }
 
     public void decrementQuantity(Book b) {
@@ -80,17 +88,19 @@ public class Cart {
 
         }
     }
-    
 
     public int getCartSize() {
         return this.items.size();
     }
 
     public boolean isIn(Book b) {
-        boolean isin = false;
+        if (b == null) {
+            return false;
+        }
+        boolean isin = true;
         Book bb = getBookinCart(b);
-        if(bb!=null){
-            isin=true;
+        if (bb == null) {
+            isin = false;
         }
         return isin;
     }
@@ -107,5 +117,5 @@ public class Cart {
         }
         this.total = tot;
     }
-   
+
 }

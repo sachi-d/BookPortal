@@ -6,7 +6,11 @@
 package Model.ReportTemplates;
 
 import Controller.DBDatalist;
+import Controller.Executenotification;
 import Model.Branch;
+import Model.Report;
+import Model.User;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +35,44 @@ public final class AnnualReport {
         totalpurchaserevenue = 0;
         totalsales = 0;
         totalsalesincome = 0;
-        this.generate();
+    }
+
+    public void addInformation() {
+        for (Branch b : DBDatalist.getBranchList()) {
+            AnnualBranch abr = new AnnualBranch(b, this.year);
+            //add to the collection of branch reports
+
+            //add ttal sales and total sales income
+            AnnualGeneralItem abi = new AnnualGeneralItem(b.getName(), abr.getTotalsales(), abr.getSalesincome());
+            this.salesrecords.add(abi);
+            this.totalsales += abr.getTotalsales();
+            this.totalsalesincome += abr.getSalesincome();
+
+            //add total purchases and purchase revenue
+            AnnualGeneralItem abii = new AnnualGeneralItem(b.getName(), abr.getTotalpurchases(), abr.getPurchaserevenue());
+            this.purchaserecords.add(abii);
+            this.totalpurchase += abr.getTotalpurchases();
+            this.totalpurchaserevenue += abr.getPurchaserevenue();
+
+            //add to database
+            abr.addDatatoDB();
+
+            //generate notifications for each branchadmin and admin
+            String reporttitle = "Annual Report - " + b.getName() + " - " + this.year;
+//            String reportmonth = new DateFormatSymbols().getMonths()[this.month - 1];
+            String location = "reportview.jsp?type=AB&year=" + this.year + "&month=null&branch=" + b.getIdbranch();
+            int repid = Report.addNewReport("AB", reporttitle, this.year, "null", b.getName(), location);
+            User badmin = DBDatalist.getBranchadminfromBranch(b);
+            Executenotification.insertnotification(badmin.getIduser(), "AB", "New Annual Branch Report", 0, repid);
+            int adminid = 1;
+            Executenotification.insertnotification(adminid, "AB", "New Annual Branch Report", 0, repid);
+        }
+        //generate notification for admin about annual general report
+        String reporttitle = "Annual Report - general ";
+        String location = "reportview.jsp?type=AG&year=" + this.year + "&month=null&branch=null";
+        int repid = Report.addNewReport("AG", reporttitle, this.year, "null", "null", location);
+        int adminid = 1;
+        Executenotification.insertnotification(adminid, "AG", "New Annual General Report", 0, repid);
     }
 
     public void generate() {
@@ -50,9 +91,6 @@ public final class AnnualReport {
             this.purchaserecords.add(abii);
             this.totalpurchase += abr.getTotalpurchases();
             this.totalpurchaserevenue += abr.getPurchaserevenue();
-
-            //add to database
-//            abr.addDatatoDB();
         }
     }
 
@@ -88,7 +126,7 @@ public final class AnnualReport {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < arr.size(); i++) {
-            String monthdigit = String.valueOf(i+1);
+            String monthdigit = String.valueOf(i + 1);
             String salescount = String.valueOf(arr.get(i).getQuantity());
             String val = "[" + monthdigit + "," + salescount + "]";
             sb.append(val);
@@ -99,7 +137,7 @@ public final class AnnualReport {
         sb.append("]");
         return sb.toString();////
     }
-    
+
     public String AGSalestoJSArray() {
 
         //format
@@ -108,7 +146,7 @@ public final class AnnualReport {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < arr.size(); i++) {
-            String monthdigit = String.valueOf(i+1);
+            String monthdigit = String.valueOf(i + 1);
             String salescount = String.valueOf(arr.get(i).getQuantity());
             String val = "[" + monthdigit + "," + salescount + "]";
             sb.append(val);

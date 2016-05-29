@@ -37,10 +37,11 @@ public final class MonthlyReport {
         this.totalsalesincome = 0;
         sales = new ArrayList<>();
         purchases = new ArrayList<>();
-        this.generate();
+//        this.generate();
     }
 
-    public void generate() {
+    public void addInformation() {
+        String reportmonth = new DateFormatSymbols().getMonths()[this.month - 1];
         for (Branch b : DBDatalist.getBranchList()) {
             MonthlyBranch mbr = new MonthlyBranch(this.year, this.month, b);
 
@@ -57,16 +58,45 @@ public final class MonthlyReport {
             this.totalpurchaserevenue += mbr.getTotalpurchaserevenue();
 
             //add to database
-//            mbr.addDatatoDB();
-//generate notifications for each branchadmin and admin
-//            String reporttitle = "Monthly Report - " + b.getName() + " - " + this.month ;
-//            String reportmonth=new DateFormatSymbols().getMonths()[this.month - 1];
-//            int repid=Report.addNewReport("MB", reporttitle, this.year,reportmonth,b.getName(),"location");
-//            User badmin=DBDatalist.getBranchadminfromBranch(b);
-//            Executenotification.insertnotification(badmin.getIduser(), "MB", reporttitle, 0, repid);
-//            int adminid=1;
-//            Executenotification.insertnotification(adminid, "MB", reporttitle, 0, repid);
+            mbr.addDatatoDB();
+
+            //generate notifications for each branchadmin and admin
+            String reporttitle = "Monthly Report - " + b.getName() + " - " + reportmonth;
+            
+            String location = "reportview.jsp?type=MB&year=" + this.year + "&month=" + this.month + "&branch=" + b.getIdbranch();
+            int repid = Report.addNewReport("MB", reporttitle, this.year, reportmonth, b.getName(), location);
+            User badmin = DBDatalist.getBranchadminfromBranch(b);
+            Executenotification.insertnotification(badmin.getIduser(), "MB", "New Monthly Branch Report", 0, repid);
+            int adminid = 1;
+            Executenotification.insertnotification(adminid, "MB", "New Monthly Branch Report", 0, repid);
         }
+        //generate notification for admin about annual monthly report
+        String reporttitle = "Monthly Report - general - " + reportmonth;
+        String location = "reportview.jsp?type=MG&year=" + this.year + "&month=" + this.month + "&branch=null";
+        int repid = Report.addNewReport("MG", reporttitle, this.year, reportmonth, "null", location);
+        int adminid = 1;
+        Executenotification.insertnotification(adminid, "MG", "New Monthly General Report", 0, repid);
+    }
+    
+     public void generate() {
+        String reportmonth = new DateFormatSymbols().getMonths()[this.month - 1];
+        for (Branch b : DBDatalist.getBranchList()) {
+            MonthlyBranch mbr = new MonthlyBranch(this.year, this.month, b);
+
+            //add ttal sales and total sales income
+            MonthlyGeneralItem mgitem = new MonthlyGeneralItem(b.getName(), mbr.getTotalsales(), mbr.getTotalsalesincome());
+            this.sales.add(mgitem);
+            this.totalsales += mbr.getTotalsales();
+            this.totalsalesincome += mbr.getTotalsalesincome();
+
+            //add total purchases and purchase revenue
+            MonthlyGeneralItem mgitem2 = new MonthlyGeneralItem(b.getName(), mbr.getTotalpurchases(), mbr.getTotalpurchaserevenue());
+            this.purchases.add(mgitem2);
+            this.totalpurchases += mbr.getTotalpurchases();
+            this.totalpurchaserevenue += mbr.getTotalpurchaserevenue();
+
+        }
+       
     }
 
     public ArrayList<MonthlyGeneralItem> getSales() {

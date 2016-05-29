@@ -5,6 +5,10 @@
  */
 package Model;
 
+import DB.DBConnectionHandler;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 
 /**
@@ -24,6 +28,12 @@ public class Stock {
         this.branch = branch;
         this.quantity = quantity;
         this.date=date;
+    }
+    public Stock(int id,Book book, Branch branch, int quantity) {
+        this.idstock=id;
+        this.book = book;
+        this.branch = branch;
+        this.quantity = quantity;
     }
 
     public Book getBook() {
@@ -66,5 +76,25 @@ public class Stock {
         this.date = date;
     }
     
-    
+     public static int getAvailability(int idbook) {
+        int q = 0;
+        int idbranch=1;
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM current_stock WHERE branch_idbranch=? AND book_idbook=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idbranch);
+            ps.setInt(2, idbook);
+            ResultSet rsetStock = ps.executeQuery();
+
+            if (rsetStock.next()) {
+                q = rsetStock.getInt(4);
+            }
+            con.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return q;
+    }
 }
