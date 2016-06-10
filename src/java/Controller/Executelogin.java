@@ -88,21 +88,6 @@ public class Executelogin extends HttpServlet {
 
                 boolean s = Savelog.saveLog(request, "user logged in");
                 if (s) {
-                    if (user.getIduser() == 1) {
-                        Date today = new Date();
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(today);
-                        int month = cal.get(Calendar.MONTH) + 1;
-                        int year = cal.get(Calendar.YEAR);
-                        if (!DBDatalist.isMonthlyReportSet(year, month)) {   
-                            MonthlyReport monthrep = new MonthlyReport(month, year);
-                            monthrep.addInformation();
-                            if (true) {  //if it is a new year (checked by january)  month==1
-                                AnnualReport annualrep = new AnnualReport(year - 1);
-                                annualrep.addInformation();
-                            }
-                        }
-                    }
                     response.sendRedirect("index.jsp");
 
                 } else {

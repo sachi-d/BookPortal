@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Stock"%>
 <%@page import="Model.Cart"%>
 <%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -36,7 +37,7 @@
     </head><!--/head-->
 
     <body>
-        
+
         <%@include file="header.jsp" %>
         <section id="slider"><!--slider-->
             <div class="container">
@@ -60,7 +61,7 @@
                                 <div class="item active">
                                     <div class="col-sm-6">
                                         <h1><span><%=fbook1.getTitle()%></span></h1>
-                                        <h2><%= fbook1.getSubject().getType().getName() + "-" + fbook1.getSubject().getName()%></h2>
+                                        <h2><a href="viewbooklist.jsp?sub=<%=fbook1.getSubject().getIdsubject()%>"><%= fbook1.getSubject().getType().getName() + "-" + fbook1.getSubject().getName()%></a></h2>
                                         <p><%= fbook1.getShortDescription()%> </p>
                                         <a href="viewbook.jsp?book=<%=fbook1.getIdbook()%>" ><button type="button" class="btn btn-default get">Get it now</button></a>
                                     </div>
@@ -76,7 +77,7 @@
                                 <div class="item">
                                     <div class="col-sm-6">
                                         <h1><span><%=bb.getTitle()%></span></h1>
-                                        <h2><%= bb.getSubject().getType().getName() + "-" + bb.getSubject().getName()%></h2>
+                                        <h2><a href="viewbooklist.jsp?sub=<%=bb.getSubject().getIdsubject()%>"><%= bb.getSubject().getType().getName() + "-" + bb.getSubject().getName()%></a></h2>
                                         <p><%= bb.getShortDescription()%> </p>
                                         <a href="viewbook.jsp?book=<%=bb.getIdbook()%>"><button type="button" class="btn btn-default get">Get it now</button></a>
                                     </div>
@@ -116,6 +117,7 @@
                             <%                                if (blist != null) {
                                     for (int i = 0; i < blist.size(); i++) {
                                         Book b = blist.get(i);
+                                        int q = Stock.getAvailability(b.getIdbook());
                             %>
                             <div class="col-sm-4">
                                 <div class="product-image-wrapper">
@@ -125,14 +127,27 @@
                                                 <img src="../<%= b.getImage()%>" alt="" class="hvr-grow" style="border: solid 1px #919191" />
                                             </a>
                                             <h3><%= b.getTitle()%></h3>
-                                            <p><%= b.getSubject().getName()%></p>
+                                            <a href="viewbooklist.jsp?sub=<%=b.getSubject().getIdsubject()%>"><%= b.getSubject().getName()%></a>
                                             <form action="../Executecart" method="POST">
                                                 <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                                 <input hidden="" value="add" name="para">
+                                                <%
+                                                    if (q > 0) {
+                                                %>
                                                 <button type="submit" class="btn btn-default add-to-cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     Add to cart
                                                 </button>
+                                                <%
+                                                } else {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart" disabled="">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <strike>Add to cart</strike>
+                                                </button>
+                                                <%
+                                                    }
+                                                %>
                                             </form>
                                         </div>
                                     </div>
@@ -152,6 +167,7 @@
                                 if (blist2 != null) {
                                     for (int i = 0; i < blist2.size(); i++) {
                                         Book b = blist2.get(i);
+                                        int q=Stock.getAvailability(b.getIdbook());
                             %>
                             <div class="col-sm-4">
                                 <div class="product-image-wrapper">
@@ -161,14 +177,27 @@
                                                 <img src="../<%= b.getImage()%>" alt="" class="hvr-grow" style="border: solid 1px #919191" />
                                             </a>
                                             <h3><%= b.getTitle()%></h3>
-                                            <p><%= b.getSubject().getName()%></p>
+                                            <a href="viewbooklist.jsp?sub=<%=b.getSubject().getIdsubject()%>"><%= b.getSubject().getName()%></a>
                                             <form action="../Executecart" method="POST">
                                                 <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                                 <input hidden="" value="add" name="para">
+                                                <%
+                                                    if (q > 0) {
+                                                %>
                                                 <button type="submit" class="btn btn-default add-to-cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     Add to cart
                                                 </button>
+                                                <%
+                                                } else {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart" disabled="">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <strike>Add to cart</strike>
+                                                </button>
+                                                <%
+                                                    }
+                                                %>
                                             </form>
                                         </div>
                                     </div>

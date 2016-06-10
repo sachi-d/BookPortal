@@ -7,6 +7,7 @@ package Controller;
 
 import Model.Book;
 import Model.Cart;
+import Model.Stock;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -50,20 +51,28 @@ public class Executecart extends HttpServlet {
             throws ServletException, IOException {
 
         String para = request.getParameter("para");
-        int bookid = Integer.parseInt(request.getParameter("id"));
-        Book book = DBDatalist.getBook(bookid);
-        System.out.println("book - " + book.getTitle());
-        Cart cart = (Cart) request.getSession().getAttribute("cart");
 
-        if (para.equals("increment")) {
-            cart.incrementQuantity(book);
-        } else if (para.equals("decrement")) {
-            cart.decrementQuantity(book);
-        } else  {
+        if (para.equals("saveShipping")) {
+            request.getSession().setAttribute("customer_name", request.getParameter("name"));
+            request.getSession().setAttribute("customer_address", request.getParameter("address"));
+            response.sendRedirect("site/cart.jsp");
+        } else {
+            int bookid = Integer.parseInt(request.getParameter("id"));
+            Book book = DBDatalist.getBook(bookid);
+            System.out.println("book - " + book.getTitle());
+            Cart cart = (Cart) request.getSession().getAttribute("cart");
+
+            if (para.equals("increment")) {
+                cart.incrementQuantity(book);
+            } else if (para.equals("decrement")) {
+                cart.decrementQuantity(book);
+            } else {
 //            cart=new 
-        }
-        String page = (String) request.getSession().getAttribute("currentpage");
+            }
+            String page = (String) request.getSession().getAttribute("currentpage");
 
-        response.sendRedirect("site/" + page);
+            response.sendRedirect("site/" + page);
+        }
     }
+
 }

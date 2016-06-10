@@ -7,6 +7,7 @@ package Controller;
 
 import DB.DBConnectionHandler;
 import Model.Branch;
+import Model.Notification;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,7 +96,7 @@ public class Saveuser extends HttpServlet {
                 }
             }
 //            System.out.println("targetuserr----------------" + newuser);
-            Executenotification.insertnotification(targetuser, "UserReg", "New user registered", newuser, 0);
+            Notification.insertnotification(targetuser, "UserReg", "New user registered", newuser, 0);
             con.commit();
             response.sendRedirect("index.jsp?msg=success");
 

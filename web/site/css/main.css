@@ -255,18 +255,19 @@ a#scrollUp i{
 
 .search_box input {
     background: #F0F0E9;
-    border: medium none;
+    border-color: #23907e;
+    border-width: medium;
     color: #B2B2B2;
-    font-family: 'roboto';
-    font-size: 12px;
+    font-family: 'Calibri';
+    font-size: 18px;
     font-weight: 300;
-    height: 35px;
+    height: 40px;
     outline: medium none;
     padding-left: 10px;
-    width: 155px;
+    width: 165px;
     background-image: url(../images/home/searchicon.png);
     background-repeat: no-repeat;
-    background-position: 130px;
+    background-position: 140px;
 }
 
 

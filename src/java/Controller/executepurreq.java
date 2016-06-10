@@ -69,7 +69,7 @@ public class Executepurreq extends HttpServlet {
             out.println("Oops! Something went wrong.\n");
             out.println(e.toString());
 
-            response.sendRedirect("notificationview.jsp?msg=error");
+            response.sendRedirect("billdetailsview.jsp?msg=error&purreq=" + pur);
         }
 
     }

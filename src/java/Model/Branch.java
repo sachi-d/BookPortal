@@ -5,6 +5,11 @@
  */
 package Model;
 
+import DB.DBConnectionHandler;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
  *
  * @author Sachi
@@ -61,5 +66,32 @@ public class Branch {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    
+    public static int getBranchIDfromName(String name) {
+        int id = 0;
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM branch where name=? ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rsetBranch = ps.executeQuery();
+
+            while (rsetBranch.next()) {
+//                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
+                id = rsetBranch.getInt(1);
+                break;
+            }
+            con.close();
+            return id;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return id;
+        }
+    }
+    
+    public void remove(){
+        System.out.println("removed branch-"+this.name);
     }
 }

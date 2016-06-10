@@ -148,12 +148,10 @@
                                     <input type="hidden" value="<%=uu.getIduser()%>" id="userid" name="userid">
                                 </div>
                                 <div class="col-md-2">
-                                    <button type="submit" class="btn btn-lg btn-danger pull-right" onclick="PrintElem('printableArea')">Print</button>
-                                    <!--<button type="button" class="btn btn-default pull-right" onclick="clearTable()">Print</button>-->
+                                    <button type="button" class="btn  btn-danger pull-right" onclick="PrintElem('printableArea')">Print</button>
                                 </div>
                                 <div class="col-md-2">
-                                    
-                                    <button type="submit" class="btn btn-lg btn-danger pull-right" >Complete order</button>
+                                    <button type="submit" class="btn btn-danger pull-right" >Complete order</button>
                                 </div>
                             </form>
                             <div class="clearfix"> </div>
@@ -243,7 +241,7 @@
 
              function PrintElem(elem)
              {
-                 $('form input[type=text]').each(function () {
+                 $('form input').each(function () {
                      $(this).attr('value', $(this).val());
                  });
 //                                            $('#printoutput').html($(elem).html());

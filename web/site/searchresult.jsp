@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Stock"%>
 <%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -73,6 +74,7 @@
                     </div>
                     <%
                         for (Book b : results) {
+                            int q=Stock.getAvailability(b.getIdbook());
                     %>
                     <div class="col-sm-4">
                         <div class="product-image-wrapper">
@@ -86,10 +88,23 @@
                                     <form action="../Executecart" method="POST">
                                         <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                         <input hidden="" value="add" name="para">
-                                        <button type="submit" class="btn btn-default add-to-cart">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            Add to cart
-                                        </button>
+                                         <%
+                                                    if (q > 0) {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    Add to cart
+                                                </button>
+                                                <%
+                                                } else {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart" disabled="">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <strike>Add to cart</strike>
+                                                </button>
+                                                <%
+                                                    }
+                                                %>
                                     </form>
                                 </div>
                             </div>

@@ -27,7 +27,7 @@
                         <script src="js/html5shiv.js"></script>
                         <script src="js/respond.min.js"></script>
                         <![endif]       -->
-        <link rel="shortcut icon" href="images/ico/favicon.ico">
+        <link rel="shortcut icon" href="images/logo.png">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
@@ -68,10 +68,11 @@
                         <tbody>
                             <%
                                 for (Book b : items.keySet()) {
+                                    System.out.println(b.getImage());
                             %>
                             <tr>
                                 <td class="cart_product">
-                                    <a href=""><img src="../<%= b.getImage()%>" alt="" height="100"  ></a>
+                                    <a href="viewbook.jsp?book=<%=b.getIdbook()%>"><img src="../<%= b.getImage()%>" alt="" height="100"  ></a>
                                 </td>
                                 <td class="cart_description">
                                     <h4><a href=""><%=b.getTitle()%></a></h4>
@@ -147,31 +148,48 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
+                    <!--                    <div class="col-md-3">
+                                            <h3>Checkout to complete your order</h3>
+                                            <hr>
+                    
+                                            <button class="btn btn-danger" onclick="emptyCart()">Empty the cart</button>
+                    
+                                        </div>-->
+
                     <div class="col-md-6">
-                        <h3>Checkout to complete your order</h3>
-                        <hr>
+                        <form action="../Executecart" method="GET">
+                            <input hidden="" name="para" value="saveShipping">
+                            <div class="form-group">
+                                <h2 class="modal-title">Add shipping information</h2>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"> Name:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="name" value="<%=customer_name%>" id="customer_name">
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"> Shipping address:</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" name="address" id="customer_address"><%=customer_address%></textarea>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="form-group">
 
-                        <!--<button class="btn btn-danger" onclick="emptyCart()">Empty the cart</button>-->
-
+                                <div class="col-md-9"></div>
+                                <div class="col-md-3"><button type="submit" class="btn btn-warning" >Save Details</button></div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-4">
-                        <div class="chose_area">
-                            <h3 style="text-align: center">Checkout with <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo"></h3>
-                            <h3 style="text-align: center;">Total bill value : <span style="color: #E74C3C">Rs. <%=shoppingCart.getTotal()%></span></h3>
-                            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST"> 
-                                <input type="hidden" name="business" value="bookportal@bookportal.lk">
-                                <input type="hidden" name="cmd" value="_xclick">
-                                <input type="hidden" name="item_name" value="Total bill">
-                                <input type="hidden" name="amount" value="<%=shoppingCart.getTotal()%>">
 
-                                <input type="hidden" name="currency_code" value="USD">
-                                <input type="hidden" name="return" value="http://localhost:8080/BookPortal/site/paypalsuccess.jsp">
-                                <input type="hidden" name="rm" value="2">
-                                <input type="hidden" name="cancel_return" value="http://localhost:8080/BookPortal/site/paypalcancel.jsp"> 
-                                <p style="text-align: center"><input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online" ></p>
-                                <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" >
-                            </form>
+                    <div class="col-md-6">
+                        <div class="chose_area">
+                            <h3 style="text-align: center">Checkout with <img src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-100px.png" border="0" alt="PayPal Logo"></h3>
+                            <h3 style="text-align: center;">Total bill value : <span style="color: #E74C3C">Rs. <%=shoppingCart.getTotal()%></span></h3>
+                            <p style="text-align: center"><button class="btn btn-success"  data-toggle="modal" data-target="#myModal" >Pay Now</button></p>
+
                         </div>
 
                     </div>
@@ -180,7 +198,89 @@
 
             </div>
         </section>/
+        <div class="bs-example2 bs-example-padded-bottom">
 
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h2 class="modal-title">Confirm order?</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="grid-form1">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"> Name:</label>
+                                    <%
+                                        boolean isnameset = false;
+                                        if (session.getAttribute("customer_name").equals("")) {
+                                            isnameset = false;
+                                    %>
+                                    <p style="color: red">Please enter a valid Shipping name.</p>
+                                    <%
+                                    } else {
+                                        isnameset = true;
+                                    %><p><%=session.getAttribute("customer_name")%></p><%
+                                        }%>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"> Shipping address:</label>
+                                    <%
+                                        boolean isaddressset = false;
+                                        if (session.getAttribute("customer_address").equals("")) {
+                                            isaddressset = false;
+                                    %>
+                                    <p style="color: red">Please enter a valid Shipping Address.</p>
+                                    <%
+                                    } else {
+                                        isaddressset = true;
+                                    %><p><%=session.getAttribute("customer_address")%></p><%
+                                        }%>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Total bill value : </label>
+                                    <%
+                                        double USDtotal = shoppingCart.getTotalinUSD();
+                                    %>
+                                    <p><span>USD <%=USDtotal%></span> at rate USD : LKR <%=shoppingCart.getLKRtoUSDrate()%></p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Checkout with :</label>
+                                    <p><img src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-100px.png" border="0" alt="PayPal Logo"></p>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST"> 
+                                        <input type="hidden" name="business" value="bookportal@bookportal.lk">
+                                        <input type="hidden" name="cmd" value="_xclick">
+                                        <input type="hidden" name="item_name" value="Total bill">
+                                        <input type="hidden" name="amount" value="<%=USDtotal%>">
+
+                                        <input type="hidden" name="currency_code" value="USD">
+                                        <input type="hidden" name="return" value="http://localhost:8080/BookPortal/site/paypalsuccess.jsp">
+                                        <input type="hidden" name="rm" value="2">
+                                        <input type="hidden" name="cancel_return" value="http://localhost:8080/BookPortal/site/paypalcancel.jsp"> 
+                                        <%
+                                            if (shoppingCart.getTotal() != 0 && isnameset && isaddressset) {
+                                        %>
+                                        <p style = "text-align: center"> <input type = "image" name = "submit" src = "https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt = "PayPal - The safer, easier way to pay online" > 
+                                            <% }
+                                            %>
+                                            <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" >
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!--                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                            <button type="button" class="btn btn-primary">Save changes</button>-->
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div>
+            </div>
+        </div>
 
         <%@include file="footer.jsp" %>
 
@@ -192,22 +292,23 @@
         <script src="js/price-range.js"></script>
         <script src="js/jquery.prettyPhoto.js"></script>
         <script src="js/main.js"></script>
+
         <script>
-                            function incrementvalue(el1)
-                            {
-                                var value = parseInt(document.getElementById(el1).value, 10);
-                                value = isNaN(value) ? 0 : value;
-                                value++;
-                                document.getElementById(el1).value = value;
-                            }
-//                            function emptyCart()
-//                            {
-//            <%
-//                    shoppingCart = new Cart();
-//                    session.setAttribute("cart", shoppingCart);
-            %>//
-//                                location.reload();
-//                            }
+            function validate() {
+                if (document.getElementById('customer_name') === "" || document.getElementById('customer_address') === "") {
+                    alert('Please enter valid shipping details.');
+                    return false;
+                }
+                return true;
+            }
+        </script>
+        <script>
+            function incrementvalue(el1) {
+                var value = parseInt(document.getElementById(el1).value, 10);
+                value = isNaN(value) ? 0 : value;
+                value++;
+                document.getElementById(el1).value = value;
+            }
         </script>
     </body>
 </html>

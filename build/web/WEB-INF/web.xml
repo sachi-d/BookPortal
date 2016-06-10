@@ -52,6 +52,10 @@
         <servlet-name>Loadsubjects</servlet-name>
         <servlet-class>Controller.Loadsubjects</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Executereport</servlet-name>
+        <servlet-class>Controller.Executereport</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>saveuser</servlet-name>
         <url-pattern>/saveuser</url-pattern>
@@ -104,17 +108,21 @@
         <servlet-name>Loadsubjects</servlet-name>
         <url-pattern>/Loadsubjects</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Executereport</servlet-name>
+        <url-pattern>/Executereport</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    <error-page>  
-        <error-code>500</error-code>  
-        <location>/500.jsp</location>  
-    </error-page>  
-    <error-page>  
-        <error-code>404</error-code>  
-        <location>/404.jsp</location>  
-    </error-page>  
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
 </web-app>

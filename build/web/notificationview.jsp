@@ -16,7 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Notifications</title>
         <link rel="shortcut icon" href="admin/images/logo.png">
-        
+
         <link href="admin/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
         <!-- DATA TABLES -->
         <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -76,6 +76,9 @@
                                             <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Unread notifications</a></li>
                                             <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">All notifications</a></li>
                                         </ul>
+                                        <%
+                                            if (null != session.getAttribute("user")) {
+                                        %>
                                         <div id="myTabContent" class="tab-content">
                                             <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 
@@ -96,15 +99,15 @@
                                                         <div class="col-md-3">
                                                             <h5 class="table-header">Action</h5>
                                                         </div>
-                                                     
+
                                                         <hr>
                                                     </div>
-                                                    <%                                                        
-                                                        User u = (User) session.getAttribute("user");
-                                                        ArrayList<Notification> arrNotification = DBDatalist.getNewNotificationsforUser(u.getIduser());
-                                                        if (arrNotification != null) {
+                                                    <%
+                                                        User ug = (User) session.getAttribute("user");
+                                                        ArrayList<Notification> arrNotification = DBDatalist.getNewNotificationsforUser(ug.getIduser());
+                                                        if (arrNotification.size() != 0) {
                                                             for (int i = 0; i < arrNotification.size(); i++) {
-                                                                Notification not = (Notification) arrNotification.get(i);
+                                                                Notification not = arrNotification.get(i);
 
                                                     %>
 
@@ -129,6 +132,18 @@
                                                         <div class="col-md-3">
                                                             <a href="executenotification?para=accept&user=<%= not.getNewuser().getIduser()%>&not=<%= not.getIdnotification()%>"><button class="btn-xs btn-success" type="button">Accept <span class='fa fa-check'></span></button></a>
                                                             <a href="executenotification?para=reject&user=<%= not.getNewuser().getIduser()%>&not=<%= not.getIdnotification()%>"><button class="btn-xs btn-danger" type="button">Reject <span class='fa fa-remove'></span></button></a>
+                                                        </div>
+                                                        <%
+                                                        } else if (not.getType().equals("PurReqError")) {
+                                                        %>
+                                                        <div class="col-md-4">
+                                                            <h5 style="color: red">Purchase request error</h5>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <p><%= not.getMessage()%></p>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <a href="executenotification?para=ignore&not=<%= not.getIdnotification()%>"><button class="btn-xs btn-default" type="button">Mark as read</button></a>
                                                         </div>
                                                         <%
                                                         } else {
@@ -165,6 +180,7 @@
                                                     <label class="label label-default">No new notifications</label>
                                                     <%
                                                         }
+
                                                     %>
 
 
@@ -184,12 +200,11 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <%
-                                                            ArrayList<Notification> arrNotification2 = DBDatalist.getAllNotificationsforUser(u.getIduser());
-                                                            if (arrNotification2 != null) {
+                                                        <%                                                            ArrayList<Notification> arrNotification2 = DBDatalist.getAllNotificationsforUser(ug.getIduser());
+                                                            if (arrNotification2.size() != 0) {
 
                                                                 for (int i = 0; i < arrNotification2.size(); i++) {
-                                                                    Notification not = (Notification) arrNotification2.get(i);
+                                                                    Notification not = arrNotification2.get(i);
 
                                                         %>
                                                         <tr>
@@ -200,24 +215,33 @@
                                                             <td class="tg-yw40"><%= not.getNewuser().getFullname()%></td>
                                                             <td class="tg-yw40">New user registration</td>
                                                             <%
+                                                            } else if (not.getType().equals("PurReqError")) {
+                                                            %>
+                                                            <td class="tg-yw40"><%= not.getMessage()%></td>
+                                                            <td class="tg-yw40">Purchase request error</td>
+                                                            <%
                                                             } else {
                                                             %>
-                                                            <td class="tg-yw40"><%= not.getNewreport().getTitle()%></td>
-                                                            <td class="tg-yw40">New report alert</td>
+                                                            <td class="tg-yw40"><%= not.getNewreport().getTitle() %></td>
+                                                            <td class="tg-yw40">New report</td>
                                                             <%
                                                                 }
                                                             %>
 
                                                         </tr>
                                                         <%  }
-                                                        } 
-                                                    %>
+                                                            }
+                                                        %>
                                                     </tbody>
 
                                                 </table>
                                             </div>
 
                                         </div>
+                                        <% } else {
+                                                //response.sendError(404);
+                                            }
+                                        %>
                                     </div>
                                 </div>
 

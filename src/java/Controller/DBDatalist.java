@@ -20,7 +20,6 @@ import Model.Notification;
 import Model.Publisher;
 import Model.Purchaserequest;
 import Model.Report;
-import Model.ReportTemplates.MonthlyBranchItem;
 import Model.Stock;
 import Model.Subject;
 import Model.Type;
@@ -35,52 +34,6 @@ import java.util.concurrent.TimeUnit;
  * @author Sachi
  */
 public class DBDatalist {
-
-    public static int getBranchIDfromName(String name) {
-        int id = 0;
-        try {
-            Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM branch where name=? ";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, name);
-            ResultSet rsetBranch = ps.executeQuery();
-
-            while (rsetBranch.next()) {
-//                User ba = getBranchadminfromBranch(rsetBranch.getString(2));
-                id = rsetBranch.getInt(1);
-                break;
-            }
-            con.close();
-            return id;
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return id;
-        }
-    }
-
-    public static boolean isMonthlyReportSet(int year, int month) {
-        try {
-            boolean isset = false;
-            Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM monthlybranchreport where year=? AND month=? ";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, year);
-            ps.setInt(2, month);
-            ResultSet rsetPurreq = ps.executeQuery();
-
-            while (rsetPurreq.next()) {
-                isset = true;
-
-            }
-            con.close();
-            return isset;
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
-    }
 
     public static ArrayList<Purchaserequest> getNewPurreqList() {
         try {
@@ -225,7 +178,7 @@ public class DBDatalist {
                             null,
                             rsetNotification.getTimestamp(8));
                     arr.add(not);
-                } else {
+                } else if (type.length() == 2) {
                     Report newreport = getReport(rsetNotification.getInt(7));
                     Notification not = new Notification(
                             rsetNotification.getInt(1),
@@ -235,6 +188,17 @@ public class DBDatalist {
                             rsetNotification.getInt(5),
                             null,
                             newreport,
+                            rsetNotification.getTimestamp(8));
+                    arr.add(not);
+                } else {
+                    Notification not = new Notification(
+                            rsetNotification.getInt(1),
+                            targetuser,
+                            type,
+                            rsetNotification.getString(4),
+                            rsetNotification.getInt(5),
+                            null,
+                            null,
                             rsetNotification.getTimestamp(8));
                     arr.add(not);
                 }
@@ -700,7 +664,7 @@ public class DBDatalist {
             ArrayList<Book> arr = new ArrayList<>();
 
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM book where status=? AND featured=? order by name";
+            String query = "SELECT * FROM book where status=? AND featured=? ";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, 1);
             ps.setInt(2, 1);

@@ -5,6 +5,9 @@
  */
 package Model;
 
+import Controller.DBDatalist;
+import java.util.ArrayList;
+
 /**
  *
  * @author Sachi
@@ -34,4 +37,23 @@ public class Type {
         this.name = name;
     }
     
+    public static String subjectListtoJSArray(int idtype){
+        Type t=DBDatalist.getType(idtype);
+        //format = ["1","sub1","2","sub2"]
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        ArrayList<Subject> subs=DBDatalist.getSubjectsfromType(t);
+        for(int i=0;i<subs.size();i++){
+            String id="\""+subs.get(i).getIdsubject()+"\"";
+            String name="\""+subs.get(i).getName()+"\"";
+            sb.append(id);
+            sb.append(",");
+            sb.append(name);
+            if (i + 1 < subs.size()) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }

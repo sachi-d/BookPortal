@@ -265,7 +265,7 @@
                                     <div class="form-group">
                                         <label class="col-md-3 control-label"> Description :</label>
                                         <div class="col-md-9">
-                                            <textarea rows="3" class="form-control" name="description" required=""></textarea>
+                                            <textarea rows="3" class="form-control" name="description" required="" id="description"></textarea>
                                         </div>
                                     </div>
 
@@ -298,7 +298,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Type :</label>
                                         <div class="col-sm-3">
-                                            <select name="type" id="type" class="form-control" required="" onselect="setsubjects()">
+                                            <select name="type" id="type" class="form-control" required="" onchange="setsubjects()">
                                                 <option value="select" selected="" disabled="">Select..</option>
                                                 <%
                                                     ArrayList<Type> arrType = DBDatalist.getTypeList();
@@ -439,8 +439,25 @@
                                                 }
 
                                                 function setsubjects() {
-                                                    document.getElementById("edition").innerHTML = "hajak";
+                                                    var typeid = document.getElementById("type").value;
+                                                    removeoptions(document.getElementById('subject'));
+                                                    if (typeid === '1') {
+                                                        var subjectlist = <%= Type.subjectListtoJSArray(1)%>;
+                                                    } else if (typeid === '2') {
+                                                        var subjectlist = <%= Type.subjectListtoJSArray(2)%>;
+                                                    } else if (typeid === '3') {
+                                                        var subjectlist = <%= Type.subjectListtoJSArray(3)%>;
+                                                    } else if (typeid === '4') {
+                                                        var subjectlist = <%= Type.subjectListtoJSArray(4)%>;
+                                                    }
 
+                                                    for (i = 0; i < subjectlist.length; i++) {
+                                                        el = document.createElement('option');
+                                                        el.value = subjectlist[i];
+                                                        el.innerHTML = subjectlist[i + 1];
+                                                        document.getElementById('subject').appendChild(el);
+                                                        i++;
+                                                    }
                                                 }
 
 

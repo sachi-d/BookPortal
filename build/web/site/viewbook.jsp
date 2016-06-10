@@ -49,6 +49,7 @@
                             <%                                if (request.getParameter("book") != null) {
                                     int idbook = Integer.parseInt(request.getParameter("book"));
                                     Book b = DBDatalist.getBook(idbook);
+                                    int q = Stock.getAvailability(idbook);
                             %>
                             <h2 class="title text-center">Book Details</h2>
 
@@ -73,6 +74,9 @@
                                     <p><%=b.getSubject().getType().getName()%> - <%= b.getSubject().getName()%> </p>
                                     <p><%=b.getLanguage()%> </p>
                                     <!--<img src="images/product-details/rating.png" alt="" />-->
+                                    <%
+                                        if (q > 0) {
+                                    %>
                                     <form action="../Executecart" method="POST">
                                         <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                         <input hidden="" value="add" name="para">
@@ -87,24 +91,25 @@
                                             </button>
                                         </span>
                                     </form>
+                                    <%
+                                        }
+                                    %>
                                     <form>
                                         <div class="form-group">
                                             <label class="col-md-3">Availability : </label>
                                             <div class="col-md-9">
                                                 <%
-                                                    int q=Stock.getAvailability(idbook);
-                                                    if(q>0){
-                                                        %>
-                                                        <label class="label label-success">In stock</label>
-                                                        <%                                                        
+                                                    if (q > 0) {
+                                                %>
+                                                <label class="label label-success">In stock</label>
+                                                <%
+                                                } else {
+                                                %>
+                                                <label class="label label-danger">Out of stock</label>
+                                                <%
                                                     }
-                                                    else{
-                                                        %>
-                                                        <label class="label label-danger">Out of stock</label>
-                                                        <%  
-                                                    }
-                                                    %>
-                                                
+                                                %>
+
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>

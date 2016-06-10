@@ -1,4 +1,4 @@
-package com.example.tests;
+package GUI.Admin;
 
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +9,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class AdminLogin {
+public class Login {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
@@ -23,14 +23,32 @@ public class AdminLogin {
   }
 
   @Test
-  public void testAdminLogin() throws Exception {
+  public void testLogin() throws Exception {
     driver.get(baseUrl + "/BookPortal/login.jsp");
+    assertEquals("Login", driver.getTitle());
+    assertEquals("Login", driver.findElement(By.cssSelector("h2")).getText());
+    assertTrue(isElementPresent(By.cssSelector("input[type=\"submit\"]")));
+    assertTrue(isElementPresent(By.linkText("Signup")));
     driver.findElement(By.name("uname")).clear();
     driver.findElement(By.name("uname")).sendKeys("admin");
     driver.findElement(By.name("pw")).clear();
     driver.findElement(By.name("pw")).sendKeys("admin123");
     driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
-    assertEquals("Home", driver.getTitle());
+    assertTrue(isElementPresent(By.linkText("Inventory")));
+    assertTrue(isElementPresent(By.linkText("Stock purchases")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[3]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[4]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[5]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[6]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[7]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[8]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[9]/a/span")));
+    assertTrue(isElementPresent(By.xpath("//ul[@id='side-menu']/li[10]/a/span")));
+    assertTrue(isElementPresent(By.cssSelector("i.fa.fa-shopping-cart")));
+    assertTrue(isElementPresent(By.cssSelector("i.fa.fa-globe")));
+    assertTrue(isElementPresent(By.xpath("//li[3]/a/span")));
+    driver.findElement(By.xpath("//li[3]/a/span")).click();
+    driver.findElement(By.linkText("Logout")).click();
   }
 
   @After

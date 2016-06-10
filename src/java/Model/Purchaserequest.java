@@ -5,6 +5,13 @@
  */
 package Model;
 
+import DB.DBConnectionHandler;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -79,7 +86,7 @@ public class Purchaserequest {
 
     public String sendEmail() {
         String mailBody1 = "\n";
-        if(this.getStatus()==null){
+        if (this.getStatus() == null) {
             return null;
         }
         if (this.getStatus().equals("Accepted")) {
@@ -88,13 +95,11 @@ public class Purchaserequest {
             mailBody1 = "\nYour purchase request is processed. It is on its way to your doorstep. Thank you for choosing BookPortal.";
         } else if (this.getStatus().equals("New")) {
             mailBody1 = "\nYou have requested online purchase from BookPortal. Please wait while your order is being processed. Thank you for choosing BookPortal.";
-        }else{
+        } else {
             return null;
         }
-        
-        
+
         String mailBody2;
-        
 
         String mailBody3 = "Bill items : ";
         if (this.getBill() != null) {
@@ -106,8 +111,7 @@ public class Purchaserequest {
                 String q = String.valueOf(h.get(b));
                 mailBody3 = mailBody3 + "\n" + title + "    " + unitprice + " x " + q;
             }
-        }
-        else{
+        } else {
             mailBody2 = "Purchase request id : " + this.getIdpurreq() + "\n Bill id : null \nCustomer : " + this.getCustomer() + "\n";
         }
 
@@ -116,4 +120,43 @@ public class Purchaserequest {
         return mailBody1;
     }
 
+    public static boolean insertPurchaseRequest(String cus_name, String cus_address, String cus_email, int idBill) {
+        boolean executionstatus = false;
+        Connection con = DBConnectionHandler.createConnection();
+        try {
+            con.setAutoCommit(false);
+            String query = "INSERT INTO purchase_req (Customer, Address, Status, Bill_idBill, Email) VALUES (?,?,?,?,?);";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, cus_name);
+            ps.setString(2, cus_address);
+            ps.setString(3, "New");
+            ps.setInt(4, idBill);
+            ps.setString(5, cus_email);
+            ps.executeUpdate();
+            executionstatus = true;
+            con.commit();
+
+        } catch (SQLException e) {
+            executionstatus = false;
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            }
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+//                System.out.println("Oops! Something went wrong.\n");
+                return false;
+            }
+        }
+        return executionstatus;
+    }
+
+    public static void notifyPaymentError(String cus_name, String cus_address, String cus_email, int idBill) {
+        String message = "Purchase request error - bill id :" + idBill + "\n" + cus_name + "/n" + cus_address + "/n" + cus_email;
+        //target user is admin
+        Notification.insertnotification(1, "PurReqError", message, 0, 0);
+    }
 }

@@ -94,7 +94,7 @@
                 <div class="drop-men" >
                     <ul class=" nav_1">
                         <%
-                            if (u.getUser_levelname().equals("Admin")) {
+                            if (ulevel == 0) {
                         %>
                         <!-- - - - - - - - - - - - - - Purchase requests - - - - - - - - - - - - - - - - - -->
                         <li class="dropdown at-drop">
@@ -131,6 +131,7 @@
                         </li>
                         <%
                             }
+                            if (ulevel == 0 || ulevel == 1) {
                         %>
                         <li class="dropdown at-drop">
                             <%
@@ -156,9 +157,13 @@
                                                 if (not.getType().equals("UserReg")) {    %>
                                             <i class="fa fa-user-plus"></i>
                                             <%
-                                            } else if (not.getType().equals("ReportAlert")) {
+                                            } else if (not.getType().length() == 2) {
                                             %>
                                             <i class="fa fa-pencil"></i>
+                                            <%
+                                            } else if (not.getType().equals("PurReqError")) {
+                                            %>
+                                            <i class="fa fa-times"></i>
                                             <%
                                                 }
                                             %>
@@ -174,8 +179,12 @@
                                 <li><a href="notificationview.jsp" class="view">View all notifications</a></li>
                             </ul>
                         </li>
+                        <%
+                            }
+                        %>
+
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span class=" name-caret"><%= u.getFullname()%><i class="caret"></i></span><img src="admin/images/user.png" alt="profile pic"></a>
+                            <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span ><%= u.getFullname()%><i class="caret"></i></span><img src="admin/images/user.png" alt="profile pic"></a>
                             <ul class="dropdown-menu " role="menu">
                                 <li><a href="userview.jsp?user=<%=u.getIduser()%>"><i class="fa fa-user"></i>View profile</a></li>
                                 <li><a href="signout"><i class="fa fa-user"></i>Logout</a></li>
@@ -193,7 +202,7 @@
                                 <a href="inventoryview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-book nav_icon"></i> <span class="nav-label">Inventory</span> </a>
                             </li>
                             <li>
-                                <a href="stockview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-plus nav_icon"></i> <span class="nav-label">Purchases</span> </a>
+                                <a href="stockview.jsp" class=" hvr-bounce-to-right"><i class="fa fa-plus nav_icon"></i> <span class="nav-label">Stock purchases</span> </a>
                             </li>
                             <%
                                 if (ulevel == 2) {

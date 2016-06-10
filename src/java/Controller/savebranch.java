@@ -57,7 +57,7 @@ public class Savebranch extends HttpServlet {
 
             ps.executeUpdate();
             con.commit();
-            Savelog.saveLog(request, "branch added successfully");
+            Savelog.saveLog(request, "branch added successfully-" + name);
             response.sendRedirect("branchview.jsp?msg=success");
 
         } catch (SQLException | IOException e) {
@@ -79,6 +79,98 @@ public class Savebranch extends HttpServlet {
             } catch (SQLException e) {
                 System.out.println("Oops! Something went wrong.\n");
             }
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        Connection con = DBConnectionHandler.createConnection();
+
+        String para = request.getParameter("para");
+        int idbranch = Integer.parseInt(request.getParameter("idbranch"));
+        if (para.equals("edit")) {
+
+            try {
+
+                String name = request.getParameter("name");
+                String address = request.getParameter("address");
+                String telno = request.getParameter("telno");
+
+                con.setAutoCommit(false);
+                String query = "UPDATE branch "
+                        + "SET name=?, address=?, telNo=? WHERE idbranch=?";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setString(2, address);
+                ps.setString(3, telno);
+                ps.setInt(4, idbranch);
+
+                ps.executeUpdate();
+                con.commit();
+                Savelog.saveLog(request, "branch editted successfully-" + idbranch);
+                response.sendRedirect("branchedit.jsp?msg=success");
+
+            } catch (SQLException | IOException e) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    out.println("Oops! Something went wrong.\n");
+                    out.println(ex.toString());
+                    Savelog.saveLog(request, "branch edit failed-"+idbranch);
+                    response.sendRedirect("branchedit.jsp?msg=error");
+                }
+                out.println("Oops! Something went wrong.\n");
+                out.println(e.toString());
+
+                response.sendRedirect("branchedit.jsp?msg=error");
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    System.out.println("Oops! Something went wrong.\n");
+                }
+            }
+
+        } else if (para.equals("remove")) {
+            try {
+                con.setAutoCommit(false);
+                String query = "UPDATE branch "
+                        + "SET status=? WHERE idbranch=?";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, 0);
+                ps.setInt(2, idbranch);
+
+                ps.executeUpdate();
+                con.commit();
+                Savelog.saveLog(request, "branch removed successfully-" + idbranch);
+                response.sendRedirect("branchedit.jsp?msg=success");
+
+            } catch (SQLException | IOException e) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    out.println("Oops! Something went wrong.\n");
+                    out.println(ex.toString());
+                    Savelog.saveLog(request, "branch remove failed-"+idbranch);
+                    response.sendRedirect("branchedit.jsp?msg=error");
+                }
+                out.println("Oops! Something went wrong.\n");
+                out.println(e.toString());
+
+                response.sendRedirect("branchedit.jsp?msg=error");
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    System.out.println("Oops! Something went wrong.\n");
+                }
+            }
+        }
+        else{
+            response.sendRedirect("branchedit.jsp?msg=error");
         }
     }
 }

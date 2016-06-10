@@ -37,6 +37,7 @@
         <%
             User usr = (User) session.getAttribute("user");
             if (usr.getULevel() == 0) {
+                Branch selected;
         %>
         <%@include file="admin_sidebar.jsp" %>
         <div id="wrapper">
@@ -86,42 +87,50 @@
                                 <div class="col-md-12">
 
 
+                                    <form action="branchedit.jsp" method="POST">
+                                        <table class="tg" id="table_branch">
+                                            <thead>
+                                                <tr>
+                                                    <th class="tg-yw4l">Branch name</th>
+                                                    <th class="tg-yw4l">Address</th>
+                                                    <th class="tg-yw4l">Tel no.</th>
+                                                    <th class="tg-yw4l">Branch admin</th>
+                                                    <th class="tg-yw4l">Action</th>
+                                                </tr>
+                                            </thead>
 
-                                    <table class="tg" id="table_branch">
-                                        <thead>
-                                            <tr>
-                                                <th class="tg-yw4l">Branch name</th>
-                                                <th class="tg-yw4l">Address</th>
-                                                <th class="tg-yw4l">Tel no.</th>
-                                                <th class="tg-yw4l">Branch admin</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%                                                ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
-                                                if (arrBranch != null) {
-                                                    for (int i = 0; i < arrBranch.size(); i++) {
-                                                        Branch branch = (Branch) arrBranch.get(i);
+                                            <tbody>
+                                                <%                                                ArrayList<Branch> arrBranch = DBDatalist.getBranchList();
+                                                    if (arrBranch != null) {
+                                                        for (int i = 0; i < arrBranch.size(); i++) {
+                                                            Branch branch = (Branch) arrBranch.get(i);
 
-                                            %>
-                                            <tr>
-                                                <td class="tg-yw40"><%= branch.getName()%></td>
-                                                <td class="tg-yw40"><%= branch.getAddress()%></td>
-                                                <td class="tg-yw40"><%= branch.getTelNo()%></td>
-                                                <td class="tg-yw40">
-                                                    <%
-                                                        User u = DBDatalist.getBranchadminfromBranch(branch);
-                                                        if (u != null) {
-                                                    %>
-                                                    <%= u.getFullname()%> 
-                                                    <% } %></td>
-                                            </tr>
-                                            <%  }
-                                                }
-                                            %>
-                                        </tbody>
+                                                %>
 
-                                    </table>
+                                                <tr>
+                                                    <td class="tg-yw40"><%= branch.getName()%></td>
+                                                    <td class="tg-yw40"><%= branch.getAddress()%></td>
+                                                    <td class="tg-yw40"><%= branch.getTelNo()%></td>
+                                                    <td class="tg-yw40">
+                                                        <%
+                                                            User u = DBDatalist.getBranchadminfromBranch(branch);
+                                                            if (u != null) {
+                                                        %>
+                                                        <%= u.getFullname()%> 
+                                                        <% }%></td>
+                                                    <td class="tg-yw40">
+                                                        <div class="col-md-6"><button class="btn-xs btn-primary " type="submit" name="edit" value="<%=branch.getIdbranch()%>">Edit</button></div>
+                                                        <div class="col-md-6"><button class="btn-xs btn-danger" type="submit" name="remove" value="<%=branch.getIdbranch()%>">Remove</button></div>
+                                                    </td>
+                                                </tr>
 
+                                                <%  }
+                                                    }
+                                                %>
+                                            </tbody>
+
+                                        </table>
+                                    </form>
 
                                 </div>
                                 <!-- - - - - - - - - - - - - - - - - - - ADD BRANCH - - - - - - - - - - - - - - - - - -->
@@ -210,6 +219,11 @@
             $(function () {
 //                $("#table_branch").DataTable();
             });
+        </script>
+        <script type="text/javascript">
+            function editWarn() {
+
+            }
         </script>
         <%
         } else {

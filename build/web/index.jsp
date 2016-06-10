@@ -4,6 +4,10 @@
     Author     : Sachi
 --%>
 
+<%@page import="java.text.DateFormatSymbols"%>
+<%@page import="Model.Report"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 <%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -74,33 +78,50 @@
                                     }
                                 %>
                                 <h3 class="head-top">Home</h3>
-                                <div class="content-top">
-                                    <div class="col-md-12 content-top-2">
-                                        <div class="content-graph">
-                                            <div class="content-color">
-                                                <div class="content-ch">
-                                                    <p><i></i> Branch sales </p>
-                                                    <!--<span>100%</span>-->
-                                                    <div class="clearfix"> </div>
-                                                </div>
-                                                <div class="content-ch1">
-                                                    <p><i></i> General sales</p>
-                                                    <!--<span> 50%</span>-->
-                                                    <div class="clearfix"> </div>
-                                                </div>
+                                <%
+                                    if (null != session.getAttribute("user")) {
+                                        User user = (User) session.getAttribute("user");
+                                        if (user.getIduser() == 1) {
+                                            Date today = new Date();
+                                            Calendar cal = Calendar.getInstance();
+                                            cal.setTime(today);
+                                            int month = cal.get(Calendar.MONTH) + 1;
+                                            int year = cal.get(Calendar.YEAR);
+                                            if (!Report.isMonthlyReportSet(year, month)) {
+                                %>
+                                <div class="col-md-12" style="border: 5px solid #ff4c65" >
+                                    <hr>
+                                    <form action="Executereport" method="POST">
+
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <p>New reports are ready to be generated.<br>Click button to generate.</p>
+
+                                                <input type="hidden" name="report" value="set">
+                                                <input type="hidden" name="month" value="<%=month%>">
+                                                <input type="hidden" name="year" value="<%=year%>">
                                             </div>
-
-
-                                            <div class="graph-container">
-
-                                                <div id="graph-lines"> </div>
-                                                <div id="graph-bars"> </div>
+                                            <div class="col-md-3">
+                                                <p><%=new DateFormatSymbols().getMonths()[month - 1] + " - " + year%> </p>
                                             </div>
-
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn-lg btn-success">Generate reports</button>
+                                            </div>                                        
                                         </div>
-                                    </div>
-                                    <div class="clearfix"> </div>
+
+                                    </form>
+                                    <div class="clearfix"></div>
+                                    <hr>
                                 </div>
+                                <div class="clearfix"></div>
+                                <br>
+
+
+                                <%
+                                            }
+                                        }
+                                    }
+                                %>
                                 <div class="content-mid">
 
                                     <div class="col-md-5">
@@ -170,120 +191,6 @@
 
 
         <script src="admin/js/jquery.flot.js"></script>
-        <script>
-            $(document).ready(function () {
 
-                // Graph Data ##############################################
-                var graphData = [{
-                        // Visits
-                        data: [[1, 1000], [2, 1200], [3, 1900], [4, 1040] ],
-                        color: '#A7DBDB'
-                    }, {
-                        // Returning Visits
-                        data: [[1, 800], [2, 600], [3, 200], [4, 200]  ],
-                        color: '#ED6498'
-//                        points: {radius: 4, fillColor: '#E'}
-//                        points: {radius: 4}
-                    }
-                ];
-
-                // Lines Graph #############################################
-                $.plot($('#graph-lines'), graphData, {
-                    series: {
-                        points: {
-                            show: true,
-                            radius: 5
-                        },
-                        lines: {
-                            show: true
-                        },
-                        shadowSize: 0
-                    },
-                    grid: {
-                        color: '#7f8c8d',
-                        borderColor: '#000000',
-//                        borderWidth: 20,
-                        hoverable: true
-                    },
-                    xaxis: {
-                        tickColor: 'transparent'//,
-//                        tickDecimals: 2
-                    },
-                    yaxis: {
-                        tickSize: 500
-                    }
-                });
-
-                // Bars Graph ##############################################
-                $.plot($('#graph-bars'), graphData, {
-                    series: {
-                        bars: {
-//                            show: true,
-//                            barWidth: .9,
-                            align: 'center'
-                        },
-                        shadowSize: 0
-                    },
-                    grid: {
-                        color: '#7f8c8d',
-                        borderColor: 'transparent',
-                        borderWidth: 20,
-                        hoverable: true
-                    },
-                    xaxis: {
-                        tickColor: 'transparent'//,
-//                        tickDecimals: 2
-                    },
-                    yaxis: {
-                        tickSize: 1000
-                    }
-                });
-
-                // Graph Toggle ############################################
-                $('#graph-bars').hide();
-
-                $('#lines').on('click', function (e) {
-                    $('#bars').removeClass('active');
-                    $('#graph-bars').fadeOut();
-                    $(this).addClass('active');
-                    $('#graph-lines').fadeIn();
-                    e.preventDefault();
-                });
-
-                $('#bars').on('click', function (e) {
-                    $('#lines').removeClass('active');
-                    $('#graph-lines').fadeOut();
-                    $(this).addClass('active');
-                    $('#graph-bars').fadeIn().removeClass('hidden');
-                    e.preventDefault();
-                });
-
-                // Tooltip #################################################
-                function showTooltip(x, y, contents) {
-                    $('<div id="tooltip">' + contents + '</div>').css({
-                        top: y - 16,
-                        left: x + 20
-                    }).appendTo('body').fadeIn();
-                }
-
-                var previousPoint = null;
-
-                $('#graph-lines, #graph-bars').bind('plothover', function (event, pos, item) {
-                    if (item) {
-                        if (previousPoint !== item.dataIndex) {
-                            previousPoint = item.dataIndex;
-                            $('#tooltip').remove();
-                            var x = item.datapoint[0],
-                                    y = item.datapoint[1];
-                            showTooltip(item.pageX, item.pageY, y + ' items ' );
-                        }
-                    } else {
-                        $('#tooltip').remove();
-                        previousPoint = null;
-                    }
-                });
-
-            });
-        </script>
     </body>
 </html>

@@ -5,8 +5,9 @@
  */
 package Model;
 
-import Controller.DBDatalist;
 import DB.DBConnectionHandler;
+import Model.ReportTemplates.AnnualReport;
+import Model.ReportTemplates.MonthlyReport;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -139,5 +140,41 @@ public class Report {
         return lastid;
     }
 
-   
+    public static boolean isMonthlyReportSet(int year, int month) {
+        try {
+            boolean isset = false;
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT * FROM monthlybranchreport where year=? AND month=? ";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, year);
+            ps.setInt(2, month);
+            ResultSet rsetPurreq = ps.executeQuery();
+
+            while (rsetPurreq.next()) {
+                isset = true;
+            }
+            con.close();
+            return isset;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public static void generateReports(int month,int year) {
+//        Date today = new Date();
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(today);
+//        int month = cal.get(Calendar.MONTH) + 1;
+//        int year = cal.get(Calendar.YEAR);
+        MonthlyReport monthrep = new MonthlyReport(month, year);
+        monthrep.addInformation();
+        if (month == 1) {  //if it is a new year (checked by january)  month==1
+            AnnualReport annualrep = new AnnualReport(year - 1);
+            annualrep.addInformation();
+        }
+
+    }
+
 }

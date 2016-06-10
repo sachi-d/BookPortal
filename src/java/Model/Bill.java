@@ -5,6 +5,10 @@
  */
 package Model;
 
+import DB.DBConnectionHandler;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -77,7 +81,27 @@ public class Bill {
     public void setItems(HashMap<Book, Integer> items) {
         this.items = items;
     }
-    
+
+    public static int getLastBillID() {
+        int id = 0;
+        try {
+            Connection con = DBConnectionHandler.createConnection();
+            String query = "SELECT max(idPurchase_req) FROM purchase_req";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rsetBranch = ps.executeQuery();
+
+            while (rsetBranch.next()) {
+                id = rsetBranch.getInt(1);
+                break;
+            }
+            con.close();
+            return id;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return id;
+        }
+    }
     
 
 }

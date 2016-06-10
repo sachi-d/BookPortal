@@ -452,7 +452,7 @@ i.fa.fa-globe {
     float: right;
 }
 .user-new-left i.fa-user-plus,.user-new-left i.fa-heart,.user-new-left i.fa-times
-,.user-new-left i.fa-info,.user-new-left i.fa-shopping-cart,.user-new-left i.fa-pencil{
+,.user-new-left i.fa-info,.user-new-left i.fa-shopping-cart,.user-new-left i.fa-pencil,user-new-left i.fa-scissors{
     font-size: 12px;
     color: #fff;
     background-color: #ED6498;
@@ -466,7 +466,7 @@ i.fa.fa-globe {
     background-color: #1ABC9C;
 }
 .user-new-left i.fa-times{
-    background-color: #8a8acb;
+    background-color: #F3625F;
 }
 .user-new-left i.fa-info{
     background-color:#FBB03B;
@@ -476,6 +476,9 @@ i.fa.fa-globe {
 }
 .user-new-left i.fa-pencil{
     background-color: #8a8acb;
+}
+.user-new-left i.fa-scissors{
+    background-color: yellow;
 }
 .dropdown-menu {
     min-width: 160px;

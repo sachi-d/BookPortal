@@ -6,11 +6,10 @@
 package Model.ReportTemplates;
 
 import Controller.DBDatalist;
-import Controller.Executenotification;
 import Model.Branch;
+import Model.Notification;
 import Model.Report;
 import Model.User;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 
 /**
@@ -63,16 +62,16 @@ public final class AnnualReport {
             String location = "reportview.jsp?type=AB&year=" + this.year + "&month=null&branch=" + b.getIdbranch();
             int repid = Report.addNewReport("AB", reporttitle, this.year, "null", b.getName(), location);
             User badmin = DBDatalist.getBranchadminfromBranch(b);
-            Executenotification.insertnotification(badmin.getIduser(), "AB", "New Annual Branch Report", 0, repid);
+            Notification.insertnotification(badmin.getIduser(), "AB", "New Annual Branch Report", 0, repid);
             int adminid = 1;
-            Executenotification.insertnotification(adminid, "AB", "New Annual Branch Report", 0, repid);
+            Notification.insertnotification(adminid, "AB", "New Annual Branch Report", 0, repid);
         }
         //generate notification for admin about annual general report
         String reporttitle = "Annual Report - general ";
         String location = "reportview.jsp?type=AG&year=" + this.year + "&month=null&branch=null";
         int repid = Report.addNewReport("AG", reporttitle, this.year, "null", "null", location);
         int adminid = 1;
-        Executenotification.insertnotification(adminid, "AG", "New Annual General Report", 0, repid);
+        Notification.insertnotification(adminid, "AG", "New Annual General Report", 0, repid);
     }
 
     public void generate() {

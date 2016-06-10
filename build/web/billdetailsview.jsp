@@ -45,7 +45,7 @@
                                 <%                                        if (request.getParameter("msg") != null) {
                                 %>
                                 <label class="label label-success">Request marked as <%= request.getParameter("msg")%></label>
-                                %><div><br></div><%                                        }
+                                <div><br></div><%                                        }
 
                                     if (request.getParameter("purreq") != null) {
                                         int purreq = Integer.parseInt(request.getParameter("purreq"));
@@ -131,21 +131,25 @@
                                         <hr>
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-md-8"></div>
+                                        
                                         <%
                                             String stat = pur.getStatus();
                                             if (stat.equals("New")) {
                                         %>
-
+                                        <div class="col-md-8">
+                                            <label class="label label-default pull-right">Accept the request to start processing the order.</label>
+                                        </div>
                                         <div class="col-md-2">
                                             <a href="executepurreq?para=accept&pur=<%= pur.getIdpurreq()%>"><button class="btn-sm btn-success" type="button">Accept <span class='fa fa-check'></span></button></a>
                                         </div>
                                         <%
                                         } else if (stat.equals("Accepted")) {
                                         %>
-
+                                        <div class="col-md-8">
+                                            <label class="label label-default pull-right">Close the request to let the custmer know the order is already processed.</label>
+                                        </div>
                                         <div class="col-md-2">
-                                            <a href="executepurreq?para=process&pur=<%= pur.getIdpurreq()%>"><button class="btn-sm btn-danger" type="button">Close<span class='fa fa-remove'></span></button></a>
+                                            <a href="executepurreq?para=process&pur=<%= pur.getIdpurreq()%>"><button class="btn-sm btn-danger" type="button">Close the order<span class='fa fa-remove'></span></button></a>
                                         </div>
                                         <%
                                             }

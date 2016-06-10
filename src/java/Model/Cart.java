@@ -5,6 +5,10 @@
  */
 package Model;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -38,6 +42,12 @@ public class Cart {
     public double getTotal() {
         updateTotal();
         return total;
+    }
+    
+    public double getTotalinUSD(){
+        updateTotal();
+        double rate=this.getLKRtoUSDrate();
+        return rate*total;
     }
 
     public void setTotal(double total) {
@@ -118,4 +128,20 @@ public class Cart {
         this.total = tot;
     }
 
+    public double getLKRtoUSDrate() {
+  
+        try {
+            URL url = new URL("http://quote.yahoo.com/d/quotes.csv?f=l1&s=" + "LKR" + "USD" + "=X");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            String line = reader.readLine();
+            if (line.length() > 0) {
+                return Double.parseDouble(line);
+            }
+            reader.close();
+        } catch (IOException | NumberFormatException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return 0;
+    }
 }

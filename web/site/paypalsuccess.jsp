@@ -4,6 +4,8 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Purchaserequest"%>
+<%@page import="Model.Bill"%>
 <%@page import="Controller.Savebill"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="Model.Book"%>
@@ -36,25 +38,60 @@
     </head><!--/head-->
 
     <body>
+        <%
+            if (request.getParameter("payment_status").equals("Completed")) {
+        %>
 
         <%@include file="header.jsp" %>
 
         <section id="cart_items">
-            <%                HashMap<Book, Integer> items = shoppingCart.getItems();
-                boolean addbill = Savebill.saveOnlineBill(shoppingCart );
+            <%                         //                String mm=request.getParameter("item_name")+request.getParameter("item_number")+request.getParameter("payment_status")+request.getParameter("mc_gross")+
+                //                        request.getParameter("mc_currency")+request.getParameter("txn_id")+request.getParameter("receiver_email")+request.getParameter("payer_email")+request.getParameter("custom");
+//                String name = request.getParameter("first_name") +" "+ request.getParameter("last_name") + request.getParameter("address1") + request.getParameter("shipping_address");
+                System.out.println("before getparam");
+                String billedname = request.getParameter("first_name") + " " + request.getParameter("last_name");
+                System.out.println("got name");
+                String shippedname = (String) session.getAttribute("customer_name");
+                String shippedaddress = (String) session.getAttribute("customer_address");
+                HashMap<Book, Integer> items = shoppingCart.getItems();
+                boolean addbill = Savebill.saveOnlineBill(shoppingCart);
+                System.out.println("afteronlinebill");
                 if (addbill) {
+                    int idbill = Bill.getLastBillID();
+                    String cus_name = billedname;
+                    String cus_address = shippedaddress;
+                    String cus_email = request.getParameter("receiver_email");
+                    boolean setPur_req = Purchaserequest.insertPurchaseRequest(cus_name, cus_address, cus_email, idbill);
+                    System.out.println("after purreq");
+                    if (!setPur_req) {
+                        Purchaserequest.notifyPaymentError(cus_name, cus_address, cus_email, idbill);
+                    }
             %>
             <div class="container">
-                <div class="breadcrumbs">
-                    <h3><strong>Your bill was successfully added. Thank you for choosing BookPortal.</strong></h3>
+                <div class="col-md-12">
+                    <form>
+                        <div class="form-group">
+                            <div class="col-md-12">Your bill was successfully added.</div>
+                            <div class="col-md-3">  Bill ID : </div><div class="col-md-9"><%=idbill%> </div>
+                            <div class="col-md-3">Paypal transaction ID :</div><div class="col-md-9"><%=request.getParameter("txn_id")%></div>
+                            <div class="col-md-3">Total value : </div><div class="col-md-9"> <%=request.getParameter("mc_currency") + request.getParameter("mc_gross")%> = Rs. <%=shoppingCart.getTotal()%></div>
+                            <div class="col-md-3">Billed to :</div><div class="col-md-9"><%=billedname%></div>
+                            <div class="col-md-3">Shipped to :</div><div class="col-md-9"><%=shippedname%></div>
+                            <div class="col-md-3"></div><div class="col-md-9"><%=shippedaddress%></div>
+                            <div class="col-md-12"><hr></div>
+                            <br>
+                        </div>
+                    </form>
+                            <!--<hr><div class="clearfix"></div>-->
                 </div>
+                            
                 <div class="table-responsive cart_info">
 
                     <table class="table table-condensed">
                         <%                            if (shoppingCart.getCartSize() != 0) {
                         %>
                         <thead>
-                            <tr>
+                            <tr class="cart_menu">
                                 <td class="image">Item</td>
                                 <td class="description"></td>
                                 <td class="price">Price (Rs.)</td>
@@ -163,5 +200,10 @@
 
             }
         </script>
+        <%
+            } else {
+                response.sendRedirect("paypalcancel.jsp");
+            }
+        %>
     </body>
 </html>

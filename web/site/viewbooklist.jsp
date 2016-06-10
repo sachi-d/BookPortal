@@ -4,6 +4,7 @@
     Author     : Sachi
 --%>
 
+<%@page import="Model.Stock"%>
 <%@page import="Model.Book"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -43,7 +44,8 @@
                     <%@include file="sidebar.jsp" %>
 
                     <div class="col-sm-9 padding-right">
-                        <div class="features_items"><!--features_items-->
+                        <div class="features_items">
+                            <h2 class="title text-center">Book filter</h2>
                             <%                                Subject sub;
                                 Type type;
                                 ArrayList<Book> blist;
@@ -68,7 +70,9 @@
                                 if (blist != null) {
                                     for (int i = 0; i < blist.size(); i++) {
                                         Book b = blist.get(i);
+                                        int q = Stock.getAvailability(b.getIdbook());
                             %>
+
                             <div class="col-sm-4">
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
@@ -79,10 +83,23 @@
                                             <form action="../Executecart" method="POST">
                                                 <input hidden="" value="<%=b.getIdbook()%>" name="id">
                                                 <input hidden="" value="add" name="para">
-                                                <button type="submit" class="btn btn-default cart">
+                                                <%
+                                                    if (q > 0) {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     Add to cart
                                                 </button>
+                                                <%
+                                                } else {
+                                                %>
+                                                <button type="submit" class="btn btn-default add-to-cart" disabled="">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <strike>Add to cart</strike>
+                                                </button>
+                                                <%
+                                                    }
+                                                %>
                                             </form>
                                         </div>
 

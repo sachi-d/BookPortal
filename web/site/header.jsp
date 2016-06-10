@@ -66,6 +66,14 @@
                     shoppingCart = new Cart();
                     session.setAttribute("cart", shoppingCart);
                 }
+                String customer_name = (String) session.getAttribute("customer_name");
+                if (customer_name == null) {
+                    session.setAttribute("customer_name", "");
+                }
+                String customer_address = (String) session.getAttribute("customer_address");
+                if (customer_address == null) {
+                    session.setAttribute("customer_address", "");
+                }
             %>
             <header id="header"><!--header-->
                 <div class="header_top"><!--header_top-->
@@ -183,11 +191,12 @@
                             </div>
                             <div class = "col-sm-3">
 
+                                <!--                                <div class = "search_box pull-right">-->
                                 <div class = "search_box pull-right">
                                     <form action="searchresult.jsp" method="GET">
                                         <input type = "text" placeholder = "Search for books" name="keyword" pattern="[^'\x22\x40\x21\x23\x24\x25\x5E\x26*\x28\x29\x5C\x2F\x3D]+"/>
                                         <input type="hidden" name="action" value="search" />
-                                        
+
                                     </form>
                                 </div>
                             </div>

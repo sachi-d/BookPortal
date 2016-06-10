@@ -78,13 +78,12 @@ public class Stock {
     
      public static int getAvailability(int idbook) {
         int q = 0;
-        int idbranch=1;
         try {
             Connection con = DBConnectionHandler.createConnection();
-            String query = "SELECT * FROM current_stock WHERE branch_idbranch=? AND book_idbook=?";
+            String query = "SELECT * FROM current_stock WHERE book_idbook=?";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, idbranch);
-            ps.setInt(2, idbook);
+//            ps.setInt(1, idbranch);
+            ps.setInt(1, idbook);
             ResultSet rsetStock = ps.executeQuery();
 
             if (rsetStock.next()) {
